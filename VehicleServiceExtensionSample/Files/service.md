@@ -1,6 +1,6 @@
-## Node JS Service
+## Node JS Service / Java Service
 
-This document provides instructions on downloading and deploying the sample Node.js application, covering the addition of authentication. It also includes information about backend APIs and the code folder structure.
+This document provides instructions on downloading and deploying the sample applications developed in both **Node.js** and **Java**, covering the addition of authentication. It also includes information about backend APIs and the code folder structure.
 
 ## Download and deploy service in Kyma
 Please follow below steps to download and deploy service in Kyma.
@@ -63,36 +63,56 @@ Please refer [this](https://blogs.sap.com/2022/07/12/the-new-way-to-consume-serv
 7. Clone the service from - *git@github.com:SAP-samples/sales-and-service-cloud-extensions.git*
 
 8. Prepare Deployment Description File\
-   Based on our application specification, we define the following description file for deployment. This yaml file can be found inside k8s folder.
+   Based on our application specification, we define the following description file for deployment. This yaml file can be found inside k8s folder(in case of **Node Service**) and within root directory(in case of **Java Service**)
 
    NOTE: In API Rule, we have configured an access strategy to restrict access to the application. We will be using the JWT access strategy to protect endpoint(s) from unsolicited access.
 
 9. Access to a container registry:\
-To store the application image, access to a container registry(eg Docker hub) is required. The docker-image name has to be filled in the files "VehicleServiceExtensionSample/nodeJs/skaffold.yaml" and "VehicleServiceExtensionSample/nodeJs/k8s/vehicle-service.yaml"(Placeholders are provided in the files)
+To store the application image, access to a container registry(eg Docker hub) is required. 
+   * For **Node Service**
+     * The docker-image name has to be filled in the files "VehicleServiceExtensionSample/nodeJs/skaffold.yaml" and "VehicleServiceExtensionSample/nodeJs/k8s/vehicle-service.yaml"(Placeholders are provided in the files)
+   * For **Java Service**
+     * The docker-image name has to be filled in the files " skaffold.yaml" and "k8s-deployment-backend.yaml"
 
-10. Install dependencies:\
-Do ```npm install``` in root directory
+10. Install dependencies:
+    * For **Node Service**
+      * Do ```npm install``` in root directory
+    * For **Java Service**
+      * Do ```mvn clean install```  in root directory
 
-11. Use "deploy.sh" (In root directory) to deploy the service to Kyma\
-This is a script which does two things:
-- Build the application
-- Deploy to Kyma cluster using scaffold
+11. Deploying the service to Kyma
+    * For **Node Service**
+      * Use "deploy.sh" (In root directory) to deploy the service to Kyma\
+        * This is a script which does two things:
+        * Build the application
+        - Deploy to Kyma cluster using scaffold
 
-   Run the command “bash deploy.sh”
+           Run the command “bash deploy.sh”
+
+    * For **Java Service**
+      * Deploying the service to Kyma
+        * below are the two commands:
+        * Build the application – ```mvn clean install```
+        * Deploy to Kyma cluster using scaffold – ```scaffold run```
 
 Alternatively, please follow the steps below to deploy your service to Kyma:
 * Build the application
 *  Build docker image:
-To create docker image we use the following docker file(This DockerFile is available in the root directory of the application):
+To create docker image we use the following docker file(This DockerFile is available in the root directory of the application):<br><br>
+* For **Node Service**
 
 ![Case ExtensionField ](../Images/K3.png "Case fields")
-* Use command - "docker build -t <docker-hub-account>/<image-name>:v1" to build docker image based on the above dockerfile.This   command should be run in the same level where the DockerFile is present
+
+* For **Java Service**<br><br>
+![Case ExtensionField ](../Images/K3Java.png "Case fields")
+
+* Use command - ```docker build -t <docker-hub-account>/<image-name>:v1``` to build docker image based on the above dockerfile.This   command should be run in the same level where the DockerFile is present
 *  Push the docker image to a container repository.\
 If you are using docker hub to store the image we created in the previous step:
-   * Log in to Docker using this command: docker login -u <docker-id> -p <password>
-   * Push the local image into the Docker Hub using command : docker push <docker-hub-account>/<image-name>:v1
+   * Log in to Docker using this command: ```docker login -u <docker-id> -p <password>```
+   * Push the local image into the Docker Hub using command : ```docker push <docker-hub-account>/<image-name>:v1```
    * Deploy the application using the deployment description file created in step 5:\
-kubectl -n dev apply -f k8s/vehicle-service.yaml
+```kubectl -n dev apply -f k8s/vehicle-service.yaml```
 
 ## Add Authentication 
 This section shows how you can enable authentication for service and achieve user propagation between SAP Sales and Service Cloud and external applications.
