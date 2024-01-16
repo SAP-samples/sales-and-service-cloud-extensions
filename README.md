@@ -11,6 +11,8 @@ Running various samples requires specific requirements which are mentioned in th
 
 ## Samples
  [Vehicle Service Extension Sample](./VehicleServiceExtensionSample)
+ 
+ [Aws Lambda Sample](./AwsLambdaSample/)
 
 ## Known Issues
 No knowns issues
