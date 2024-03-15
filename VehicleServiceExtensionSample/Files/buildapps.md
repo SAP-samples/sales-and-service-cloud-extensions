@@ -29,10 +29,9 @@ In this application, After the Job Card is created, the service advisor can view
 **Job Portal- Application**:
 
 
-This application displays a list of Job Cards and is accessible by both the service supervisor and service technician. The service supervisor can assign job card services to different technicians. Technicians can pick up job cards, perform the required services, update tasks, and mark them as complete.
+This application provides a comprehensive Job Card management system accessible to both service supervisors and technicians. Users can search through job cards using free text or advanced filters within the job portal, enabling them to identify specific tasks according to their scope and persona. The service supervisor is empowered to assign job card services to technicians. Technicians can then pick up job cards, perform the required services, update tasks, and mark them as complete.
 
-Once all services, such as brake replacement or oil change, are finished, the job card status is updated in  the sales and service cloud. Within the Job Card, the service advisor can download the invoice and present it to the customer.
-
+Once all services, such as brake replacement or oil change, are completed, the job card status is promptly updated in the sales and service cloud. Within the Job Card interface, the service advisor can easily download the invoice and present it to the customer, ensuring a seamless service experience.
 
 
 ### How to run Build Apps Application
@@ -94,4 +93,3 @@ Example: In the "Job portal" sample application, please refer to the Submit / St
 
 ![Case ExtensionField ](../Images/SBA4.png "Case fields")
  
-
