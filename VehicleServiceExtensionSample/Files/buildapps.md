@@ -9,6 +9,55 @@ The applications seamlessly integrates with different backend services such as J
 
 ### Application Overview
  
+
+**Authentication**:
+
+By default, BTP authentication is enabled in all build apps applications. This means that users need to authenticate themselves in order to access the applications. The system uses BTP authentication to identify the user and determine their identity.
+
+**Authorization**:
+
+Once the user is authenticated, the application retrieves the user's information, such as their email ID, User ID, to perform authorization. To obtain the authorization scopes for the user, a request is sent to "/employees/currentUserInfo". This endpoint returns a list of authorization scopes associated with the user.
+
+The response from the "/employees/currentUserInfo" request includes the user's name, user ID, and a list of scopes. The scopes represent the permissions or actions that the user is authorized to perform in the system.
+
+Based on the scopes returned in the response, the system allows or restricts certain actions for the user. Different personas or user roles are defined in the system based on these scopes. Each persona is associated with a set of scopes that determine the actions they can perform.
+
+
+*List of scopes*
+```
+{
+    "userName": "Vijay babu krishnan",
+    "userId": "a4042340-3a8b-42b3-a983-5eb33caa331c",
+    "scopes": [
+        "vehicle-service!t173918.ViewJobCard",
+        "vehicle-service!t173918.DeleteJobCard",
+        "vehicle-service!t173918.CreateServiceForm",
+        "openid",
+        "vehicle-service!t173918.MasterData",
+        "vehicle-service!t173918.EditTask",
+        "uaa.user",
+        "vehicle-service!t173918.ViewServiceForm",
+        "vehicle-service!t173918.EditJobCardService",
+        "vehicle-service!t173918.CreateJobCard",
+        "vehicle-service!t173918.UpdateServiceForm",
+        "vehicle-service!t173918.DeleteServiceForm",
+        "vehicle-service!t173918.GenerateInvoice"
+    ]
+}
+```
+
+For example, if a user has the following scopes:
+
+```
+- "vehicle-service!t173918.ViewJobCard"
+- "openid"
+- "vehicle-service!t173918.EditTask"
+- "uaa.user"
+```
+
+They have access to viewing the list of job cards and performing start and complete actions on job card services. However, they cannot perform actions to assign technicians or initiate tasks assigned to other technicians
+
+
 **Personas**:
 - **Service Advisor** : Can create service forms, Job Cards, and download invoices.
 - **Service Supervisor** :Has access to the Job Portal.Can assign technicians and add service notes.
@@ -29,11 +78,10 @@ In this application, After the Job Card is created, the service advisor can view
 **Job Portal- Application**:
 
 
-This application displays a list of Job Cards and is accessible by both the service supervisor and service technician. The service supervisor can assign job card services to different technicians. Technicians can pick up job cards, perform the required services, update tasks, and mark them as complete.
+This application provides a comprehensive Job Card management system accessible to both service supervisors and technicians. Users can search through job cards using free text or advanced filters within the job portal, enabling them to identify specific tasks according to their scope and persona. The service supervisor is empowered to assign job card services to technicians. Technicians can then pick up job cards, perform the required services, update tasks, and mark them as complete.
 
-Once all services, such as brake replacement or oil change, are finished, the job card status is updated in  the sales and service cloud. Within the Job Card, the service advisor can download the invoice and present it to the customer.
-
-
+Once all services, such as brake replacement or oil change, are completed, the job card status is promptly updated in the sales and service cloud. Within the Job Card interface, the service advisor can easily download the invoice and present it to the customer, ensuring a seamless service experience.
+ 
 
 ### How to run Build Apps Application
 
@@ -95,3 +143,34 @@ Example: In the "Job portal" sample application, please refer to the Submit / St
 ![Case ExtensionField ](../Images/SBA4.png "Case fields")
  
 
+## Important Functionality
+
+In the following section, we will know about the search, filter, and pagination functionality of the job portal application.
+
+**Search** :
+
+By passing the search value as a parameter, we can find job cards based on the search criteria. The search value is a free text input.
+
+Request for searching job cards:
+``/destinations/0001_VehicleService_NODE/job-cards?$search=KH123&$top=10&$skip=0``
+
+![Search ](../../Images/SBA8.png "Search")
+
+
+**Advanced filter**:
+
+We can filter job cards based on one or multiple fields. By using the "and" condition in the filter parameter, we can further narrow down the job cards.
+
+Request for filtering job cards:
+``/destinations/0001_VehicleService_NODE/job-cards?$filter=vehicleNumber ct 'KA' and displayId ct '9' and true``
+
+![Filter ](../../Images/SBA9.png "Filter")
+
+**Pagination**:
+
+The $top and $skip parameters are used for pagination in job card list requests. $top specifies the number of items to retrieve, while $skip determines the number of items to skip before starting the retrieval.
+
+Request for pagination:
+``/destinations/0001_VehicleService_NODE/job-cards?$top=10&$skip=10``
+
+![Pagination ](../../Images/SBA10.png "Pagination")
