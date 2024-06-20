@@ -28,7 +28,7 @@ public class CaseService {
         CaseApi service = new CaseApi(destination);
         return service;
     }
-    public CaseReadResponse getCaseById(UUID caseId) throws ServerException {
+    public CaseReadResponse getCaseById(UUID caseId){
 
         CaseApi caseApi = fetchCaseApi();
         try {
@@ -37,18 +37,18 @@ public class CaseService {
             return result;
         } catch (OpenApiRequestException e) {
             e.printStackTrace();
-            throw new ServerException("Cannot read Case Data");
+            throw new OpenApiRequestException("Cannot read Case Data");
         }
     }
 
-    public CasePatchResponse updateCase(OffsetDateTime ifMatch, UUID caseID, CasePatchUpdateRequest req) throws ServerException {
+    public CasePatchResponse updateCase(OffsetDateTime ifMatch, UUID caseID, CasePatchUpdateRequest req) {
         CaseApi caseApi = fetchCaseApi();
         try {
             String authToken = requestContextProvider.getRequestContext().getAuthToken();
             return caseApi.modifycaseservicecase(authToken,ifMatch,caseID,req);
         } catch (OpenApiRequestException e) {
             e.printStackTrace();
-            throw new ServerException("Cannot update Case Data");
+            throw new OpenApiRequestException("Cannot update Case Data");
         }
     }
 

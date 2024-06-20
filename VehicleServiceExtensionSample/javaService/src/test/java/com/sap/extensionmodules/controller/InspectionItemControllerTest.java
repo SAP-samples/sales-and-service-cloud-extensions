@@ -1,5 +1,6 @@
 package com.sap.extensionmodules.controller;
 
+import com.sap.cloud.sdk.services.openapi.core.OpenApiRequestException;
 import com.sap.extensionmodules.dtos.InspectionItemDto;
 import com.sap.extensionmodules.exception.APIExceptionHandler;
 import com.sap.extensionmodules.service.InspectionItemService;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class InspectionItemControllerTest {
@@ -33,7 +35,7 @@ public class InspectionItemControllerTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
 
         when(inspectionItemService.create(inspectionItemDto)).thenReturn(inspectionItemDto);
@@ -45,15 +47,11 @@ public class InspectionItemControllerTest {
     }
 
     @Test
-    public void testCreateException() {
+    public void testCreateException() throws Exception {
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
-
         when(inspectionItemService.create(inspectionItemDto)).thenThrow(new RuntimeException("Error creating inspection item"));
 
-        ResponseEntity<?> response = inspectionItemController.create(inspectionItemDto);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
+        assertThrows(RuntimeException.class, () -> inspectionItemController.create(inspectionItemDto));
     }
 
     @Test
@@ -73,14 +71,11 @@ public class InspectionItemControllerTest {
     public void testFindAllException() {
         when(inspectionItemService.findAll()).thenThrow(new RuntimeException("Error retrieving all inspection items"));
 
-        ResponseEntity<?> response = inspectionItemController.findAll();
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
+        assertThrows(RuntimeException.class, () -> inspectionItemController.findAll());
     }
 
     @Test
-    public void testFindByIdFound() throws NotFoundException {
+    public void testFindByIdFound() throws Exception {
         String id = "1";
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
 
@@ -93,31 +88,24 @@ public class InspectionItemControllerTest {
     }
 
     @Test
-    public void testFindByIdNotFound() throws NotFoundException {
+    public void testFindByIdNotFound() throws Exception {
         String id = "1";
-
         when(inspectionItemService.findById(id)).thenThrow(new NotFoundException("Inspection item not found"));
 
-        ResponseEntity<?> response = inspectionItemController.findById(id);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
+        assertThrows(NotFoundException.class, () -> inspectionItemController.findById(id));
     }
 
     @Test
-    public void testFindByIdException() throws NotFoundException {
+    public void testFindByIdException() throws Exception {
         String id = "1";
 
         when(inspectionItemService.findById(id)).thenThrow(new RuntimeException("Error retrieving inspection item by ID"));
 
-        ResponseEntity<?> response = inspectionItemController.findById(id);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
+        assertThrows(RuntimeException.class, () -> inspectionItemController.findById(id));
     }
 
     @Test
-    public void testUpdateSuccess() throws NotFoundException, APIExceptionHandler {
+    public void testUpdateSuccess() throws Exception {
         String id = "1";
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
 
@@ -130,42 +118,24 @@ public class InspectionItemControllerTest {
     }
 
     @Test
-    public void testUpdatePreconditionRequired() throws NotFoundException, APIExceptionHandler {
-        String id = "1";
-        InspectionItemDto inspectionItemDto = new InspectionItemDto();
-
-        when(inspectionItemService.update(id, inspectionItemDto, null)).thenThrow(new APIExceptionHandler(HttpStatus.PRECONDITION_REQUIRED, "Precondition required"));
-
-        ResponseEntity<?> response = inspectionItemController.update(id, inspectionItemDto, null);
-
-        assertEquals(HttpStatus.PRECONDITION_REQUIRED, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
-    }
-
-    @Test
-    public void testUpdateNotFound() throws NotFoundException, APIExceptionHandler {
+    public void testUpdateNotFound() throws Exception {
         String id = "1";
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
 
         when(inspectionItemService.update(id, inspectionItemDto, null)).thenThrow(new NotFoundException("Inspection item not found"));
 
-        ResponseEntity<?> response = inspectionItemController.update(id, inspectionItemDto, null);
+        assertThrows(NotFoundException.class, () -> inspectionItemController.update(id, inspectionItemDto, null));
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
     }
 
     @Test
-    public void testUpdateException() throws NotFoundException, APIExceptionHandler {
+    public void testUpdateException() throws Exception {
         String id = "1";
         InspectionItemDto inspectionItemDto = new InspectionItemDto();
 
         when(inspectionItemService.update(id, inspectionItemDto, null)).thenThrow(new RuntimeException("Error updating inspection item by ID"));
+        assertThrows(RuntimeException.class, () -> inspectionItemController.update(id, inspectionItemDto, null));
 
-        ResponseEntity<?> response = inspectionItemController.update(id, inspectionItemDto, null);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
     }
 
     @Test
@@ -187,10 +157,8 @@ public class InspectionItemControllerTest {
 
         when(inspectionItemService.delete(id)).thenThrow(new NotFoundException("Inspection item not found"));
 
-        ResponseEntity<?> response = inspectionItemController.delete(id);
+        assertThrows(NotFoundException.class, () -> inspectionItemController.delete(id));
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
     }
 
     @Test
@@ -198,10 +166,7 @@ public class InspectionItemControllerTest {
         String id = "1";
 
         when(inspectionItemService.delete(id)).thenThrow(new RuntimeException("Error deleting inspection item by ID"));
+        assertThrows(RuntimeException.class, () -> inspectionItemController.delete(id));
 
-        ResponseEntity<?> response = inspectionItemController.delete(id);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
     }
 }

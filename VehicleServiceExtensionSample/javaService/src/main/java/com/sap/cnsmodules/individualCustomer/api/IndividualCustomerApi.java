@@ -91,7 +91,7 @@ public class IndividualCustomerApi extends AbstractOpenApiService {
         // create path and map variables
         final Map<String, Object> localVarPathParams = new HashMap<String, Object>();
         localVarPathParams.put("id", id);
-        final String localVarPath = UriComponentsBuilder.fromPath("/elsa/sap/c4c/api/v1/individual-customer-service/individualCustomers/{id}").buildAndExpand(localVarPathParams).toUriString();
+        final String localVarPath = UriComponentsBuilder.fromPath("/sap/c4c/api/v1/individual-customer-service/individualCustomers/{id}").buildAndExpand(localVarPathParams).toUriString();
 
         final MultiValueMap<String, String> localVarQueryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders localVarHeaderParams = new HttpHeaders();

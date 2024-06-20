@@ -19,6 +19,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,7 +64,6 @@ public class JobCardRepositoryTest {
             .id("a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb")
             .service("Air filter replacement")
             .price("49.99")
-            .technician("Sandra")
             .status(ServiceStatus.Z21.toString())
             .startTime(null)
             .endTime(null)
@@ -181,7 +184,6 @@ public class JobCardRepositoryTest {
         jobCardServices.setId(jobCardServicesDto.getId());
         jobCardServices.setService(jobCardServicesDto.getService());
         jobCardServices.setPrice(jobCardServicesDto.getPrice());
-        jobCardServices.setTechnician(jobCardServicesDto.getTechnician());
         jobCardServices.setStatus(jobCardServicesDto.getStatus());
         jobCardServices.setStartTime(jobCardServicesDto.getStartTime());
         jobCardServices.setEndTime(jobCardServicesDto.getEndTime());
@@ -205,30 +207,32 @@ public class JobCardRepositoryTest {
         JobCard entity2 = jobCardEntity(jobCardDto2);
         entityList.add(entity2);
         List<JobCard> mockJobCards = Arrays.asList(entity1, entity2);
+        Pageable page = mock(Pageable.class);
+        when(jobCardRepositoryInterface.findAll(spec, page)).thenReturn(new PageImpl<>(mockJobCards));
 
-        when(jobCardRepositoryInterface.findAll(spec)).thenReturn(mockJobCards);
-
-        List<JobCard> result = jobCardRepository.findAllBy(spec);
+        List<JobCard> result = jobCardRepository.findAllBy(spec, page);
 
         assertEquals(mockJobCards, result);
-        verify(jobCardRepositoryInterface).findAll(spec);
+        verify(jobCardRepositoryInterface).findAll(spec, page);
     }
 
     @Test
     public void testFindAllBy_Exception() {
 
         JobCardSpecification spec = mock(JobCardSpecification.class);
-        when(jobCardRepositoryInterface.findAll(spec)).thenThrow(new DataAccessException("Mocked exception") {
+        Pageable page = mock(Pageable.class);
+        when(jobCardRepositoryInterface.findAll(spec, page)).thenThrow(new DataAccessException("Mocked exception") {
         });
+
         try {
-            jobCardRepository.findAllBy(spec);
+            jobCardRepository.findAllBy(spec, page);
             fail("Expected CustomNotFoundException, but no exception was thrown.");
         } catch (CustomNotFoundException e) {
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getCode());
             assertEquals(Messages.DB_ERROR, e.getMessage());
         }
 
-        verify(jobCardRepositoryInterface).findAll(spec);
+        verify(jobCardRepositoryInterface).findAll(spec, page);
     }
 
     @Test

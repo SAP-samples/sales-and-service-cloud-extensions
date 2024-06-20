@@ -10,14 +10,14 @@ spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
     - accessStrategies:
-          - config:
-              jwks_urls:
-                - >-
-                  https://external-func-services.authentication.eu10.hana.ondemand.com/token_keys
-              trusted_issuers:
-                - >-
-                  https://external-func-services.authentication.eu10.hana.ondemand.com/oauth/token
-            handler: jwt
+        - config:
+            jwks_urls:
+              - >-
+                https://external-func-services.authentication.eu10.hana.ondemand.com/token_keys
+            trusted_issuers:
+              - >-
+                https://external-func-services.authentication.eu10.hana.ondemand.com/oauth/token
+          handler: jwt
       path: /.*
       methods:
         - GET
@@ -174,17 +174,22 @@ spec:
                 secretKeyRef:
                   name: vehicle-service-secrets
                   key: extension_field_vehicle_number
+            - name: xsappname
+              valueFrom:
+                secretKeyRef:
+                  name: xsuaa2
+                  key: xsappname
           volumeMounts:
-              - mountPath: /bindings/destination
-                name: destination-volume
-                readOnly: true
-              - mountPath: /bindings/xsuaa
-                name: xsuaa-volume
-                readOnly: true
+            - mountPath: /bindings/destination
+              name: destination-volume
+              readOnly: true
+            - mountPath: /bindings/xsuaa
+              name: xsuaa-volume
+              readOnly: true
       volumes:
-            - name: destination-volume
-              secret:
-                secretName: destination-service-binding
-            - name: xsuaa-volume
-              secret:
-                secretName: xsuaa-service-binding
+        - name: destination-volume
+          secret:
+            secretName: destination-service-binding
+        - name: xsuaa-volume
+          secret:
+            secretName: xsuaa-service-binding

@@ -2,6 +2,7 @@ package com.sap.extensionmodules.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -25,7 +26,9 @@ public class JobCardServices {
     private String service;
     @Column(name = "\"price\"")
     private String price;
+
     @Column(name = "\"technician\"")
+    @ColumnDefault("{\"btpUserId\":\"\",\"name\":\"\"}")
     private String technician;
     @Column(name = "\"status\"")
     private String status;

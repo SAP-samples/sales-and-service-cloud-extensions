@@ -1,6 +1,7 @@
 package com.sap.extensionmodules.repository;
 
 import com.sap.extensionmodules.commons.Constants;
+import com.sap.extensionmodules.dtos.InspectionItemDto;
 import com.sap.extensionmodules.exception.CustomNotFoundException;
 import com.sap.extensionmodules.entity.InspectionItem;
 import javassist.NotFoundException;
@@ -36,6 +37,22 @@ public class InspectionItemRepository {
             List<InspectionItem> entities = new ArrayList<>();
             serviceRepo.findAll().forEach(entities::add);
             return entities;
+        } catch (DataAccessException e) {
+            throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.Messages.DB_ERROR);
+        }
+    }
+    public List<InspectionItemDto> findAllByQuery() {
+        try {
+            List<InspectionItemDto> dtos = new ArrayList<>();
+
+            for( String[] obj : serviceRepo.findAllByQuery()) {
+                InspectionItemDto dto = InspectionItemDto.builder()
+                        .id(obj[0])
+                        .description(obj[1])
+                        .isSelected(Boolean.parseBoolean(obj[2])).build();
+                dtos.add(dto);
+            }
+            return dtos;
         } catch (DataAccessException e) {
             throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.Messages.DB_ERROR);
         }

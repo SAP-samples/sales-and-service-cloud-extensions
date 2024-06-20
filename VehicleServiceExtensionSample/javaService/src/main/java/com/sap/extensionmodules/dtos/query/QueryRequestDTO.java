@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
@@ -15,6 +17,11 @@ public class QueryRequestDTO {
 
     @Setter(AccessLevel.PUBLIC)
     @Getter(AccessLevel.PUBLIC)
-    private QueryFilterOptions filterOptions;
+    private List<QueryFilterOptions> filterOptions;
+    @Getter(AccessLevel.PUBLIC)
+    private int top;
+    @Getter(AccessLevel.PUBLIC)
+    private int skip;
+
 
 }

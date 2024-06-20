@@ -8,6 +8,7 @@ import com.sap.cnsmodules.model.CaseReadResponse;
 import com.sap.cnsmodules.model.RegisteredProductfile;
 import com.sap.cnsmodules.model.RegisteredProductqueryresponseValueInner;
 import com.sap.extensionmodules.Utils.ServiceFormSpecification;
+import com.sap.extensionmodules.Utils.StatusUtil;
 import com.sap.extensionmodules.Utils.UpdateChecker;
 import com.sap.extensionmodules.commons.Constants;
 import com.sap.extensionmodules.commons.SFStatus;
@@ -31,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.lang.Error;
-import java.rmi.ServerException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
@@ -91,13 +91,17 @@ public class ServiceFormService {
         serviceFormDto.setAdminData(adminData);
 
         ServiceForm entity = serviceFormRepository.create(mapper.ServiceFormDtoToServiceForm(serviceFormDto));
+        ServiceFormDto dto = mapper.ServiceFormToDto(entity);
+        String statusDescription = StatusUtil.getDescription(serviceFormDto.getStatus(), requestContextProvider.getRequestContext().getLanguage());
+        dto.setStatusDescription(statusDescription);
         entityManager.flush();
         mapper.CaseResponseValueToCasePatchUpdate(caseReadResponse.getValue(), casePatchUpdateRequest);
         HashMap<String, String> map = new HashMap<>();
         map.put(SERVICE_FORM_ID, Integer.toString(entity.getDisplayId()));
         casePatchUpdateRequest.setExtensions(map);
         caseService.updateCase(offsetDateTime, serviceFormDto.getCaseId(), casePatchUpdateRequest);
-        return mapper.ServiceFormToDto(entity);
+
+        return dto;
     }
 
     public ServiceFormDto getServiceFormInfo(ServiceFormDto createServiceFormDto, CaseReadResponse caseReadResponse, UUID sCaseId) throws Exception {
@@ -109,7 +113,7 @@ public class ServiceFormService {
             throw new Error(NO_MILOMETER_IN_CASE);
         }
         RegisteredProduct registeredProductData = getRegisteredProductData(caseReadResponse);
-        List<InspectionItemDto> inspectionItems = inspectionItemService.findAll();
+        List<InspectionItemDto> inspectionItems = inspectionItemService.findAllByQuery();
         List<ServicesDto> suggestedServices = getSuggestedServices(nMilometer);
         return new ServiceFormDto(sCaseId, caseReadResponse.getValue().getDisplayId(), registeredProductData, createServiceFormDto.getCustomerComplaints(), nMilometer, suggestedServices, inspectionItems, createServiceFormDto.getNotes(), SFStatus.Z01.toString());
     }
@@ -122,7 +126,7 @@ public class ServiceFormService {
                 .collect(Collectors.toList());
     }
 
-    public RegisteredProduct getRegisteredProductData(CaseReadResponse caseReadResponse) throws ServerException {
+    public RegisteredProduct getRegisteredProductData(CaseReadResponse caseReadResponse) {
         String sVehicleNumber = null;
         UUID registeredProductId = caseReadResponse.getValue().getRegisteredProducts().get(0).getId();
         RegisteredProductfile registeredProduct = registeredProductsService.readRegisteredProductById(registeredProductId);
@@ -144,7 +148,7 @@ public class ServiceFormService {
         QueryRequestDTO queryRequestDTO = queryDTOHelper.buildRequestDTO(filter);
         ServiceFormSpecification spec = null;
         if(queryRequestDTO.getFilterOptions() != null) {
-            spec = new ServiceFormSpecification(queryRequestDTO.getFilterOptions());
+            spec = new ServiceFormSpecification(queryRequestDTO.getFilterOptions().get(0));
         }
         List<ServiceForm> entity = serviceFormRepository.findAll(spec);
         for (ServiceForm form : entity) {

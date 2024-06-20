@@ -1,6 +1,7 @@
 package com.sap.extensionmodules.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -33,7 +34,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.rmi.ServerException;
 import java.time.OffsetDateTime;
 import java.util.*;
 
@@ -48,6 +48,7 @@ public class InvoiceService {
     private CloseableHttpClient client;
 
     private HttpDestination destination;
+    private Gson gson= new Gson();
 
     public void InvoiceService(){
         client = HttpClients.createDefault();
@@ -139,7 +140,7 @@ public class InvoiceService {
 
                 table.addCell(new PdfPCell(new Paragraph(String.valueOf(i + 1), regularFont)));
                 table.addCell(new PdfPCell(new Paragraph(service.getService() != null ? service.getService() : "-", regularFont)));
-                table.addCell(new PdfPCell(new Paragraph(service.getTechnician() != null ? service.getTechnician() : "-", regularFont)));
+                table.addCell(new PdfPCell(new Paragraph(gson.toJson(service.getTechnician()) != null ? gson.toJson(service.getTechnician()) : "-", regularFont)));
                 table.addCell(new PdfPCell(new Paragraph(service.getStatus() != null ? service.getStatus() : "-", regularFont)));
                 table.addCell(new PdfPCell(new Paragraph(service.getStartTime(), regularFont)));
                 table.addCell(new PdfPCell(new Paragraph(service.getEndTime(), regularFont)));
@@ -189,7 +190,7 @@ public class InvoiceService {
             CasePatchUpdateRequest patchReq = objectMapper.readValue(jsonString, CasePatchUpdateRequest.class);
             mapper.CaseResponseValueToCasePatchUpdate(caseById.getValue(), patchReq);
             return caseService.updateCase(OffsetDateTime.parse(caseById.getValue().getAdminData().getUpdatedOn()),UUID.fromString(caseId), patchReq);
-        } catch (ServerException | JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }

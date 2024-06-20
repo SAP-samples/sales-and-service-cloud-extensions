@@ -239,9 +239,9 @@ public class ServiceFormServiceTest {
         ServiceForm entity = createSampleServiceForm();
         QueryFilterOptions filterOptions = new QueryFilterOptions(
                 "caseId", QueryFilterOptions.QueryFilterOperator.EQ, "52bae7b3-8c35-11ee-b2e1-fff1214a8fa0", false, null, false);
-
+        List<QueryFilterOptions> filterList = Arrays.asList(filterOptions);
         QueryRequestDTO queryRequestDTO = QueryRequestDTO.builder()
-                .filterOptions(filterOptions)
+                .filterOptions(filterList)
                 .build();
 
         when(queryDTOHelper.buildRequestDTO(Optional.of("someFilter"))).thenReturn(queryRequestDTO);

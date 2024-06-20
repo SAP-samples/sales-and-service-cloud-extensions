@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobCardServicesUpdateDto {
-    private String technician;
+    private TechnicianDto technician;
     private String observation;
    // private String message = "Invalid Status";
     private String status;

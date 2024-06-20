@@ -51,6 +51,10 @@ public class InspectionItemService {
         }
         return ListOfInspectionItemDto;
     }
+    public List<InspectionItemDto> findAllByQuery() {
+        List<InspectionItemDto> dtos = inspectionItemRepository.findAllByQuery();
+        return dtos;
+    }
 
     public InspectionItemDto findById(String id) throws NotFoundException {
         InspectionItem entity = inspectionItemRepository.findById(id);
@@ -68,9 +72,10 @@ public class InspectionItemService {
             throw new NotFoundException(INSPECTION_ITEM_RESOURCE_NOT_FOUND);
         } else {
             UpdateChecker.isUpdateOnLatestData(ifMatch, existingInspectionItem.getAdminData().getUpdatedOn());
-            AdminData adminData = new AdminData();
-            adminData.setUpdatedBy(requestContextProvider.getRequestContext().getUserId());
-            adminData.setUpdatedOn(strDate);
+            AdminData adminData = new AdminData(
+                    existingInspectionItem.getAdminData().getCreatedOn(), strDate,
+                    existingInspectionItem.getAdminData().getCreatedBy(),
+                    requestContextProvider.getRequestContext().getUserId());
             dto.setAdminData(adminData);
 
             mapper.updateInspectionItem(dto, inspectionItem);

@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.sap.cloud.security.token.Token;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired RequestContextProvider requestContextProvider;
@@ -34,7 +37,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Value("${extension_field_service_form_id}")
     private String extensionFieldServiceFormId;
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String authToken = request.getHeader("Authorization");
         if(authToken==null){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -54,13 +57,27 @@ public class SessionInterceptor implements HandlerInterceptor {
         Constants.ExtensionFields.MILOMETER = extensionFieldMilometer;
         Constants.ExtensionFields.VEHICLE_NUMBER = extensionFieldVehicleNumber;
         Constants.ExtensionFields.SERVICE_FORM_ID = extensionFieldServiceFormId;
-
-
+        String userName = String.join(" ", token.getClaimAsString("given_name"), token.getClaimAsString("family_name"));
         RequestContext requestContext = RequestContext.builder()
-                .language(request.getHeader("accept-language"))
+                .language(request.getHeader("accept-language")!=null ? request.getHeader("accept-language") : "en-US")
                 .userId(token.getClaimAsString("user_id"))
-                .userToken(value).build();
+                .userToken(value)
+                .roles(fetchPrivileges(token.getClaimAsStringList("scope")))
+                .scopes(token.getClaimAsStringList("scope"))
+                .userName(userName).build();
+
         requestContextProvider.setRequestContext(requestContext);
         return true;
+    }
+
+    public List<String> fetchPrivileges(List<String> roles){
+
+        List<String> privileges = roles.stream().map(s-> {
+            if(s.contains(".")) {
+                return s.split("[.]")[1];
+            } else
+                return s;
+        }).collect(Collectors.toList());
+        return privileges;
     }
 }

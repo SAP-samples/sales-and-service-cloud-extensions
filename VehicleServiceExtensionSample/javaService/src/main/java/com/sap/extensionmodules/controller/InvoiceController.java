@@ -1,5 +1,6 @@
 package com.sap.extensionmodules.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.sap.extensionmodules.commons.APIConstants;
 import com.sap.extensionmodules.commons.Constants;
 import com.sap.extensionmodules.dtos.JobCardDto;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -21,8 +24,9 @@ public class InvoiceController {
 
     @Autowired InvoiceService invoiceService;
     @RequestMapping(value = APIConstants.SERVICE_PREFIX +"/generate-invoice", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('GenerateInvoice')")
     public ResponseEntity<InputStreamResource> generatePDF(@RequestParam(value = Constants.QUERY_OPTION_FILTER, required = false)
-                                                               Optional<String> filter) {
+                                                               Optional<String> filter) throws DocumentException, IOException {
 
         String id = filter.get().split(Constants.SPACE_DELIMITER)[2].replace(Constants.QUOTES_DELIMITER, "")
                 .replace(Constants.SINGLE_QUOTES_DELIMITER, "");

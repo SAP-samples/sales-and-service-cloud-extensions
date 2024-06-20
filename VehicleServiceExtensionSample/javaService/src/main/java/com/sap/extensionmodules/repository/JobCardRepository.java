@@ -7,6 +7,8 @@ import com.sap.extensionmodules.entity.JobCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +20,9 @@ public class JobCardRepository {
     @Autowired
     private com.sap.extensionmodules.repository.JobCardRepositoryInterface jobCardRepo;
 
-    public List<JobCard> findAllBy(JobCardSpecification spec) {
+    public List<JobCard> findAllBy(Specification<JobCard> spec, Pageable page) {
         try {
-            List<JobCard> entity = new ArrayList<>();
-            jobCardRepo.findAll(spec).forEach(entity::add);
+            List<JobCard> entity = jobCardRepo.findAll(spec, page).toList();
             return entity;
         } catch (DataAccessException e) {
             throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.DB_ERROR );
@@ -86,5 +87,8 @@ public class JobCardRepository {
         } catch (DataAccessException e) {
             throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.DB_ERROR );
         }
+    }
+    public long getCount() {
+        return jobCardRepo.count();
     }
 }

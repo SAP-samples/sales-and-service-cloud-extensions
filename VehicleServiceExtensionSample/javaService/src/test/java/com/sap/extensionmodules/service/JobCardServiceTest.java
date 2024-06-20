@@ -1,6 +1,7 @@
 package com.sap.extensionmodules.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.sap.cnsmodules.model.*;
 import com.sap.extensionmodules.Utils.JobCardSpecification;
 import com.sap.extensionmodules.commons.Constants;
@@ -13,6 +14,7 @@ import com.sap.extensionmodules.dtos.query.QueryFilterOptions;
 import com.sap.extensionmodules.entity.JobCard;
 import com.sap.extensionmodules.entity.JobCardServices;
 import com.sap.extensionmodules.entity.ServiceForm;
+import com.sap.extensionmodules.exception.CustomException;
 import com.sap.extensionmodules.exception.CustomNotFoundException;
 import com.sap.extensionmodules.exception.CustomValidationException;
 import com.sap.extensionmodules.exception.ErrorResponse;
@@ -28,6 +30,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -68,6 +73,7 @@ public class JobCardServiceTest {
     private ObjectMapper objectMapper;
 
     private MockedStatic<Constants.CaseStatus> caseStatusMock;
+    private Gson gson = new Gson();
 
     @BeforeEach
     public void setUp() {
@@ -91,7 +97,7 @@ public class JobCardServiceTest {
             .id("5d876d79-caf6-421b-8b2c-190cea9a137e")
             .service("Brake pad replacement")
             .price("99.99")
-            .technician(null)
+            .technician(new TechnicianDto("","sandra"))
             .status(ServiceStatus.Z21.toString())
             .startTime(null)
             .endTime(null)
@@ -108,7 +114,7 @@ public class JobCardServiceTest {
             .id("a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb")
             .service("Air filter replacement")
             .price("49.99")
-            .technician("Sandra")
+            .technician(new TechnicianDto("","sandra"))
             .status(ServiceStatus.Z22.toString())
             .startTime("2023-07-03T04:06:51.874Z")
             .endTime(null)
@@ -125,7 +131,7 @@ public class JobCardServiceTest {
             .id("78cd57cd-f61a-4d7f-9f87-dc031d5b95fb")
             .service("Air filter replacement")
             .price("49.99")
-            .technician("Jack")
+            .technician(new TechnicianDto("","Jack"))
             .status(ServiceStatus.Z23.toString())
             .startTime("2023-07-03T04:06:51.874Z")
             .endTime(null)
@@ -182,7 +188,7 @@ public class JobCardServiceTest {
 
     JobCardDto jobCardDto2 = JobCardDto.builder()
             .id("c7e9469a-1b6b-42c6-9580-28ed4a994346")
-            .displayId(2)
+            .displayId(123)
             .caseId("2bfdd60f-da14-11ed-bf97-bb732c681de4")
             .caseDisplayId("451")
             .status(JCStatus.Z12.toString())
@@ -235,7 +241,7 @@ public class JobCardServiceTest {
         jobCardServices.setId(jobCardServicesDto.getId());
         jobCardServices.setService(jobCardServicesDto.getService());
         jobCardServices.setPrice(jobCardServicesDto.getPrice());
-        jobCardServices.setTechnician(jobCardServicesDto.getTechnician());
+        jobCardServices.setTechnician(gson.toJson(jobCardServicesDto.getTechnician()));
         jobCardServices.setStatus(jobCardServicesDto.getStatus());
         jobCardServices.setStartTime(jobCardServicesDto.getStartTime());
         jobCardServices.setEndTime(jobCardServicesDto.getEndTime());
@@ -429,12 +435,56 @@ public class JobCardServiceTest {
                 .userId("36addd73-5f39-11ea-9efa-9b0ce15ed32c")
                 .authToken("authToken")
                 .language("en-us")
+                .roles(Arrays.asList("ViewJobCardService", "EditTask", "EditJobCardService"))
                 .build();
         return requestContext;
     }
 
 
 //    Updating job card service start time
+
+    @Test
+    @DisplayName("testUpdateJobCardServiceStartTime")
+    public void testUpdateJobCardServiceStartTime_Forbidden() throws Exception {
+
+        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
+        String jobCardServiceId = "5d876d79-caf6-421b-8b2c-190cea9a137e";
+        String ifMatch = "2023-07-03 09:36:53.872000000";
+        RequestContext requestContext = getRequestContext();
+        JobCard mockJobCard = getJobCardEntity(jobCardDto1);
+        requestContext.setRoles(Arrays.asList("EditTask"));
+        when(requestContextProvider.getRequestContext()).thenReturn(requestContext);
+        when(jobCardServicesRepository.findOneBy(any())).thenReturn(mockJobCard.getServicesSelected().get(0));
+        when(mapper.JobCardServicesToDto(any(JobCardServices.class))).thenReturn(jobCardServicesDto1);
+        JobCardServicesUpdateDto jobCardServicesUpdateDto = new JobCardServicesUpdateDto();
+        jobCardServicesUpdateDto.setStatus(ServiceStatus.Z22.toString());
+        jobCardServicesUpdateDto.setNotes("Notes");
+
+        assertThrows(CustomException.class, () ->jobCardService.updateJobCardService(jobCardId, jobCardServiceId, jobCardServicesUpdateDto,ifMatch));
+
+    }
+    @Test
+    @DisplayName("testUpdateJobCardServiceStartTime")
+    public void testUpdateJobCardServiceStartTime_UnAuthorizedFields() throws Exception {
+
+        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
+        String jobCardServiceId = "5d876d79-caf6-421b-8b2c-190cea9a137e";
+        String ifMatch = "2023-07-03 09:36:53.872000000";
+        RequestContext requestContext = getRequestContext();
+        JobCard mockJobCard = getJobCardEntity(jobCardDto1);
+        requestContext.setRoles(Arrays.asList("EditTask"));
+        jobCardServicesDto1.setTechnician(new TechnicianDto("36addd73-5f39-11ea-9efa-9b0ce15ed32c","John Doe"));
+
+        when(requestContextProvider.getRequestContext()).thenReturn(requestContext);
+        when(jobCardServicesRepository.findOneBy(any())).thenReturn(mockJobCard.getServicesSelected().get(0));
+        when(mapper.JobCardServicesToDto(any(JobCardServices.class))).thenReturn(jobCardServicesDto1);
+        JobCardServicesUpdateDto jobCardServicesUpdateDto = new JobCardServicesUpdateDto();
+        jobCardServicesUpdateDto.setStatus(ServiceStatus.Z22.toString());
+        jobCardServicesUpdateDto.setNotes("Notes");
+
+        assertThrows(CustomException.class, () ->jobCardService.updateJobCardService(jobCardId, jobCardServiceId, jobCardServicesUpdateDto,ifMatch));
+
+    }
     @Test
     @DisplayName("testUpdateJobCardServiceStartTime")
     public void testUpdateJobCardServiceStartTime() throws Exception {
@@ -480,7 +530,7 @@ public class JobCardServiceTest {
 
         when(requestContextProvider.getRequestContext()).thenReturn(requestContext);
         when(jobCardServicesRepository.findOneBy(any())).thenReturn(mockJobCard.getServicesSelected().get(0));
-        when(mapper.JobCardServicesToDto(any())).thenReturn(jobCardServicesDto1);
+       // when(mapper.JobCardServicesToDto(any())).thenReturn(jobCardServicesDto1);
         when(jobCardServicesRepository.update(any())).thenReturn(new JobCardServices());
         when(mapper.JobCardServicesDtoToJobCardServices(any())).thenReturn(mockJobCard.getServicesSelected().get(0));
         when(jobCardRepository.create(any())).thenReturn(mockJobCard);
@@ -749,7 +799,11 @@ public class JobCardServiceTest {
         List<JobCardDto> mockJobCardDtoList = new ArrayList<>();
         mockJobCardDtoList.add(jobCardDto2);
 
-        Optional<String> filter = Optional.of("caseId eq c7e9469a-1b6b-42c6-9580-28ed4a994346");
+        Optional<String> filter = Optional.of("caseId eq c7e9469a-1b6b-42c6-9580-28ed4a994346 and true");
+        Optional<String> search = Optional.empty();
+        Optional<Integer> top = Optional.of(1000);
+        Optional<Integer> skip = Optional.empty();
+        Pageable page = PageRequest.of(0, 1000);
         QueryFilterOptions queryFilterOptions = QueryFilterOptions.builder().
                 selectAttributeName("caseId")
                 .selectValue("123")
@@ -759,10 +813,14 @@ public class JobCardServiceTest {
 
         when(mapper.JobCardToDto(any(JobCard.class))).thenReturn(jobCardDto2);
         when(mapper.JobCardServicesToDto(any(JobCardServices.class))).thenReturn(jobCardServicesDto2);
-        when(jobCardRepository.findAllBy(any(JobCardSpecification.class))).thenReturn(mockJobCardList);
-        List<JobCardDto> result = jobCardService.findAll(filter);
+        when(jobCardRepository.findAllBy(any(Specification.class), any(Pageable.class))).thenReturn(mockJobCardList);
+        List<JobCardDto> result = jobCardService.findAll(filter,search, top, skip);
 
         assertEquals(mockJobCardDtoList, result);
+        search = Optional.of("123");
+        result = jobCardService.findAll(filter,search, top, skip);
+        assertEquals(mockJobCardDtoList, result);
+
     }
 
     @Test

@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -47,7 +49,11 @@ class RequestContextProviderTest {
                         .builder()
                         .userId("36addd73-5f39-11ea-9efa-9b0ce15ed32c")
                         .authToken("authToken")
-                        .language("en-us").destination(destination).caseStatus(caseStatus).extensionFields(extensionFields)
+                        .language("en-us")
+                        .destination(destination)
+                        .caseStatus(caseStatus)
+                        .extensionFields(extensionFields)
+                        .roles(Arrays.asList("ViewJobCard", "MasterData", "EditTask"))
                         .build();
     }
 

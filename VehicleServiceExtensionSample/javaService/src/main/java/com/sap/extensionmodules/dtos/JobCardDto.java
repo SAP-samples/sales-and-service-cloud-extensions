@@ -1,5 +1,6 @@
 package com.sap.extensionmodules.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sap.extensionmodules.commons.APIConstants;
 import lombok.*;
 
@@ -28,6 +29,8 @@ public class JobCardDto {
     private String estimatedCompletionDate;
     private AdminData adminData;
     private String statusDescription;
+    private String model;
+    private String vehicleNumber;
     private final String source = APIConstants.JAVA_SERVICE;
 
 

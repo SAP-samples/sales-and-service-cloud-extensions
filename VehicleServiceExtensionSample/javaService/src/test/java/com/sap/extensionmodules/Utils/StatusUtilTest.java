@@ -52,7 +52,7 @@ class StatusUtilTest {
 
         dto.setServicesSelected(services);
 
-        when(utilSpy.getDescription("Z01", "en-US")).thenReturn("Draft");
+       // when(utilSpy.getDescription("Z01", "en-US")).thenReturn("Draft");
         //when(resourceBundle.getString("Z11")).thenReturn("Booked");
         //when(resourceBundle.getString("Z12")).thenReturn("In Progress");
 
@@ -67,7 +67,7 @@ class StatusUtilTest {
 
     @Test
     void testGetDescription() {
-        when(utilSpy.getDescription("Z21", "en-US")).thenReturn("New");
+        //when(utilSpy.getDescription("Z21", "en-US")).thenReturn("New");
 
         String description = statusUtil.getDescription("Z21", "en_US");
 
