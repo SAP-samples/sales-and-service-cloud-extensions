@@ -1,6 +1,8 @@
 package com.sap.extensionmodules.dtos;
+import com.sap.cnsmodules.model.RegisteredProductqueryresponseValueInnerServiceTechnician;
 import com.sap.extensionmodules.commons.APIConstants;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @Builder
@@ -17,7 +19,7 @@ public class JobCardServicesDto {
     private String id;
     private String service;
     private String price;
-    private String technician;
+    private TechnicianDto technician;
     private String status;
     private String startTime;
     private String endTime;

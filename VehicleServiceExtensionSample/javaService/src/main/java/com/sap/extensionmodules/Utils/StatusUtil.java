@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 @Service
 public class StatusUtil {
 
-    public JobCardDto addStatusDescription(JobCardDto dto, String language){
+    public static JobCardDto addStatusDescription(JobCardDto dto, String language){
 
         dto.setStatusDescription(getDescription(dto.getStatus(), language));
         for(JobCardServicesDto service:dto.getServicesSelected()){
@@ -20,7 +20,7 @@ public class StatusUtil {
         return dto;
     }
 
-    public String getDescription(String status, String language){
+    public static String getDescription(String status, String language){
         Locale locale = new Locale(language);
         ResourceBundle rb = ResourceBundle.getBundle("Message", locale);
         return rb.getString(status);

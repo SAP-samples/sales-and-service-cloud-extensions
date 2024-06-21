@@ -2,6 +2,7 @@ package com.sap.extensionmodules.dtos;
 
 import lombok.*;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Data

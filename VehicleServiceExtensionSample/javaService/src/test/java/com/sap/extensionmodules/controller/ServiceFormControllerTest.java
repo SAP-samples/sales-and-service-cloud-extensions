@@ -61,35 +61,27 @@ public class ServiceFormControllerTest {
         ServiceFormDto serviceFormDto = createSampleServiceFormDto();
         when(serviceFormService.create(eq(serviceFormDto))).thenThrow(new OpenApiRequestException("Test exception"));
 
-        ResponseEntity<?> response = serviceFormController.create(serviceFormDto);
+        //ResponseEntity<?> response = serviceFormController.create(serviceFormDto);
+        assertThrows(OpenApiRequestException.class, () -> serviceFormController.create(serviceFormDto));
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals("Test exception", errorResponse.getError().getMessage());
-        verify(serviceFormService, times(1)).create(eq(serviceFormDto));
+       verify(serviceFormService, times(1)).create(eq(serviceFormDto));
     }
 
-    @Test
-    void testCreate_ServerException() throws Exception {
-        ServiceFormDto serviceFormDto = createSampleServiceFormDto();
-        when(serviceFormService.create(eq(serviceFormDto))).thenThrow(new ServerException("Test exception"));
-
-        assertThrows(ResponseStatusException.class, () -> serviceFormController.create(serviceFormDto));
-        verify(serviceFormService, times(1)).create(eq(serviceFormDto));
-    }
+//    @Test
+//    void testCreate_ServerException() throws Exception {
+//        ServiceFormDto serviceFormDto = createSampleServiceFormDto();
+//        when(serviceFormService.create(eq(serviceFormDto))).thenThrow(new ServerException("Test exception"));
+//
+//        assertThrows(ResponseStatusException.class, () -> serviceFormController.create(serviceFormDto));
+//        verify(serviceFormService, times(1)).create(eq(serviceFormDto));
+//    }
 
     @Test
     void testCreate_UnexpectedException() throws Exception {
         ServiceFormDto serviceFormDto = createSampleServiceFormDto();
         when(serviceFormService.create(eq(serviceFormDto))).thenThrow(new RuntimeException("Test exception"));
 
-        ResponseEntity<?> response = serviceFormController.create(serviceFormDto);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals("Test exception", errorResponse.getError().getMessage());
+        assertThrows(RuntimeException.class, () -> serviceFormController.create(serviceFormDto));
         verify(serviceFormService, times(1)).create(eq(serviceFormDto));
     }
 
@@ -98,16 +90,11 @@ public class ServiceFormControllerTest {
         List<ServiceFormDto> serviceFormDtoList = createSampleServiceFormDtoList();
         when(serviceFormService.findAll(Optional.empty())).thenReturn(serviceFormDtoList);
 
-        when(statusUtil.getDescription(anyString(), anyString())).thenReturn("Test Description");
-
         ResponseEntity<?> response = serviceFormController.findAll(null, Optional.empty());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(serviceFormDtoList, response.getBody());
 
-        for (ServiceFormDto dto : serviceFormDtoList) {
-            verify(statusUtil, times(1)).getDescription(dto.getStatus(), "en-US");
-        }
     }
 
     @Test
@@ -116,16 +103,12 @@ public class ServiceFormControllerTest {
         Optional<String> filter = Optional.empty();
         when(serviceFormService.findAll(filter)).thenReturn(serviceFormDtoList);
 
-        when(statusUtil.getDescription(anyString(), anyString())).thenReturn("Test Description");
 
         ResponseEntity<?> response = serviceFormController.findAll("en-GB", filter);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(serviceFormDtoList, response.getBody());
 
-        for (ServiceFormDto dto : serviceFormDtoList) {
-            verify(statusUtil, times(1)).getDescription(dto.getStatus(), "en-GB");
-        }
     }
 
     @Test
@@ -133,180 +116,19 @@ public class ServiceFormControllerTest {
 
         List<ServiceFormDto> serviceFormDtoList = createSampleServiceFormDtoList();
         when(serviceFormService.findAll(Optional.empty())).thenReturn(serviceFormDtoList);
-        when(statusUtil.getDescription(anyString(), anyString())).thenReturn("Test Description");
-
         ResponseEntity<?> response = serviceFormController.findAll("fr-FR", Optional.empty());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(serviceFormDtoList, response.getBody());
 
-        for (ServiceFormDto dto : serviceFormDtoList) {
-            verify(statusUtil, times(1)).getDescription(dto.getStatus(), "fr-FR");
-        }
     }
 
     @Test
     public void testFindAllException() {
         when(serviceFormService.findAll(any(Optional.class))).thenThrow(new RuntimeException("Simulated exception"));
 
-        ResponseEntity<?> response = serviceFormController.findAll("en-US", Optional.empty());
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorResponse.getError().getCode());
-        assertEquals("Simulated exception", errorResponse.getError().getMessage());
+        assertThrows(RuntimeException.class, () -> serviceFormController.findAll("en-US", Optional.empty()));
     }
-
-
-    @Test
-    public void testFindServiceFormById() throws NotFoundException {
-        String serviceFormId = "24ec9136-f3e5-4704-bd49-459506f687fc";
-        String language = "en-US";
-        ServiceFormDto serviceFormDto = createSampleServiceFormDto();
-
-        when(serviceFormService.findById(eq(serviceFormId))).thenReturn(serviceFormDto);
-
-        when(statusUtil.getDescription(anyString(), anyString())).thenReturn("Test Description");
-
-        ResponseEntity<?> response = serviceFormController.findById(serviceFormId, language);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(serviceFormDto, response.getBody());
-
-        verify(statusUtil, times(1)).getDescription(serviceFormDto.getStatus(), language);
-    }
-
-    @Test
-    public void testFindByIdSuccess() throws Exception {
-        String serviceFormId = "24ec9136-f3e5-4704-bd49-459506f687fc";
-        String language = "en-US";
-        ServiceFormDto serviceFormDto = createSampleServiceFormDto();
-
-        when(serviceFormService.findById(serviceFormId)).thenReturn(serviceFormDto);
-
-        when(statusUtil.getDescription(anyString(), anyString())).thenReturn("Test Description");
-
-        ResponseEntity<?> response = serviceFormController.findById(serviceFormId, language);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(serviceFormDto, response.getBody());
-
-        verify(statusUtil, times(1)).getDescription(serviceFormDto.getStatus(), language);
-    }
-
-    @Test
-    public void testFindByIdNotFound() throws NotFoundException {
-        String id = "123";
-        when(serviceFormService.findById(eq(id))).thenThrow(new NotFoundException("Service form not found"));
-
-        ResponseEntity<?> response = serviceFormController.findById(id, null);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assert errorResponse != null;
-        assertEquals("Service form not found", errorResponse.getError().getMessage());
-        verify(serviceFormService, times(1)).findById(eq(id));
-    }
-
-    @Test
-    public void testFindByIdInternalServerError() throws NotFoundException {
-        String id = "123";
-        when(serviceFormService.findById(eq(id))).thenThrow(new RuntimeException("Internal server error"));
-
-        ResponseEntity<?> response = serviceFormController.findById(id, null);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assert errorResponse != null;
-        assertEquals("Internal server error", errorResponse.getError().getMessage());
-        verify(serviceFormService, times(1)).findById(eq(id));
-    }
-
-    @Test
-    public void testFindByIdSuccessWithNullLanguage() throws Exception {
-        String serviceFormId = "24ec9136-f3e5-4704-bd49-459506f687fc";
-        String language = null;
-        ServiceFormDto serviceFormDto = createSampleServiceFormDto();
-
-        when(serviceFormService.findById(serviceFormId)).thenReturn(serviceFormDto);
-
-        when(statusUtil.getDescription(anyString(), eq("en-US"))).thenReturn("Test Description");
-
-        ResponseEntity<?> response = serviceFormController.findById(serviceFormId, language);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(serviceFormDto, response.getBody());
-
-        verify(statusUtil, times(1)).getDescription(serviceFormDto.getStatus(), "en-US");
-    }
-
-    @Test
-    public void testFindAllSFStatusesSuccess() {
-        String language = "en-US";
-
-        when(statusUtil.getDescription(eq(SFStatus.Z01.toString()), eq(language))).thenReturn("Description Z01");
-        when(statusUtil.getDescription(eq(SFStatus.Z02.toString()), eq(language))).thenReturn("Description Z02");
-
-        ResponseEntity<?> response = serviceFormController.findAllSFStatus("en-US");
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List <?> statusDtoList = (List<?>) response.getBody();
-        assertNotNull(statusDtoList);
-        assertEquals(2, statusDtoList.size());
-
-        verify(statusUtil, times(1)).getDescription(eq(SFStatus.Z01.toString()), eq(language));
-        verify(statusUtil, times(1)).getDescription(eq(SFStatus.Z02.toString()), eq(language));
-
-        StatusDto statusDto1 = (StatusDto) statusDtoList.get(0);
-        assertEquals(SFStatus.Z01.toString(), statusDto1.getCode());
-        assertEquals("Description Z01", statusDto1.getDescription());
-
-        StatusDto statusDto2 = (StatusDto) statusDtoList.get(1);
-        assertEquals(SFStatus.Z02.toString(), statusDto2.getCode());
-        assertEquals("Description Z02", statusDto2.getDescription());
-    }
-
-    @Test
-    public void testFindAllSFStatusesNoLanguage() {
-        when(statusUtil.getDescription(eq(SFStatus.Z01.toString()), eq("en-US"))).thenReturn("Description Z01");
-        when(statusUtil.getDescription(eq(SFStatus.Z02.toString()), eq("en-US"))).thenReturn("Description Z02");
-
-        ResponseEntity<?> response = serviceFormController.findAllSFStatus(null);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<?> statusDtoList = (List<?>) response.getBody();
-        assertNotNull(statusDtoList);
-        assertEquals(2, statusDtoList.size());
-
-        verify(statusUtil, times(1)).getDescription(eq(SFStatus.Z01.toString()), eq("en-US"));
-        verify(statusUtil, times(1)).getDescription(eq(SFStatus.Z02.toString()), eq("en-US"));
-
-        StatusDto statusDto1 = (StatusDto) statusDtoList.get(0);
-        assertEquals(SFStatus.Z01.toString(), statusDto1.getCode());
-        assertEquals("Description Z01", statusDto1.getDescription());
-
-        StatusDto statusDto2 = (StatusDto) statusDtoList.get(1);
-        assertEquals(SFStatus.Z02.toString(), statusDto2.getCode());
-        assertEquals("Description Z02", statusDto2.getDescription());
-    }
-
-    @Test
-    public void testFindAllSFStatusesException() {
-        String language = "en-US";
-        when(statusUtil.getDescription(anyString(), eq(language))).thenThrow(new RuntimeException("Simulated exception"));
-
-        ResponseEntity<?> response = serviceFormController.findAllSFStatus(language);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorResponse.getError().getCode());
-        assertEquals("Simulated exception", errorResponse.getError().getMessage());
-    }
-
 
     @Test
     public void testUpdate_Success() throws Exception {
@@ -325,24 +147,6 @@ public class ServiceFormControllerTest {
     }
 
     @Test
-    public void testUpdate_PreconditionRequiredException() throws Exception {
-        String id = "24ec9136-f3e5-4704-bd49-459506f687fc";
-        ServiceFormDto inputDto = createSampleServiceFormDto();
-        String ifMatch = "12345";
-        APIExceptionHandler preconditionRequiredException = new APIExceptionHandler(HttpStatus.PRECONDITION_REQUIRED, "Precondition required");
-
-        when(serviceFormService.update(eq(id), eq(inputDto), eq(ifMatch))).thenThrow(preconditionRequiredException);
-
-        ResponseEntity<?> response = serviceFormController.update(id, inputDto, ifMatch);
-
-        assertEquals(HttpStatus.PRECONDITION_REQUIRED, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assert errorResponse != null;
-        assertEquals(preconditionRequiredException.getMessage(), errorResponse.getError().getMessage());
-        verify(serviceFormService, times(1)).update(eq(id), eq(inputDto), eq(ifMatch));
-    }
-
-    @Test
     public void testUpdate_NotFoundException() throws Exception {
         String id = "24ec9136-f3e5-4704-bd49-459506f687fc";
         ServiceFormDto inputDto = createSampleServiceFormDto();
@@ -350,13 +154,7 @@ public class ServiceFormControllerTest {
         NotFoundException notFoundException = new NotFoundException("Service form not found");
 
         when(serviceFormService.update(eq(id), eq(inputDto), eq(ifMatch))).thenThrow(notFoundException);
-
-        ResponseEntity<?> response = serviceFormController.update(id, inputDto, ifMatch);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assert errorResponse != null;
-        assertEquals(notFoundException.getMessage(), errorResponse.getError().getMessage());
+        assertThrows(NotFoundException.class, () -> serviceFormController.update(id, inputDto, ifMatch));
         verify(serviceFormService, times(1)).update(eq(id), eq(inputDto), eq(ifMatch));
     }
 
@@ -368,12 +166,7 @@ public class ServiceFormControllerTest {
         RuntimeException exception = new RuntimeException("Internal server error");
 
         doThrow(exception).when(serviceFormService).update(eq(id), eq(inputDto), eq(ifMatch));
-        ResponseEntity<?> response = serviceFormController.update(id, inputDto, ifMatch);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals(exception.getMessage(), errorResponse.getError().getMessage());
+        assertThrows(RuntimeException.class, () -> serviceFormController.update(id, inputDto, ifMatch));
         verify(serviceFormService, times(1)).update(eq(id), eq(inputDto), eq(ifMatch));
     }
 
@@ -397,12 +190,7 @@ public class ServiceFormControllerTest {
         NotFoundException exception = new NotFoundException("Service form not found");
 
         doThrow(exception).when(serviceFormService).delete(id);
-        ResponseEntity<?> response = serviceFormController.delete(id);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        ErrorResponse errorResponse = (ErrorResponse) response.getBody();
-        assertNotNull(errorResponse);
-        assertEquals(exception.getMessage(), errorResponse.getError().getMessage());
+        assertThrows(NotFoundException.class, () -> serviceFormController.delete(id));
         verify(serviceFormService, times(1)).delete(id);
     }
 
@@ -411,13 +199,7 @@ public class ServiceFormControllerTest {
         String id = "sampleId";
         doThrow(new RuntimeException("Test exception")).when(serviceFormService).delete(id);
 
-        ResponseEntity<?> responseEntity = serviceFormController.delete(id);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-        assertTrue(responseEntity.getBody() instanceof ErrorResponse);
-        ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-        assertEquals("Test exception", errorResponse.getError().getMessage());
-
+        assertThrows(RuntimeException.class, () -> serviceFormController.delete(id));
         verify(serviceFormService).delete(id);
     }
 

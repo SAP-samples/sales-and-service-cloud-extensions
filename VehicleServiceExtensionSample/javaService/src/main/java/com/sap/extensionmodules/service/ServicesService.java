@@ -69,12 +69,13 @@ public class ServicesService {
             throw new NotFoundException(SERVICE_RESOURCE_NOT_FOUND);
         } else {
             UpdateChecker.isUpdateOnLatestData(ifMatch, existingService.getAdminData().getUpdatedOn());
-            AdminData adminData = new AdminData();
-            adminData.setUpdatedBy(requestContextProvider.getRequestContext().getUserId());
-            adminData.setUpdatedOn(strDate);
+            AdminData adminData = new AdminData(
+                    existingService.getAdminData().getCreatedOn(), strDate,
+                    existingService.getAdminData().getCreatedBy(),
+                    requestContextProvider.getRequestContext().getUserId());
             dto.setAdminData(adminData);
 
-            mapper.updateServices(existingService, services);
+            mapper.updateServices(dto, services);
             Services entity = servicesRepository.update(services);
             return mapper.ServicesToDto(entity);
         }

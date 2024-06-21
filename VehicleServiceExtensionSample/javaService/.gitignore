@@ -19,6 +19,7 @@ target/
 *.iml
 *.ipr
 *.prt
+.DS_Store
 
 ### NetBeans ###
 /nbproject/private/

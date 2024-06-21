@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,91 +29,49 @@ public class ServicesController {
     private ServicesService servicesService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('MasterData')")
     public ResponseEntity<?> create(@RequestBody ServicesDto servicesDto) {
-        try {
-            servicesDto = servicesService.create(servicesDto);
-            log.info("Service created successfully: {}", servicesDto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(servicesDto);
-        } catch (Exception e) {
-            log.error("Error creating service: {}", e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+        servicesDto = servicesService.create(servicesDto);
+        log.info("Service created successfully: {}", servicesDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(servicesDto);
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('MasterData')")
     public ResponseEntity<?> findAll() {
-        try {
-            List<ServicesDto> dto = servicesService.findAll();
-            log.info("Found {} services", dto.size());
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(dto);
-        } catch (Exception e) {
-            log.error("Error retrieving all services: {}", e.getMessage());
-            log.error(e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+        List<ServicesDto> dto = servicesService.findAll();
+        log.info("Found {} services", dto.size());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(dto);
     }
 
     @GetMapping(REST_PATH_ID)
-    public ResponseEntity<?> findById(@PathVariable String id) {
-        try {
-            ServicesDto dto = servicesService.findById(id);
-            log.info("Found service by ID {}: {}", id, dto);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(dto);
-        } catch (NotFoundException e) {
-            log.warn("Service not found by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        } catch (Exception e) {
-            log.error("Error retrieving service by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+    @PreAuthorize("hasAuthority('MasterData')")
+    public ResponseEntity<?> findById(@PathVariable String id) throws NotFoundException {
+        ServicesDto dto = servicesService.findById(id);
+        log.info("Found service by ID {}: {}", id, dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(dto);
     }
 
     @PatchMapping(REST_PATH_ID)
+    @PreAuthorize("hasAuthority('MasterData')")
     public ResponseEntity<?> update(@PathVariable String id,
                                     @RequestBody ServicesDto servicesDto,
-                                    @RequestHeader(name = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
-        try {
-            ServicesDto result = servicesService.update(id, servicesDto, ifMatch);
-            log.info("Service updated successfully: {}", result);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(result);
-        } catch (APIExceptionHandler preconditionRequiredException) {
-            log.warn("Precondition required: {}", preconditionRequiredException.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(preconditionRequiredException.getHttpStatus().value(), preconditionRequiredException.getMessage());
-            return ResponseEntity.status(preconditionRequiredException.getHttpStatus()).body(errorResponse);
-        } catch (NotFoundException e) {
-            log.warn("Service not found for update by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        } catch (Exception e) {
-            log.error("Error updating service by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+                                    @RequestHeader(name = HttpHeaders.IF_MATCH, required = false) String ifMatch) throws NotFoundException {
+        ServicesDto result = servicesService.update(id, servicesDto, ifMatch);
+        log.info("Service updated successfully: {}", result);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(result);
     }
 
     @DeleteMapping(REST_PATH_ID)
-    public ResponseEntity<?> delete(@PathVariable String id) {
-        try {
-            servicesService.delete(id);
-            log.info("Service deleted successfully with ID: {}", id);
-            Map<String, Object> response = Map.of("raw", Collections.emptyList(), "affected", 1);
-            return ResponseEntity.ok(response);
-        } catch (NotFoundException e) {
-            log.warn("Service not found for deletion by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        } catch (Exception e) {
-            log.error("Error deleting service by ID {}: {}", id, e.getMessage());
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+    @PreAuthorize("hasAuthority('MasterData')")
+    public ResponseEntity<?> delete(@PathVariable String id) throws NotFoundException {
+        servicesService.delete(id);
+        log.info("Service deleted successfully with ID: {}", id);
+        Map<String, Object> response = Map.of("raw", Collections.emptyList(), "affected", 1);
+        return ResponseEntity.ok(response);
     }
 }

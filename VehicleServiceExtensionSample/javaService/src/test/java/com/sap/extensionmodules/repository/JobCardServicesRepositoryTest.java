@@ -55,7 +55,6 @@ public class JobCardServicesRepositoryTest {
             .id("a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb")
             .service("Air filter replacement")
             .price("49.99")
-            .technician("Sandra")
             .status(ServiceStatus.Z21.toString())
             .startTime(null)
             .endTime(null)
@@ -176,7 +175,6 @@ public class JobCardServicesRepositoryTest {
         jobCardServices.setId(jobCardServicesDto.getId());
         jobCardServices.setService(jobCardServicesDto.getService());
         jobCardServices.setPrice(jobCardServicesDto.getPrice());
-        jobCardServices.setTechnician(jobCardServicesDto.getTechnician());
         jobCardServices.setStatus(jobCardServicesDto.getStatus());
         jobCardServices.setStartTime(jobCardServicesDto.getStartTime());
         jobCardServices.setEndTime(jobCardServicesDto.getEndTime());

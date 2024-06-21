@@ -20,7 +20,7 @@ public class RegisteredProductsService {
     @Autowired
     RequestContextProvider requestContextProvider;
 
-    public RegisteredProductfile readRegisteredProductById(UUID caseId) throws ServerException {
+    public RegisteredProductfile readRegisteredProductById(UUID caseId) {
         final HttpDestination destination = requestContextProvider.getRequestContext().getDestination();
         RegisteredProductApi service = new RegisteredProductApi(destination);
         String authToken = requestContextProvider.getRequestContext().getAuthToken();
@@ -30,7 +30,7 @@ public class RegisteredProductsService {
         }
         catch(OpenApiRequestException e){
             e.printStackTrace();
-            throw new ServerException("Cannot read Registered Product", e);
+            throw new OpenApiRequestException("Cannot read Registered Product", e);
         }
     }
 }

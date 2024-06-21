@@ -21,6 +21,8 @@ public class Constants {
         public static final String INSPECTION_ITEM_RESOURCE_NOT_FOUND = "InspectionItem Resource with the provided id not found";
         public static final String SERVICE_RESOURCE_NOT_FOUND = "Services Resource with the provided id not found";
         public static final String SERVICE_FORM_RESOURCE_NOT_FOUND = "ServiceForm Resource with the provided id not found";
+
+        public static final String EMPLOYEE_RESOURCE_NOT_FOUND = "Employee Resource with the provided id not found";
         public static final String CASE_COMPLETED = "Case is Completed. Cannot create Job Card for Completed Case";
         public static final String NO_REGISTERED_PRODUCTS_IN_CASE = "No Registered Products in the case";
         public static final String NO_REGISTERED_PRODUCTS_WITH_VEHICLE_NO = "No Registered Products with given Vehicle Number";
@@ -40,6 +42,7 @@ public class Constants {
         public static final String INVALID_SOURCE_TYPE = "Invalid sourceType.";
         public static final String INVALID_SOURCE_ID = "sourceid must be a UUID";
         public static final String INVALID_JOBCARD_STATUS = "Invalid status. Valid values are:";
+        public static final String INVALID_EMPLOYEE = "Invalid Employee ID";
     }
 
     public static class ExtensionFields {
@@ -74,16 +77,23 @@ public class Constants {
     }
 
     public static final String QUERY_OPTION_FILTER = "$filter";
+    public static final String QUERY_OPTION_SEARCH = "$search";
+    public static final String QUERY_OPTION_TOP = "$top";
+    public static final String QUERY_OPTION_SKIP = "$skip";
     public static final String AND_DELIMITER = " and ";
     public static final String OR_DELIMITER = " or ";
     public static final String SPACE_DELIMITER = " ";
     public static final String COMMA_DELIMITER = ",";
     public static final String SINGLE_QUOTES_DELIMITER = "\'";
     public static final String QUOTES_DELIMITER = "\"";
-    public static <T> List<T> safe(List<T> list) {
-        return list == null ? Collections.emptyList() : list;
-    }
 
     public static final String DESTINATION_SERVICE_URL = "/destination-configuration/v1/destinations/";
+    public static final String[] AUTHORIZED_FIELDS = {"status", "observation"};
+    public static final String EditTaskRole = "EditTask";
+    public static final String EditJobCardService = "EditJobCardService";
+    public static final String CANNOT_EDIT_OTHER_USER_RECORDS = "User cannot edit other user's records";
+    public static final String CANNOT_EDIT_FIELD = "User does not have access to edit the field: ";
 
+    public static final int DEFAULT_PAGE_SIZE = 50;
+    public static final int MAX_PAGE_SIZE = 999;
 }

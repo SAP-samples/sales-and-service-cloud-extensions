@@ -13,6 +13,20 @@ import lombok.Value;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class QueryFilterOptions {
+
+    private String selectAttributeName;
+
+    private QueryFilterOperator operator;
+
+    private String selectValue;
+
+    private boolean isArray;
+
+    private String arrayName;
+
+    private boolean isLogicalOr;
+
+
     public enum QueryFilterOperator {
         LK(0),
 
@@ -26,7 +40,8 @@ public class QueryFilterOptions {
         EX(8),
         NEX(9),
         IN(10),
-        NIN(11);
+        NIN(11),
+        CT(12);
 
         private int value;
 
@@ -38,17 +53,5 @@ public class QueryFilterOptions {
             return this.value;
         }
     }
-
-    private String selectAttributeName;
-
-    private QueryFilterOperator operator;
-
-    private String selectValue;
-
-    private boolean isArray;
-
-    private String arrayName;
-
-    private boolean isLogicalOr;
 
 }

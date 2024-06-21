@@ -44,6 +44,12 @@ public class JobCardSpecification implements Specification<JobCard> {
             return builder.lessThanOrEqualTo(
                     root.get(criteria.getSelectAttributeName()), criteria.getSelectValue());
         }
+        else if (criteria.getOperator().getValue() == QueryFilterOptions.QueryFilterOperator.CT.getValue()) {
+            if(criteria.getSelectAttributeName().equals("displayId"))
+                return builder.like(builder.function("STR", String.class, root.get(criteria.getSelectAttributeName())), "%" + value + "%");
+
+            return builder.like(root.get(criteria.getSelectAttributeName()), "%" + criteria.getSelectValue() + "%");
+        }
 
         return null;
     }
@@ -52,7 +58,7 @@ public class JobCardSpecification implements Specification<JobCard> {
         switch (criteria.getSelectAttributeName()) {
             case "servicesProposed.isSelected":
                 return Boolean.parseBoolean(criteria.getSelectValue());
-            case "displayId":
+            //case "displayId":
             case "milometer":
                 return Integer.parseInt(criteria.getSelectValue());
             default:

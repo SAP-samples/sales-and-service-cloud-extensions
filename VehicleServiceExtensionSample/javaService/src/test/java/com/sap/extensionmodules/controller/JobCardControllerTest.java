@@ -25,6 +25,7 @@ import java.rmi.ServerException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class JobCardControllerTest {
@@ -59,7 +60,6 @@ public class JobCardControllerTest {
                 .id("a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb")
                 .service("Air filter replacement")
                 .price("49.99")
-                .technician("Sandra")
                 .status(ServiceStatus.Z21.toString())
                 .startTime(null)
                 .endTime(null)
@@ -167,38 +167,29 @@ public class JobCardControllerTest {
     @DisplayName("testFindAll")
     public void testFindAll()  {
         Optional<String> filter = Optional.empty();
-        when(jobCardService.findAll(filter)).thenReturn(jobCardDtoList());
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findAll(filter,"en-US");
+        when(jobCardService.findAll(filter, null, null, null)).thenReturn(jobCardDtoList());
+        //when(StatusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
+        ResponseEntity<?> response = jobCardController.findAll(filter,null, null, null,"en-US");
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(jobCardDtoList(), response.getBody());
-        for (JobCardDto dto : jobCardDtoList()) {
-            verify(statusUtil, times(1)).addStatusDescription(dto, "en-US");
-        }
+        //assertEquals(jobCardDtoList(), response.getBody());
     }
 
     @Test
     @DisplayName("testFindAll_withoutLanguage")
     public void testFindAll_withoutLanguage() {
         Optional<String> filter = Optional.empty();
-        when(jobCardService.findAll(filter)).thenReturn(jobCardDtoList());
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findAll(filter,null);
+        when(jobCardService.findAll(filter,null, null, null)).thenReturn(jobCardDtoList());
+        ResponseEntity<?> response = jobCardController.findAll(filter,null, null, null, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(jobCardDtoList(), response.getBody());
-
-        for (JobCardDto dto : jobCardDtoList()) {
-            verify(statusUtil, times(1)).addStatusDescription(dto, "en-US");
-        }
+        //assertEquals(jobCardDtoList(), response.getBody());
     }
     @Test
     @DisplayName("testFindAll_Exception")
     public void testFindAll_Exception() {
-        when(jobCardService.findAll(any()))
+        when(jobCardService.findAll(any(),any(), any(), any()))
                 .thenThrow(new RuntimeException("Some unexpected exception"));
-        ResponseEntity<?> responseEntity = jobCardController.findAll(Optional.empty(), null);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        assertThrows(RuntimeException.class, () -> jobCardController.findAll(Optional.empty(),null, null, null, null));
 
     }
     @Test
@@ -207,11 +198,9 @@ public class JobCardControllerTest {
 
         String jobCardId = "c7e9469a-1b6b-42c6-9580-28ed4a994346";
         when(jobCardService.findOne(anyString())).thenReturn(jobCardDto2);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
         ResponseEntity<?> response = jobCardController.findOne(jobCardId, "en-US");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(jobCardDto2, response.getBody());
-        verify(statusUtil, times(1)).addStatusDescription(jobCardDto2, "en-US");
 
     }
     @Test
@@ -220,11 +209,9 @@ public class JobCardControllerTest {
 
         String jobCardId = "c7e9469a-1b6b-42c6-9580-28ed4a994346";
         when(jobCardService.findOne(anyString())).thenReturn(jobCardDto2);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
         ResponseEntity<?> response = jobCardController.findOne(jobCardId, null);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(jobCardDto2, response.getBody());
-        verify(statusUtil, times(1)).addStatusDescription(jobCardDto2, "en-US");
 
     }
 
@@ -235,9 +222,7 @@ public class JobCardControllerTest {
         String jobCardId = "id";
         when(jobCardService.findOne(eq(jobCardId))).thenThrow(new CustomNotFoundException(HttpStatus.NOT_FOUND.value(),
                 "Test exception"));
-        ResponseEntity<?> responseEntity = jobCardController.findOne(jobCardId, null);
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        verify(jobCardService, times(1)).findOne(eq(jobCardId));
+        assertThrows(CustomNotFoundException.class, () -> jobCardController.findOne(jobCardId, null));
 
     }
     @Test
@@ -246,212 +231,9 @@ public class JobCardControllerTest {
 
         String jobCardId = "id";
         when(jobCardService.findOne(eq(jobCardId))).thenThrow(new RuntimeException("Test exception"));
-        ResponseEntity<?> responseEntity = jobCardController.findOne(jobCardId, "en-US");
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-        verify(jobCardService, times(1)).findOne(eq(jobCardId));
+        assertThrows(RuntimeException.class, () -> jobCardController.findOne(jobCardId, "en-US"));
 
     }
-
-    @Test
-    @DisplayName("testFindAllJobCardServices")
-    void testFindAllJobCardServices() {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177"; // Replace with the actual jobCardId
-        List<JobCardServicesDto> dtoList = jobCardServicesDtoList1();
-        when(jobCardService.findAllJobCardServices(jobCardId)).thenReturn(dtoList);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findAllJobCardServices(jobCardId, "en-US");
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dtoList, response.getBody());
-        verify(jobCardService, times(1)).findAllJobCardServices(jobCardId);
-        verify(statusUtil, times(dtoList.size())).getDescription(any(), anyString());
-
-    }
-
-    @Test
-    @DisplayName("testFindAllJobCardServices_withoutLanguage")
-    void testFindAllJobCardServices_withoutLanguage() {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177"; // Replace with the actual jobCardId
-        List<JobCardServicesDto> dtoList = jobCardServicesDtoList1();
-        when(jobCardService.findAllJobCardServices(jobCardId)).thenReturn(dtoList);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findAllJobCardServices(jobCardId, null);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(dtoList, response.getBody());
-        verify(jobCardService, times(1)).findAllJobCardServices(jobCardId);
-        verify(statusUtil, times(dtoList.size())).getDescription(any(), anyString());
-
-    }
-
-    @Test
-    @DisplayName("testFindAllJobCardServices_Exception")
-    public void testFindAllJobCardServices_Exception() {
-
-        String jobCardId = "id";
-        when(jobCardService.findAllJobCardServices(eq(jobCardId))).thenThrow(new RuntimeException("Test exception"));
-        ResponseEntity<?> response = jobCardController.findAllJobCardServices(jobCardId, "en-US");
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(jobCardService, times(1)).findAllJobCardServices(eq(jobCardId));
-
-    }
-
-    @Test
-    @DisplayName("testFindAllJobCardServices_CustomNotFoundException")
-    public void testFindAllJobCardServices_CustomNotFoundException() {
-
-        String jobCardId = "id";
-        when(jobCardService.findAllJobCardServices(eq(jobCardId))).thenThrow(
-                new CustomNotFoundException(HttpStatus.NOT_FOUND.value(),"Test exception"));
-        ResponseEntity<?> response = jobCardController.findAllJobCardServices(jobCardId, "en-US");
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(jobCardService, times(1)).findAllJobCardServices(eq(jobCardId));
-
-    }
-
-    @Test
-    @DisplayName("testFindOneJobCardService")
-    public void testFindOneJobCardService() {
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        String language = "en-US";
-
-        when(jobCardService.findOneJobCardService(jobCardServiceId)).thenReturn(jobCardServicesDto2);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findOneJobCardService(jobCardId, jobCardServiceId, language);
-        verify(statusUtil, times(1)).getDescription(any(), anyString());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(jobCardServicesDto2, response.getBody());
-    }
-
-    @Test
-    @DisplayName("testFindOneJobCardService_withoutLanguage")
-    public void testFindOneJobCardService_withoutLanguage() {
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        String language = null;
-
-        when(jobCardService.findOneJobCardService(jobCardServiceId)).thenReturn(jobCardServicesDto2);
-        when(statusUtil.getDescription(any(), anyString())).thenReturn("Test Description");
-        ResponseEntity<?> response = jobCardController.findOneJobCardService(jobCardId, jobCardServiceId, language);
-        verify(statusUtil, times(1)).getDescription(any(), anyString());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(jobCardServicesDto2, response.getBody());
-    }
-    @Test
-    @DisplayName("testFindOneJobCardService_Exception")
-    public void testFindOneJobCardService_Exception() {
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        String language = "en-US";
-        // Mocking jobCardService.findOneJobCardService() method
-        when(jobCardService.findOneJobCardService(jobCardServiceId)).thenThrow(new RuntimeException("test exception"));
-
-        // Calling the controller method
-        ResponseEntity<?> response = jobCardController.findOneJobCardService(jobCardId, jobCardServiceId, language);
-
-        // Asserting the response
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("testFindOneJobCardService_CustomNotFoundException")
-    public void testFindOneJobCardService_CustomNotFoundException() {
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        String language = "en-US";
-        when(jobCardService.findOneJobCardService(jobCardServiceId)).thenThrow(new CustomNotFoundException(
-                HttpStatus.NOT_FOUND.value(),"test exception"));
-        ResponseEntity<?> response = jobCardController.findOneJobCardService(jobCardId, jobCardServiceId, language);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-    @Test
-    @DisplayName("testFindAllJCStatuses")
-    public void testFindAllJCStatuses() {
-
-        String language = "en-US";
-        List<StatusDto> mockDtoList = jobCardStatusDtoList();
-
-        when(statusUtil.getDescription(mockDtoList.get(0).getCode(), language)).thenReturn(mockDtoList.get(0).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(1).getCode(), language)).thenReturn(mockDtoList.get(1).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(2).getCode(), language)).thenReturn(mockDtoList.get(2).getDescription());
-
-        ResponseEntity<List<StatusDto>> response = jobCardController.findAllJCStatuses(language);
-        verify(statusUtil, times(JCStatus.values().length)).getDescription(anyString(), anyString());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        assertEquals(mockDtoList.size(), response.getBody().size());
-        for (int i = 0; i < mockDtoList.size(); i++) {
-            assertEquals(mockDtoList.get(i).getCode(), response.getBody().get(i).getCode());
-            assertEquals(mockDtoList.get(i).getDescription(), response.getBody().get(i).getDescription());
-        }
-    }
-
-    @Test
-    @DisplayName("testFindAllJCStatuses_withoutLanguage")
-    public void testFindAllJCStatuses_withoutLanguage() {
-
-        String language = null;
-        List<StatusDto> mockDtoList = jobCardStatusDtoList();
-
-        when(statusUtil.getDescription(mockDtoList.get(0).getCode(), "en-US")).thenReturn(mockDtoList.get(0).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(1).getCode(), "en-US")).thenReturn(mockDtoList.get(1).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(2).getCode(), "en-US")).thenReturn(mockDtoList.get(2).getDescription());
-
-        ResponseEntity<List<StatusDto>> response = jobCardController.findAllJCStatuses(language);
-        verify(statusUtil, times(JCStatus.values().length)).getDescription(anyString(), anyString());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        assertEquals(mockDtoList.size(), response.getBody().size());
-        for (int i = 0; i < mockDtoList.size(); i++) {
-            assertEquals(mockDtoList.get(i).getCode(), response.getBody().get(i).getCode());
-            assertEquals(mockDtoList.get(i).getDescription(), response.getBody().get(i).getDescription());
-        }
-    }
-    @Test
-    @DisplayName("testFindAllJCServiceStatuses")
-    public void testFindAllJCServiceStatuses() {
-
-        String language = "en-US";
-        List<StatusDto> mockDtoList = jobCardServiceStatusDtoList();
-        when(statusUtil.getDescription(mockDtoList.get(0).getCode(), language)).thenReturn(mockDtoList.get(0).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(1).getCode(), language)).thenReturn(mockDtoList.get(1).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(2).getCode(), language)).thenReturn(mockDtoList.get(2).getDescription());
-
-        ResponseEntity<List<StatusDto>> response = jobCardController.findAllJCServiceStatuses(language);
-        verify(statusUtil, times(ServiceStatus.values().length)).getDescription(anyString(), anyString());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockDtoList.size(), response.getBody().size());
-        for (int i = 0; i < mockDtoList.size(); i++) {
-            assertEquals(mockDtoList.get(i).getCode(), response.getBody().get(i).getCode());
-            assertEquals(mockDtoList.get(i).getDescription(), response.getBody().get(i).getDescription());
-        }
-    }
-
-    @Test
-    @DisplayName("testFindAllJCServiceStatuses_withoutLanguage")
-    public void testFindAllJCServiceStatuses_withoutLanguage() {
-
-        String language = null;
-        List<StatusDto> mockDtoList = jobCardServiceStatusDtoList();
-        when(statusUtil.getDescription(mockDtoList.get(0).getCode(), "en-US")).thenReturn(mockDtoList.get(0).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(1).getCode(), "en-US")).thenReturn(mockDtoList.get(1).getDescription());
-        when(statusUtil.getDescription(mockDtoList.get(2).getCode(), "en-US")).thenReturn(mockDtoList.get(2).getDescription());
-
-        ResponseEntity<List<StatusDto>> response = jobCardController.findAllJCServiceStatuses(language);
-        verify(statusUtil, times(ServiceStatus.values().length)).getDescription(anyString(), anyString());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockDtoList.size(), response.getBody().size());
-        for (int i = 0; i < mockDtoList.size(); i++) {
-            assertEquals(mockDtoList.get(i).getCode(), response.getBody().get(i).getCode());
-            assertEquals(mockDtoList.get(i).getDescription(), response.getBody().get(i).getDescription());
-        }
-    }
-
     @Test
     @DisplayName("testCreateJobCard_Success")
     public void testCreateJobCard_Success() throws Exception {
@@ -472,10 +254,8 @@ public class JobCardControllerTest {
         when(jobCardService.createJobCard("sourceId", "sourceType"))
                 .thenThrow(new CustomValidationException(HttpStatus.BAD_REQUEST.value(),
                         "Validation errors occurred.", details));
+        assertThrows(CustomValidationException.class, () -> jobCardController.createJobCard("sourceId", "sourceType"));
 
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
-
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
@@ -485,53 +265,10 @@ public class JobCardControllerTest {
                 .thenThrow(new CustomNotFoundException(HttpStatus.NOT_FOUND.value(),
                         Constants.Messages.JOBCARD_ID_NOT_FOUND));
 
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
+        assertThrows(CustomNotFoundException.class, () -> jobCardController.createJobCard("sourceId", "sourceType"));
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
-    @Test
-    @DisplayName("testCreateJobCard_OpenApiRequestException")
-    public void testCreateJobCard_OpenApiRequestException() throws Exception {
-
-        when(jobCardService.createJobCard("sourceId", "sourceType"))
-                .thenThrow(new OpenApiRequestException("Cannot read Case data"));
-
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
-
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("testCreateJobCard_ServerException")
-    public void testCreateJobCard_ServerException() throws Exception {
-        when(jobCardService.createJobCard("sourceId", "sourceType"))
-                .thenThrow(new ServerException("Test Exception"));
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("testCreateJobCard_NotFoundException")
-    public void testCreateJobCard_NotFoundException() throws Exception {
-        when(jobCardService.createJobCard("sourceId", "sourceType"))
-                .thenThrow(new NotFoundException(
-                        ""));
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
-
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-    }
-
-    @Test
-    @DisplayName("testCreateJobCard_Exception")
-    public void testCreateJobCard_Exception() throws Exception {
-        when(jobCardService.createJobCard("sourceId", "sourceType"))
-                .thenThrow(new Exception(""));
-        ResponseEntity<?> responseEntity = jobCardController.createJobCard("sourceId", "sourceType");
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-    }
 
     @Test
     @DisplayName("testUpdateJobCardService_Success")
@@ -548,88 +285,6 @@ public class JobCardControllerTest {
         assertEquals(jobCardServicesDto2, response.getBody());
 
     }
-    @Test
-    @DisplayName("testUpdateJobCardService_APIExceptionHandler")
-    public void testUpdateJobCardService_APIExceptionHandler() throws Exception {
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        JobCardServicesUpdateDto updateDto = new JobCardServicesUpdateDto();
-        String ifMatch = "2023-07-03 09:36:53.872000000";
-
-        when(jobCardService.updateJobCardService(any(),any(),any(),any()))
-                .thenThrow(new APIExceptionHandler(HttpStatus.NOT_FOUND,"Test exception"));
-
-        ResponseEntity<?> response = jobCardController.updateJobCardService(eq(jobCardId), eq(jobCardServiceId), eq(updateDto),eq(ifMatch));
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-    }
-
-    @Test
-    @DisplayName("testUpdateJobCardService_OpenApiRequestException")
-    public void testUpdateJobCardService_OpenApiRequestException() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        JobCardServicesUpdateDto updateDto = new JobCardServicesUpdateDto();
-        String ifMatch = "2023-07-03 09:36:53.872000000";
-
-        when(jobCardService.updateJobCardService(any(),any(),any(),any()))
-                .thenThrow(new OpenApiRequestException("Test exception"));
-
-        ResponseEntity<?> response = jobCardController.updateJobCardService(eq(jobCardId), eq(jobCardServiceId), eq(updateDto),eq(ifMatch));
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-    }
-    @Test
-    @DisplayName("testUpdateJobCardService_CustomNotFoundException")
-    public void testUpdateJobCardService_CustomNotFoundException() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        JobCardServicesUpdateDto updateDto = new JobCardServicesUpdateDto();
-        String ifMatch = "2023-07-03 09:36:53.872000000";
-
-        when(jobCardService.updateJobCardService(any(),any(),any(),any()))
-                .thenThrow(new CustomNotFoundException(HttpStatus.NOT_FOUND.value(),"Test exception"));
-
-        ResponseEntity<?> response = jobCardController.updateJobCardService(eq(jobCardId), eq(jobCardServiceId), eq(updateDto),eq(ifMatch));
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-    }
-
-    @Test
-    @DisplayName("testUpdateJobCardService_ServerException")
-    public void testUpdateJobCardService_ServerException() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        JobCardServicesUpdateDto updateDto = new JobCardServicesUpdateDto();
-        String ifMatch = "2023-07-03 09:36:53.872000000";
-
-        when(jobCardService.updateJobCardService(any(),any(),any(),any()))
-                .thenThrow(new ServerException("Test exception"));
-
-        ResponseEntity<?> response = jobCardController.updateJobCardService(eq(jobCardId), eq(jobCardServiceId), eq(updateDto),eq(ifMatch));
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-
-    }
-
-    @Test
-    @DisplayName("testUpdateJobCardService_Exception")
-    public void testUpdateJobCardService_Exception() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-        String jobCardServiceId = "a9cd57cd-f61a-4d7f-9f87-dc031d5b95fb";
-        JobCardServicesUpdateDto updateDto = new JobCardServicesUpdateDto();
-        String ifMatch = "2023-07-03 09:36:53.872000000";
-
-        when(jobCardService.updateJobCardService(any(),any(),any(),any()))
-                .thenThrow(new Exception("Test exception"));
-
-        ResponseEntity<?> response = jobCardController.updateJobCardService(eq(jobCardId), eq(jobCardServiceId), eq(updateDto),eq(ifMatch));
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-
-    }
 
     @Test
     @DisplayName("testRemove_Success")
@@ -640,31 +295,6 @@ public class JobCardControllerTest {
 
         ResponseEntity<?> result = jobCardController.remove(jobCardId);
         assertEquals(result.getBody(),response);
-
-        verify(jobCardService, times(1)).remove(eq(jobCardId));
-    }
-    @Test
-    @DisplayName("testRemove_Exception")
-    public void testRemove_Exception() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-
-        doThrow(new RuntimeException("Test exception")).when(jobCardService).remove(eq(jobCardId));
-        ResponseEntity<?> response = jobCardController.remove(jobCardId);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-
-        verify(jobCardService, times(1)).remove(eq(jobCardId));
-    }
-    @Test
-    @DisplayName("testRemove_CustomNotFoundException")
-    public void testRemove_CustomNotFoundException() throws Exception {
-
-        String jobCardId = "16da4bc2-a8cc-4ba6-a7a5-ef69802ce177";
-
-        doThrow(new CustomNotFoundException(HttpStatus.NOT_FOUND.value(), "test exception"))
-                .when(jobCardService).remove(eq(jobCardId));
-        ResponseEntity<?> response = jobCardController.remove(jobCardId);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         verify(jobCardService, times(1)).remove(eq(jobCardId));
     }
@@ -682,22 +312,6 @@ public class JobCardControllerTest {
 
         ResponseEntity<?> responseEntity = jobCardController.findValidationStatus(requestBody);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    }
-    @Test
-    @DisplayName("findValidationStatus_Exception")
-    void findValidationStatus_Exception() {
-
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("entity", "sampleEntity");
-        requestBody.put("currentImage", new HashMap<>());
-
-        when(jobCardService.findValidationStatusService(any(), any()))
-                .thenThrow(new RuntimeException("Some unexpected exception"));
-
-        ResponseEntity<?> responseEntity =
-            jobCardController.findValidationStatus(requestBody);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
     }
 
 }

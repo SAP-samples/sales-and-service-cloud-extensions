@@ -96,7 +96,7 @@ class CaseServiceTest {
 
         when(caseApi.readcaseservicecase("abcd", caseId)).thenThrow(OpenApiRequestException.class);
 
-        assertThrows(ServerException.class, () -> serviceSpy.getCaseById(caseId));
+        assertThrows(OpenApiRequestException.class, () -> serviceSpy.getCaseById(caseId));
     }
 //
     @Test
@@ -140,7 +140,7 @@ class CaseServiceTest {
 
         when(caseApi.modifycaseservicecase("abcd", ifmatch, caseID, req)).thenThrow(OpenApiRequestException.class);
 
-        assertThrows(ServerException.class, () -> serviceSpy.updateCase(ifmatch, caseID, req));
+        assertThrows(OpenApiRequestException.class, () -> serviceSpy.updateCase(ifmatch, caseID, req));
     }
     @Test
     void testGetCaseData_WhenIndividualCustomer() {

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @Builder
@@ -17,4 +19,7 @@ public class RequestContext {
     private String language;
     private Constants.CaseStatus caseStatus;
     private Constants.ExtensionFields extensionFields;
+    private List<String> roles;
+    private List<String> scopes;
+    private String userName;
 }

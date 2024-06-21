@@ -17,7 +17,7 @@ components:
 security:
   - basicAuthentication: []
 paths:
-  /elsa/sap/c4c/api/v1/individual-customer-service/individualCustomers/{id}:
+  /sap/c4c/api/v1/individual-customer-service/individualCustomers/{id}:
     parameters:
       - name: x-sap-crm-token
         in: header

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sap.extensionmodules.Utils.RegisteredProductConverter;
 import com.sap.extensionmodules.dtos.RegisteredProduct;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenericGenerator;
@@ -47,13 +48,6 @@ public class JobCard {
     @Column(name = "\"milometer\"")
     private int milometer;
 
-//    @Column(name = "\"serviceAdvisor\"")
-//    private String serviceAdvisor;
-
-//    @Convert(converter = CustomerDetailsConverter.class)
-//    @Column(name = "\"customerDetails\"")
-//    private CustomerDetails customerDetails; //CustomerDetails
-
     @Column(name = "\"estimatedCompletionDate\"")
     @org.hibernate.annotations.ColumnDefault("")
     private String estimatedCompletionDate;
@@ -82,6 +76,14 @@ public class JobCard {
     @ToString.Exclude
     @OneToOne(mappedBy = "jobCard", cascade = CascadeType.PERSIST)
     private ServiceForm serviceForm;
+
+    @Column(name = "\"vehicleNumber\"")
+    @ColumnDefault("")
+    private String vehicleNumber;
+
+    @Column(name = "\"model\"")
+    @ColumnDefault("")
+    private String model;
 
     public void addServicesSelected(JobCardServices service) {
         servicesSelected.add(service);

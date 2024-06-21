@@ -2,6 +2,10 @@ package com.sap.extensionmodules.service;
 
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.sap.cloud.sdk.cloudplatform.connectivity.DefaultHttpDestination;
 import com.sap.cnsmodules.document.model.DocumentPostResponseValue;
 import com.sap.cnsmodules.model.CasePatchResponse;
@@ -29,8 +33,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.rmi.ServerException;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -79,7 +85,7 @@ class InvoiceServiceTest {
     }
 
     @Test
-    void testCreateInvoice(){
+    void testCreateInvoice() throws DocumentException, IOException {
         when(env.getProperty("sscDestination")).thenReturn("vlab");
         ByteArrayInputStream brr = new ByteArrayInputStream("Sample content".getBytes());
         when(invoiceServiceSpy.generateInvoice(createMockJobCardDto())).thenReturn(brr);
@@ -95,7 +101,7 @@ class InvoiceServiceTest {
         verify(invoiceServiceSpy, times(1)).updateCaseWithInvoice(any(String.class),any(DocumentPostResponse.class));
     }
     @Test
-    void testGenerateInvoice() throws IOException {
+    void testGenerateInvoice() throws IOException, DocumentException {
         // Create mock data
         JobCardDto jobCardDto = createMockJobCardDto();
 
@@ -103,6 +109,18 @@ class InvoiceServiceTest {
         ByteArrayInputStream inputStream = invoiceService.generateInvoice(jobCardDto);
 
         assertNotNull(inputStream);
+    }
+    @Test
+    void testGenerateInvoice_DocumentException(){
+        // Create mock data
+        JobCardDto jobCardDto = createMockJobCardDto();
+        try (MockedStatic mocked = mockStatic(PdfWriter.class)) {
+            mocked.when(() ->PdfWriter.getInstance(any(),any())).thenThrow(DocumentException.class);
+            ByteArrayInputStream inputStream = invoiceService.generateInvoice(jobCardDto);
+        } catch (Exception e) {
+            assertEquals(e.getClass(), RuntimeException.class);
+        }
+
     }
 
 
@@ -139,7 +157,7 @@ class InvoiceServiceTest {
         assertThrows(RuntimeException.class, () -> invoiceService.uploadDocument(new ByteArrayInputStream("Sample content".getBytes()), "your_dynamic_url"));
     }
     @Test
-    void testUpdateCaseWithInvoice() throws ServerException {
+    void testUpdateCaseWithInvoice() throws ServerException, JsonProcessingException {
 
         DocumentPostResponse res = new DocumentPostResponse();
         DocumentPostResponseValue val = new DocumentPostResponseValue();
@@ -189,6 +207,7 @@ class InvoiceServiceTest {
         service.setService("Brake pad replacement");
         service.setPrice("3450");
         service.setStatus("Z21");
+        service.setTechnician(new TechnicianDto("", "sandra"));
         service.setAdminData(new AdminData("2023-08-03 07:12:51.769000000","2023-08-03 07:12:51.769000000","",""));
 
 
@@ -204,6 +223,7 @@ class InvoiceServiceTest {
                 .milometer(5000)
                 .serviceAdvisor("Pavithra N")
                 .customerDetails(customerDetails)
+                .customerComplaints(Arrays.asList("brake failed"))
                 .estimatedCompletionDate(null)
                 .adminData(AdminData.builder()
                         .createdOn("2022-05-10T11:55:47.397Z")

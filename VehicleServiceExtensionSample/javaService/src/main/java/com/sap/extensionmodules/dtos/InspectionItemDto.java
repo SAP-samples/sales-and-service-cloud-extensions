@@ -16,6 +16,10 @@ public class InspectionItemDto {
     private String description;
     private Boolean isSelected = false;
     private AdminData adminData;
-    private final String source = APIConstants.JAVA_SERVICE;
 //    private AdminData adminData;
+    public InspectionItemDto(String id, String description, Boolean isSelected){
+        this.id = id;
+        this.description = description;
+        this.isSelected = isSelected;
+    }
 }

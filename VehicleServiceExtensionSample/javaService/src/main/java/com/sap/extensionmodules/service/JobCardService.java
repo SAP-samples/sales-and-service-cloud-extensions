@@ -3,12 +3,12 @@ package com.sap.extensionmodules.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.sap.cnsmodules.model.CasePatchResponse;
 import com.sap.cnsmodules.model.CasePatchUpdateRequest;
 import com.sap.cnsmodules.model.CaseReadResponse;
-import com.sap.extensionmodules.Utils.JobCardSpecification;
-import com.sap.extensionmodules.Utils.JobCardUtil;
-import com.sap.extensionmodules.Utils.UpdateChecker;
+import com.sap.extensionmodules.Utils.*;
+import com.sap.extensionmodules.commons.Constants;
 import com.sap.extensionmodules.commons.Constants.Messages;
 import com.sap.extensionmodules.commons.Constants.CaseStatus;
 import com.sap.extensionmodules.commons.Constants.EntityName;
@@ -16,18 +16,11 @@ import com.sap.extensionmodules.commons.Constants.CaseType;
 import com.sap.extensionmodules.commons.JCStatus;
 import com.sap.extensionmodules.commons.SFStatus;
 import com.sap.extensionmodules.commons.ServiceStatus;
-import com.sap.extensionmodules.dtos.AdminData;
-import com.sap.extensionmodules.dtos.CaseServiceDto;
-import com.sap.extensionmodules.dtos.CustomerDetails;
-import com.sap.extensionmodules.dtos.JobCardDto;
-import com.sap.extensionmodules.dtos.JobCardServicesDto;
-import com.sap.extensionmodules.dtos.JobCardServicesUpdateDto;
-import com.sap.extensionmodules.dtos.JobCardValidationError;
-import com.sap.extensionmodules.dtos.JobCardValidationResponse;
-import com.sap.extensionmodules.dtos.ServiceFormDto;
-import com.sap.extensionmodules.dtos.ServicesDto;
+import com.sap.extensionmodules.dtos.*;
 import com.sap.extensionmodules.dtos.query.QueryDTOHelper;
+import com.sap.extensionmodules.dtos.query.QueryFilterOptions;
 import com.sap.extensionmodules.dtos.query.QueryRequestDTO;
+import com.sap.extensionmodules.exception.CustomException;
 import com.sap.extensionmodules.exception.CustomNotFoundException;
 import com.sap.extensionmodules.exception.CustomValidationException;
 import com.sap.extensionmodules.exception.ErrorResponse;
@@ -40,6 +33,11 @@ import com.sap.extensionmodules.repository.JobCardRepository;
 import com.sap.extensionmodules.repository.JobCardServicesRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,21 +74,59 @@ public class JobCardService {
     RequestContextProvider requestContextProvider;
     @Autowired
     ServiceFormRepository serviceFormRepository;
+    @Autowired
+    EmployeesService employeesService;
 
-    public List<JobCardDto> findAll(Optional<String> filter) {
-        QueryRequestDTO queryRequestDTO = queryDTOHelper.buildRequestDTO(filter);
-        JobCardSpecification spec = null;
+    private Gson gson = new Gson();
+
+    public List<JobCardDto> findAll(Optional<String> filter, Optional<String> search, Optional<Integer> top, Optional<Integer> skip) {
+        Specification<JobCard> spec = null;
         boolean getCustomerDetails = false;
         List<JobCardDto> dtos = new ArrayList<>();
+        if(search.isPresent()) {
+            spec = JobCardSearchSpecification.hasStatusLike(search.get())
+                    .or(JobCardSearchSpecification.hasModelLike(search.get())
+                            .or(JobCardSearchSpecification.hasVehicleNumberLike(search.get())
+                                    .or(JobCardSearchSpecification.hasDisplayIdLike(search.get()))));
+        }
+        else if(filter.isPresent()) {
+            QueryRequestDTO queryRequestDTO = queryDTOHelper.buildRequestDTO(filter);
+            if (queryRequestDTO.getFilterOptions() != null) {
+                for(QueryFilterOptions option: queryRequestDTO.getFilterOptions()) {
+                    if(spec == null) {
+                        spec = new JobCardSpecification(option);
+                    }
+                    else {
+                        Specification<JobCard> predicate = new JobCardSpecification(option);
+                        spec = spec.and(predicate);
+                    }
+                }
 
-        if (queryRequestDTO.getFilterOptions() != null)
-            spec = new JobCardSpecification(queryRequestDTO.getFilterOptions());
-        List<JobCard> entity = jobCardRepository.findAllBy(spec);
+            }
+        }
+        Pageable page = getPageSize(top, skip);
+
+        List<JobCard> entity = jobCardRepository.findAllBy(spec, page);
 
         for (JobCard jobCard : entity) {
             dtos.add(enhanceDto(jobCard, getCustomerDetails));
         }
         return dtos;
+    }
+
+    public long getCount() {
+        return jobCardRepository.getCount();
+    }
+
+    public Pageable getPageSize(Optional<Integer> top, Optional<Integer> skip) {
+
+        int pageSize = top.orElse(Constants.DEFAULT_PAGE_SIZE);
+        if(pageSize > Constants.MAX_PAGE_SIZE) {
+            pageSize = Constants.MAX_PAGE_SIZE;
+        }
+        int pageNumber = skip.orElse(0)/(pageSize!=0?pageSize:Constants.DEFAULT_PAGE_SIZE);
+
+        return PageRequest.of(pageNumber, pageSize );
     }
 
     public JobCardDto findOne(String id) {
@@ -114,15 +150,32 @@ public class JobCardService {
 
     public JobCardServicesDto findOneJobCardService(String jobCardServiceId) {
         JobCardServices entity = jobCardServicesRepository.findOneBy(jobCardServiceId);
-        return mapper.JobCardServicesToDto(entity);
+        JobCardServicesDto dto = mapper.JobCardServicesToDto(entity);
+        dto.setTechnician(gson.fromJson(entity.getTechnician(), TechnicianDto.class));
+        return dto;
     }
 
-    //update job card with ifMatch
     @Transactional(rollbackFor = Exception.class)
     public JobCardServicesDto updateJobCardService(String jobCardId,
                                                    String jobCardServiceId,
                                                    JobCardServicesUpdateDto jobCardServicesUpdateDto,
                                                    String ifMatch) throws Exception {
+
+        JobCardServices entity = jobCardServicesRepository.findOneBy(jobCardServiceId);
+        JobCardServicesDto result = mapper.JobCardServicesToDto(entity);
+        if(jobCardServicesUpdateDto.getTechnician()!=null) {
+            List<EmployeeDto> employee = employeesService.findAll(Optional.of("btpUserId eq "+jobCardServicesUpdateDto.getTechnician().getBtpUserId()));
+            if(employee.size()>0) {
+                result.setTechnician(new TechnicianDto(employee.get(0).getBtpUserId(),employee.get(0).getName()));
+            }
+            else {
+                throw new RuntimeException(Messages.INVALID_EMPLOYEE);
+            }
+        } else {
+            result.setTechnician(gson.fromJson(entity.getTechnician(), TechnicianDto.class));
+        }
+
+        checkAuthorization(jobCardServicesUpdateDto, result);
 
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -132,8 +185,6 @@ public class JobCardService {
         JobCardDto jobCardDto = findOne(jobCardId);
         List<JobCardServicesDto> jobCardServices = jobCardDto.getServicesSelected();
 
-        JobCardServices entity = jobCardServicesRepository.findOneBy(jobCardServiceId);
-        JobCardServicesDto result = mapper.JobCardServicesToDto(entity);
 
         UpdateChecker.isUpdateOnLatestData(ifMatch, result.getAdminData().getUpdatedOn());
 
@@ -152,7 +203,7 @@ public class JobCardService {
         boolean jobCardStarted = false;
 
         if (jobCardServicesUpdateDto.getStatus() != null) {
-            //if updatedStatus = In Progress (Z22) or Completed (Z23)
+            //updatedStatus = In Progress (Z22) or Completed (Z23)
             if (jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z22.toString()) || jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z23.toString())) {
                 if (jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z22.toString()) && result.getStartTime() == null) {
                     result.setStartTime(strDate);
@@ -190,23 +241,23 @@ public class JobCardService {
         }
 
         mapper.updateJobCardServices(result, entity);
-        JobCardServices updatedJobCardService = jobCardServicesRepository.update(entity);
+        entity.setTechnician(gson.toJson(result.getTechnician()));
+        jobCardServicesRepository.update(entity);
         entityManager.flush();
-//        JobCardServicesDto updatedJobCardServiceDto = mapper.JobCardServicesToDto(updatedJobCardService);
         //update the corresponding jobCard
         if (jobCardStarted) {
             JobCardDto newJobCardDto = findOne(jobCardId);
             newJobCardDto.setStatus(JCStatus.Z12.toString());
             newJobCardDto.getAdminData().setUpdatedBy(userId);
             newJobCardDto.getAdminData().setUpdatedOn(strDate);
-            JobCardDto updatedJobCard = updateJobCard(newJobCardDto);
+            updateJobCard(newJobCardDto);
 
         } else if (jobCardCompleted) {
             JobCardDto newJobCardDto = findOne(jobCardId);
             newJobCardDto.setStatus(JCStatus.Z13.toString());
             newJobCardDto.getAdminData().setUpdatedBy(userId);
             newJobCardDto.getAdminData().setUpdatedOn(strDate);
-            JobCardDto updatedJobCard = updateJobCard(newJobCardDto);
+            updateJobCard(newJobCardDto);
         }
 
         OffsetDateTime offsetDateTime = OffsetDateTime.parse(caseReadResponse.getValue().getAdminData().getUpdatedOn());
@@ -264,6 +315,7 @@ public class JobCardService {
             jobCardService.setService(servicesDto.getService());
             jobCardService.setStatus(ServiceStatus.Z21.toString());
             jobCardService.setAdminData(new AdminData(strDate, strDate, "", ""));
+            jobCardService.setTechnician(new TechnicianDto());
             jobCardServicesList.add(jobCardService);
         }
 
@@ -280,8 +332,8 @@ public class JobCardService {
         jobCardDto.setCaseDisplayId(caseServiceDto.getCaseDisplayId());
         jobCardDto.setStatus(JCStatus.Z11.toString());
         jobCardDto.setMilometer(serviceForm.getMilometer());
-//        jobCard.setServiceAdvisor(caseServiceDto.getProcessor());
-//        jobCard.setEstimatedCompletionDate(caseServiceDto.getEstimatedCompletionDate());
+        jobCardDto.setModel(serviceForm.getRegisteredProduct() != null && serviceForm.getRegisteredProduct().getModel() != null ? serviceForm.getRegisteredProduct().getModel() : "");
+        jobCardDto.setVehicleNumber(serviceForm.getRegisteredProduct() != null && serviceForm.getRegisteredProduct().getVehicleNumber() != null ? serviceForm.getRegisteredProduct().getVehicleNumber() : "");
         AdminData adminData = new AdminData();
         adminData.setCreatedBy(userId);
         adminData.setCreatedOn(strDate);
@@ -309,13 +361,14 @@ public class JobCardService {
         List<JobCardServicesDto> servicesDtos = jobCardDto.getServicesSelected();
         for (JobCardServicesDto serviceDto : servicesDtos) {
             JobCardServices service = mapper.JobCardServicesDtoToJobCardServices(serviceDto);
+            service.setTechnician(gson.toJson(serviceDto.getTechnician()));
             entity.addServicesSelected(service);
         }
         entity.addServiceForm(serviceFormRepository.findById(serviceForm.getId()));
         JobCard newEnity = jobCardRepository.create(entity);
         entityManager.flush();
         JobCardDto result = enhanceDto(newEnity, getCustomerDetails);
-
+        StatusUtil.addStatusDescription(result, requestContextProvider.getRequestContext().getLanguage());
         CasePatchUpdateRequest caseUpdateData = new CasePatchUpdateRequest();
         mapper.CaseResponseValueToCasePatchUpdate(caseReadResponse.getValue(), caseUpdateData);
         caseUpdateData.setStatus(CaseStatus.BOOKED);
@@ -351,6 +404,7 @@ public class JobCardService {
 
             for (JobCardServicesDto serviceDto : servicesDtos) {
                 JobCardServices service = mapper.JobCardServicesDtoToJobCardServices(serviceDto);
+                service.setTechnician(gson.toJson(serviceDto.getTechnician()));
                 entity.addServicesSelected(service);
             }
 
@@ -444,6 +498,7 @@ public class JobCardService {
         if(services !=null){
             for (JobCardServices jobCardService : services) {
                 JobCardServicesDto jobCardServicesDto = mapper.JobCardServicesToDto(jobCardService);
+                jobCardServicesDto.setTechnician(gson.fromJson(jobCardService.getTechnician(), TechnicianDto.class));
                 servicesDtos.add(jobCardServicesDto);
             }
         }
@@ -485,6 +540,26 @@ public class JobCardService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void checkAuthorization(JobCardServicesUpdateDto updateDto, JobCardServicesDto dto) {
+        // A User who has only `EditTask` scope can update only his own record, and can update only specific fields
+        List<String> privileges = requestContextProvider.getRequestContext().getRoles();
+        JSONObject json = new JSONObject(updateDto);
+
+        boolean hasOnlyEditTask = privileges.contains(Constants.EditTaskRole) && !privileges.contains(Constants.EditJobCardService);
+        List<String> unAuthorizedFields = json.keySet().stream().filter(s->!Arrays.stream(Constants.AUTHORIZED_FIELDS).toList().contains(s)).toList();
+
+        if(hasOnlyEditTask) {
+            JSONObject obj = new JSONObject(dto.getTechnician());
+            if(!Objects.equals(requestContextProvider.getRequestContext().getUserId(), obj.getString("btpUserId"))){
+                throw new CustomException(HttpStatus.FORBIDDEN.value(), Constants.CANNOT_EDIT_OTHER_USER_RECORDS);
+            }
+            else if(!unAuthorizedFields.isEmpty()) {
+                throw new CustomException(HttpStatus.FORBIDDEN.value(), Constants.CANNOT_EDIT_FIELD+unAuthorizedFields);
+            }
+
+        }
+
     }
 
 }

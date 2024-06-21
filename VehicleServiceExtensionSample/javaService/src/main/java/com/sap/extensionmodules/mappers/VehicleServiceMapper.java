@@ -55,6 +55,33 @@ public abstract class VehicleServiceMapper{
     public abstract List<ServicesDto> ServicesDtoToDtoList(List<Services> services);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mappings({
+            @Mapping(source = "createdOn", target = "adminData.createdOn"),
+            @Mapping(source = "updatedOn", target = "adminData.updatedOn"),
+            @Mapping(source = "createdBy", target = "adminData.createdBy"),
+            @Mapping(source = "updatedBy", target = "adminData.updatedBy")
+    })
+    public abstract EmployeeDto EmployeeToDto(Employee employee);
+
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mappings({
+            @Mapping(source = "adminData.createdOn", target = "createdOn"),
+            @Mapping(source = "adminData.updatedOn", target = "updatedOn"),
+            @Mapping(source = "adminData.createdBy", target = "createdBy"),
+            @Mapping(source = "adminData.updatedBy", target = "updatedBy")
+    })
+    public abstract Employee EmployeeDtoToServices(EmployeeDto employeeDto);
+
+    @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
+    @Mappings({
+            @Mapping(source = "adminData.createdOn", target = "createdOn"),
+            @Mapping(source = "adminData.updatedOn", target = "updatedOn"),
+            @Mapping(source = "adminData.createdBy", target = "createdBy"),
+            @Mapping(source = "adminData.updatedBy", target = "updatedBy")
+    })
+    public abstract void updateEmployee(EmployeeDto dto, @MappingTarget Employee employee);
+
+    @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     public abstract List<JobCardDto> JobCardToDtoList(List<JobCard> JobCardList);
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -71,6 +98,7 @@ public abstract class VehicleServiceMapper{
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mappings({
+            @Mapping(target = "technician", ignore = true),
             @Mapping(source = "createdOn", target = "adminData.createdOn"),
             @Mapping(source = "updatedOn", target = "adminData.updatedOn"),
             @Mapping(source = "createdBy", target = "adminData.createdBy"),
@@ -137,6 +165,7 @@ public abstract class VehicleServiceMapper{
 
     @BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mappings({
+            @Mapping(target = "technician", ignore = true),
             @Mapping(source = "adminData.createdOn", target = "createdOn"),
             @Mapping(source = "adminData.updatedOn", target = "updatedOn"),
             @Mapping(source = "adminData.createdBy", target = "createdBy"),
@@ -151,6 +180,7 @@ public abstract class VehicleServiceMapper{
 
     @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
     @Mappings({
+            @Mapping(target = "technician", ignore = true),
             @Mapping(source = "adminData.createdOn", target = "createdOn"),
             @Mapping(source = "adminData.updatedOn", target = "updatedOn"),
             @Mapping(source = "adminData.createdBy", target = "createdBy"),
@@ -162,10 +192,13 @@ public abstract class VehicleServiceMapper{
     @Mapping(target = "id", ignore = true)
     public abstract void servicesToJobCardServicesDto(ServicesDto servicesDto, @MappingTarget JobCardServicesDto dto);
     @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
+    @Mappings({
+            @Mapping(target = "technician", ignore = true)
+    })
     public abstract void updateJobCardServicesDto(JobCardServicesUpdateDto jobCardServicesUpdateDto, @MappingTarget JobCardServicesDto jobCardServicesDto);
-    @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
-    @Mapping(target = "notes", ignore = true)
-    public abstract void createJobCardServices(JobCardServicesDto jobCardServicesDto, @MappingTarget JobCardServices jobCardServices);
+//    @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
+//    @Mapping(target = "notes", ignore = true)
+//    public abstract void createJobCardServices(JobCardServicesDto jobCardServicesDto, @MappingTarget JobCardServices jobCardServices);
 
     @BeanMapping( nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
     @Mappings({
