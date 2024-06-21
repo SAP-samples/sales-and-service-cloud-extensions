@@ -15,7 +15,10 @@ Search for `exfs` within JobCards
 GET /leads?$search="exfs"
 ```
 
-To see the implementation of search, please see the function processSearchQuery() in "src/utils/utils.service.ts". In this function, we create the query, which is then passed to the service layer and then to the DB as query. Please note that the search happens only on the following fields:
+To see the implementation of search in Node, please see the function processSearchQuery() in "src/utils/utils.service.ts". In this function, we create the query, which is then passed to the service layer and then to the DB as query.
+To see the implementation of search in Java, please follow the function findAll() in "com/sap/extensionmodules/service/JobCardService". We are using JobCardSearchSpecification class to build the JPA Specification for the search functionality and pass that to the query.
+
+Please note that the search happens only on the following fields:
 - displayId
 - vehicleNumber
 - model
@@ -55,7 +58,9 @@ Following are the list of operators that are to be supported.
 | And | `$filter=field1 eq 'A' and field2 eq 14` |
 | Or | `$filter=countryCode eq 'ES' or countryCode eq 'US'` |
 
-To see the implementation of filter, please see the function processFilterQuery() in "src/utils/utils.service.ts". In this function, we create the query, which is then passed to the service layer and then to the DB as query
+To see the implementation of filter in Node, please see the function processFilterQuery() in "src/utils/utils.service.ts". In this function, we create the query, which is then passed to the service layer and then to the DB as query.
+
+To see the implementation of filter in JAVA, follow the function findAll() in "com/sap/extensionmodules/service/JobCardService". We are using JobCardSpecification class to build the JPA Specification for the search functionality and pass that to the query. 
 
 **Build apps - Filter**
  
