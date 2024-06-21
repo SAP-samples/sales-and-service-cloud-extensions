@@ -103,8 +103,6 @@ public class JobCardService {
                 }
 
             }
-//            spec = new JobCardSpecification(queryRequestDTO.getFilterOptions());
-//            Specification<?> finalSpec  = spec.or()
         }
         Pageable page = getPageSize(top, skip);
 
@@ -157,7 +155,6 @@ public class JobCardService {
         return dto;
     }
 
-    //update job card with ifMatch
     @Transactional(rollbackFor = Exception.class)
     public JobCardServicesDto updateJobCardService(String jobCardId,
                                                    String jobCardServiceId,
@@ -179,8 +176,6 @@ public class JobCardService {
         }
 
         checkAuthorization(jobCardServicesUpdateDto, result);
-
-        //UpdateChecker.isUpdateOnLatestData(ifMatch, result.getAdminData().getUpdatedOn());
 
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -208,7 +203,7 @@ public class JobCardService {
         boolean jobCardStarted = false;
 
         if (jobCardServicesUpdateDto.getStatus() != null) {
-            //if updatedStatus = In Progress (Z22) or Completed (Z23)
+            //updatedStatus = In Progress (Z22) or Completed (Z23)
             if (jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z22.toString()) || jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z23.toString())) {
                 if (jobCardServicesUpdateDto.getStatus().equals(ServiceStatus.Z22.toString()) && result.getStartTime() == null) {
                     result.setStartTime(strDate);
@@ -249,7 +244,6 @@ public class JobCardService {
         entity.setTechnician(gson.toJson(result.getTechnician()));
         jobCardServicesRepository.update(entity);
         entityManager.flush();
-//        JobCardServicesDto updatedJobCardServiceDto = mapper.JobCardServicesToDto(updatedJobCardService);
         //update the corresponding jobCard
         if (jobCardStarted) {
             JobCardDto newJobCardDto = findOne(jobCardId);

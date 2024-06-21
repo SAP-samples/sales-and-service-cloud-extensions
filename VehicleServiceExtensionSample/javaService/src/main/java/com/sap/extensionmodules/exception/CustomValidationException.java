@@ -6,11 +6,6 @@ public class CustomValidationException extends RuntimeException{
     private final int code;
     private final String message;
     private final List<ErrorResponse.ErrorInfo> details;
-//    public CustomValidationException(int code, String message, String target, String value) {
-//        this.code = code;
-//        this.message = message;
-//        this.details = List.of(new ErrorResponse.ErrorInfo(message, target, value));
-//    }
     public CustomValidationException(int code, String message, List<ErrorResponse.ErrorInfo> details) {
         this.code = code;
         this.message = message;

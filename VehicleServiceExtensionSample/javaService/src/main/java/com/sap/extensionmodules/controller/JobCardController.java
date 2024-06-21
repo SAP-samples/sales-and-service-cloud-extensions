@@ -104,59 +104,6 @@ public class JobCardController {
 
     }
 
-//    @GetMapping("/{jobCardId}/services") //find all jobCardServices related to the jobCardId
-//    public ResponseEntity<?> findAllJobCardServices(@PathVariable String
-//                                                            jobCardId, @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String language) {
-//
-//        List<JobCardServicesDto> dtoList = jobCardService.findAllJobCardServices(jobCardId);
-//        String lang = (language != null) ? language : "en-US";
-//        for (JobCardServicesDto dto : dtoList) {
-//            dto.setStatusDescription(statusUtil.getDescription(dto.getStatus(), lang));
-//        }
-//        log.info("Found {} services with Job card ID: {}", dtoList.size(), jobCardId);
-//        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
-//
-//    }
-
-//    @GetMapping("/{jobCardId}/services/{jobCardServiceId}")
-//    public ResponseEntity<?> findOneJobCardService(@PathVariable String jobCardId,
-//                                                   @PathVariable String jobCardServiceId, @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String
-//                                                           language) {
-//
-//        JobCardServicesDto dto = jobCardService.findOneJobCardService(jobCardServiceId);
-//        String lang = (language != null) ? language : "en-US";
-//        dto.setStatusDescription(statusUtil.getDescription(dto.getStatus(), lang));
-//        log.info("Found job card service with ID {}: {}", jobCardServiceId, dto);
-//        return ResponseEntity.status(HttpStatus.OK).body(dto);
-//    }
-
-//    @GetMapping("/statuses")
-//    public ResponseEntity<List<StatusDto>> findAllJCStatuses
-//            (@RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String language) {
-//        List<StatusDto> dtoList = new ArrayList<>();
-//        String lang = (language != null) ? language : "en-US";
-//        for (JCStatus s : JCStatus.values()) {
-//            String desc = statusUtil.getDescription(s.toString(), lang);
-//            StatusDto dto = new StatusDto(s.toString(), desc);
-//            dtoList.add(dto);
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
-//    }
-//
-//    @GetMapping("/services/statuses")
-//    public ResponseEntity<List<StatusDto>> findAllJCServiceStatuses
-//            (@RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String language) {
-//        List<StatusDto> dtoList = new ArrayList<>();
-//        String lang = (language != null) ? language : "en-US";
-//        for (ServiceStatus s : ServiceStatus.values()) {
-//            String desc = statusUtil.getDescription(s.toString(), lang);
-//            StatusDto dto = new StatusDto(s.toString(), desc);
-//            dtoList.add(dto);
-//        }
-//        log.info("Found {} services statuses", dtoList.size());
-//        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
-//    }
-
     @PostMapping("/validations")
     public ResponseEntity<?> findValidationStatus(@RequestBody Map<String, Object> body) {
             log.info("Calling job card validation service.");

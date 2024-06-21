@@ -78,7 +78,6 @@ public class EmployeesService {
         if(existingEmployee == null) {
             throw new NotFoundException(EMPLOYEE_RESOURCE_NOT_FOUND);
         } else {
-            //UpdateChecker.isUpdateOnLatestData(ifMatch, existingEmployee.getAdminData().getUpdatedOn());
             AdminData adminData = new AdminData(
                     existingEmployee.getAdminData().getCreatedOn(), strDate,
                     existingEmployee.getAdminData().getCreatedBy(),

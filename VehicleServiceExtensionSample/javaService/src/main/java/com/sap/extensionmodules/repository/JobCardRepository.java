@@ -67,17 +67,6 @@ public class JobCardRepository {
             throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.DB_ERROR );
         }
     }
-
-//    public JobCard updateJobCardStatus(JobCard entity) {
-//        try {
-//            return jobCardRepo.save(entity);
-//        } catch (DataIntegrityViolationException e) {
-//            throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.UNIQUE_KEY_CONSTRAINT_FAILED);
-//        } catch (DataAccessException e) {
-//            throw new CustomNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Messages.DB_ERROR);
-//        }
-//    }
-
     public void delete(JobCard entity) {
         try {
             if (entity == null) {

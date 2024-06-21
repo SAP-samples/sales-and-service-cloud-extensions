@@ -61,19 +61,6 @@ public class ServiceFormController {
                 .body(dtoList);
     }
 
-//    @GetMapping(REST_PATH_ID)
-//    @PreAuthorize("hasAuthority('ViewServiceForm')")
-//    public ResponseEntity<?> findById(@PathVariable String id, @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String language) throws NotFoundException {
-//        ServiceFormDto dto;
-//        dto = serviceFormService.findById(id);
-//        String lang = (language != null) ? language : "en-US";
-//        dto.setStatusDescription(statusUtil.getDescription(dto.getStatus(), lang));
-//        log.info("Found service form by ID {}: {}", id, dto);
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(dto);
-//    }
-
-
     @PatchMapping(REST_PATH_ID)
     @PreAuthorize("hasAuthority('UpdateServiceForm')")
     public ResponseEntity<?> update(@PathVariable String id,
@@ -94,16 +81,4 @@ public class ServiceFormController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping(REST_PATH_SERVICES_STATUSES)
-//    public ResponseEntity<?> findAllSFStatus(@RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) String language) {
-//        List<StatusDto> dtoList = new ArrayList<>();
-//        String lang = (language != null) ? language : "en-US";
-//        for (SFStatus s : SFStatus.values()) {
-//            String desc = statusUtil.getDescription(s.toString(), lang);
-//            StatusDto dto = new StatusDto(s.toString(), desc);
-//            dtoList.add(dto);
-//        }
-//        log.info("Found {} service form statuses", dtoList.size());
-//        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
-//    }
 }

@@ -105,7 +105,6 @@ class RequestContextProviderTest {
             requestContextProvider.getRequestContext();
         } catch (Exception e) {
             assertThat(e, instanceOf(SecurityContextNotFoundException.class));
-            //  Assertions.assertEquals("Security Context Invalid", e.getMessage());
         }
     }
 
@@ -118,7 +117,6 @@ class RequestContextProviderTest {
             requestContextProvider.setRequestContext(requestContext);
         } catch (Exception e) {
             assertThat(e, instanceOf(SecurityContextNotFoundException.class));
-            //   Assertions.assertEquals("Security Context Invalid", e.getMessage());
         }
     }
 }
