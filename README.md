@@ -11,6 +11,7 @@ Running various samples requires specific requirements which are mentioned in th
 
 ## Samples
  [Vehicle Service Extension Sample](./VehicleServiceExtensionSample)
+ 
  [Bonus Plan Extension Sample based on CAP](./BonusPlanCapSample)
 
 ## Known Issues
