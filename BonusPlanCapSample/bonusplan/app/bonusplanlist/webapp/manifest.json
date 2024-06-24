@@ -1,0 +1,163 @@
+{
+  "_version": "1.58.0",
+  "sap.app": {
+    "id": "bonusplanlist",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.11.3",
+      "toolsId": "97c2591f-4437-4e6d-8960-40c84ec16cd5"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/api/my/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.120.3",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "bonusplanlist.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "BonusPlansList",
+          "target": "BonusPlansList"
+        },
+        {
+          "pattern": "BonusPlans({key}):?query:",
+          "name": "BonusPlansObjectPage",
+          "target": "BonusPlansObjectPage"
+        }
+      ],
+      "targets": {
+        "BonusPlansList": {
+          "type": "Component",
+          "id": "BonusPlansList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/BonusPlans",
+              "variantManagement": "None",
+              "navigation": {
+                "BonusPlans": {
+                  "detail": {
+                    "route": "BonusPlansObjectPage"
+                  }
+                }
+              },
+              "initialLoad": "Enabled",
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "enableExport": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "BonusPlansObjectPage": {
+          "type": "Component",
+          "id": "BonusPlansObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/BonusPlans",
+              "content": {
+                "header": {
+                  "actions": {
+                    "backToBonusPlans": {
+                      "press": "bonusplanlist.ext.controller.MainObject.goBackToListPage",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Back to Bonus Plans"
+                    }
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "bonusDetails/@com.sap.vocabularies.UI.v1.LineItem#BonusDetail": {
+                  "tableSettings": {
+                    "enableExport": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}

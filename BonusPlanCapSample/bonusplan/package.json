@@ -1,0 +1,119 @@
+{
+    "name": "bonusplan",
+    "version": "1.0.0",
+    "description": "A EXFS Application based on SAP CAP, Fiori and Hana.",
+    "repository": "https://github.tools.sap/c4c-cns/EXFS",
+    "license": "UNLICENSED",
+    "private": true,
+    "files": [
+        "app",
+        "srv",
+        "db"
+    ],
+    "workspaces": [
+        "app",
+        "app/bonusplanlist",
+        "app/bonuspolicy",
+        "app/employees"
+    ],
+    "dependencies": {
+        "@sap-cloud-sdk/http-client": "^3.5.0",
+        "@sap-cloud-sdk/resilience": "^3.5.0",
+        "@sap/cds": "^7",
+        "@sap/cds-hana": "^2",
+        "@sap/xssec": "^3",
+        "express": "^4",
+        "hdb": "^0.19.6",
+        "moment": "^2.29.4",
+        "passport": "^0",
+        "sqlite3": "^5.1.6"
+    },
+    "devDependencies": {
+        "@sap/cds-dk": "^7",
+        "@sap/eslint-plugin-ui5-jsdocs": "^2.0.5",
+        "@sap/ux-specification": "^1.120.1",
+        "@sapui5/ts-types": "^1.92.2",
+        "axios": "^1",
+        "chai": "^4.3.4",
+        "chai-as-promised": "^7.1.1",
+        "chai-subset": "^1.6.0",
+        "eslint": "^7.32.0",
+        "jest": "^29.7.0",
+        "rimraf": "^3.0.2",
+        "@cap-js/sqlite": "*"
+    },
+    "engines": {
+        "node": "^20"
+    },
+    "scripts": {
+        "start": "cds-serve",
+        "watch-bonusplanlist": "cds watch --open bonusplanlist/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-bonuspolicy": "cds watch --open bonuspolicy/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-employees": "cds watch --open employees/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy undefined --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "jest": "npx jest --forceExit --detectOpenHandles --testTimeout=120000",
+        "jest:watchall": "jest --watchAll",
+        "jest:watch": "jest --watch",
+        "jest:test": "jest --runInBand",
+        "test": "npm run jest -- --silent",
+        "test:coverage": "npm run jest -- --silent --coverage"
+    },
+    "cds": {
+        "features": {
+            "fiori_preview": true,
+            "fiori_routes": true
+        },
+        "requires": {
+            "[development]": {
+                "db": "sql",
+                "auth": {
+                    "kind": "mocked",
+                    "users": {
+                        "testadmin": {
+                            "password": "123456",
+                            "roles": [
+                                "ReadWriteBPlan"
+                            ]
+                        }
+                    }
+                }
+            },
+            "[production]": {
+                "db": "hana",
+                "auth": "xsuaa"
+            },
+            "[hybrid]": {
+                "auth": "xsuaa"
+            },
+            "Open.Api.Specification.for.salesQuote.service": {
+                "kind": "rest",
+                "[production]": {
+                    "credentials": {
+                        "destination": "service7-vlab-iam-users",
+                        "path": "/sap/c4c/api/v1/sales-quote-service"
+                    }
+                }
+            },
+            "Open.Api.Specification.for.employee.service": {
+                "kind": "rest",
+                "model": "srv/external/sap.crm.md.employeeservice.openapischema.employee",
+                "[production]": {
+                    "credentials": {
+                        "destination": "service7-vlab-iam-users",
+                        "path": "/sap/c4c/api/v1/employee-service"
+                    }
+                }
+            }
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        }
+    },
+    "sapux": [
+        "app/employees",
+        "app/bonusplanlist",
+        "app/bonuspolicy"
+    ]
+}

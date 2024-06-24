@@ -1,0 +1,48 @@
+{
+  "xsappname": "bonusplan",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.ReadWriteBPlan",
+      "description": "used for read and write"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    },
+    {
+      "name": "ReadWriteBPlan",
+      "description": "used for read and write of shipping app",
+      "scope-references": [
+        "$XSAPPNAME.ReadWriteBPlan"
+      ]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "read_write_bplan_rolecollection",
+      "description": "read_write_bplan_rolecollection desc",
+      "role-template-references": [
+       "$XSAPPNAME.ReadWriteBPlan" 
+      ]
+    }
+  ],
+  "attributes": [],
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "http://localhost:5000/",
+      "https://*.hana.ondemand.com/**",
+      "https://*.applicationstudio.cloud.sap/**"
+    ]
+  }
+}
