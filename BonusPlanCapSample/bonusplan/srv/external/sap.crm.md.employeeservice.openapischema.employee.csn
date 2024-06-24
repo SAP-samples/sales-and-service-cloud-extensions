@@ -1,0 +1,2600 @@
+{
+ "definitions": {
+  "Open.Api.Specification.for.employee.service": {
+   "kind": "service",
+   "@Capabilities.BatchSupported": false,
+   "@Capabilities.KeyAsSegmentSupported": true,
+   "@Core.Description": "Open Api Specification for employee service",
+   "@Core.SchemaVersion": "1.0.0",
+   "@Core.LongDescription": "This API provides REST operations for interactions with the employee service."
+  },
+  "Open.Api.Specification.for.employee.service.sap_c4c_api_v1_employee_service_employees": {
+   "kind": "function",
+   "params": {
+    "_skip": {
+     "type": "cds.Integer",
+     "@description": "Skip the first n employees.",
+     "@openapi.in": "query",
+     "@openapi.name": "$skip"
+    },
+    "_top": {
+     "type": "cds.Integer",
+     "@description": "Show only the first n employees.",
+     "@openapi.in": "query",
+     "@openapi.name": "$top"
+    },
+    "_search": {
+     "type": "cds.String",
+     "@description": "Search for a string within employees.",
+     "@openapi.in": "query",
+     "@openapi.name": "$search"
+    },
+    "_filter": {
+     "type": "cds.String",
+     "@description": "Filter employees by attribute.",
+     "@openapi.in": "query",
+     "@openapi.name": "$filter"
+    },
+    "_orderby": {
+     "type": "cds.String",
+     "@openapi.in": "query",
+     "@openapi.name": "$orderby"
+    },
+    "_select": {
+     "type": "cds.String",
+     "@description": "Select attributes to be returned.",
+     "@openapi.in": "query",
+     "@openapi.name": "$select"
+    },
+    "_exclude": {
+     "type": "cds.String",
+     "@description": "Exclude attributes from response.",
+     "@openapi.in": "query",
+     "@openapi.name": "$exclude"
+    },
+    "_count": {
+     "type": "cds.Boolean",
+     "@description": "Indicates if count of employees to be returned.",
+     "@openapi.in": "query",
+     "@openapi.name": "$count"
+    }
+   },
+   "@Common.Label": "Employee",
+   "@Core.Description": "Read data",
+   "@openapi.path": "/sap/c4c/api/v1/employee-service/employees",
+   "returns": {
+    "type": "Open.Api.Specification.for.employee.service_types.Employeequeryresponse"
+   }
+  },
+  "Open.Api.Specification.for.employee.service.sap_c4c_api_v1_employee_service_employees_post": {
+   "kind": "action",
+   "params": {
+    "body": {
+     "type": "Open.Api.Specification.for.employee.service_types.Employeecreaterequest",
+     "@openapi.in": "body"
+    }
+   },
+   "@Common.Label": "Employee",
+   "@Core.Description": "Create data",
+   "@openapi.path": "/sap/c4c/api/v1/employee-service/employees",
+   "returns": {
+    "type": "Open.Api.Specification.for.employee.service_types.Employeefile"
+   }
+  },
+  "Open.Api.Specification.for.employee.service.sap_c4c_api_v1_employee_service_employees_": {
+   "kind": "function",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@openapi.in": "path"
+    }
+   },
+   "@Common.Label": "Employee",
+   "@Core.Description": "Read a specific data",
+   "@openapi.path": "/sap/c4c/api/v1/employee-service/employees/{id}",
+   "returns": {
+    "type": "Open.Api.Specification.for.employee.service_types.Employeefile"
+   }
+  },
+  "Open.Api.Specification.for.employee.service.sap_c4c_api_v1_employee_service_employees__put": {
+   "kind": "action",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@openapi.in": "path"
+    },
+    "body": {
+     "type": "Open.Api.Specification.for.employee.service_types.Employeeupdaterequest",
+     "@openapi.in": "body"
+    }
+   },
+   "@Common.Label": "Employee",
+   "@Core.Description": "Create or Update data",
+   "@openapi.method": "PUT",
+   "@openapi.path": "/sap/c4c/api/v1/employee-service/employees/{id}",
+   "returns": {
+    "type": "Open.Api.Specification.for.employee.service_types.Employeefile"
+   }
+  },
+  "Open.Api.Specification.for.employee.service.sap_c4c_api_v1_employee_service_employees__patch": {
+   "kind": "action",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@openapi.in": "path"
+    }
+   },
+   "@Common.Label": "Employee",
+   "@Core.Description": "Update or Modify data",
+   "@openapi.method": "PATCH",
+   "@openapi.path": "/sap/c4c/api/v1/employee-service/employees/{id}"
+  },
+  "Open.Api.Specification.for.employee.service_types.error": {
+   "elements": {
+    "error": {
+     "elements": {
+      "code": {
+       "type": "cds.String"
+      },
+      "details": {
+       "items": {
+        "elements": {
+         "message": {
+          "type": "cds.String"
+         },
+         "code": {
+          "type": "cds.String"
+         },
+         "target": {
+          "type": "cds.String"
+         }
+        }
+       }
+      },
+      "message": {
+       "type": "cds.String"
+      },
+      "target": {
+       "type": "cds.String"
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Open.Api.Specification.for.employee.service_types.Employeequeryresponse": {
+   "@title": "Employee query response",
+   "elements": {
+    "count": {
+     "type": "cds.Integer"
+    },
+    "value": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "displayId": {
+        "@title": "Business Partner ID",
+        "type": "cds.String",
+        "length": 10
+       },
+       "employeeDisplayId": {
+        "@title": "Employee ID",
+        "type": "cds.String",
+        "length": 20
+       },
+       "isInternalEmployee": {
+        "type": "cds.Boolean"
+       },
+       "formattedName": {
+        "@title": "Name",
+        "type": "cds.String",
+        "length": 255
+       },
+       "lifeCycleStatus": {
+        "@title": "Status",
+        "type": "cds.String",
+        "length": 14
+       },
+       "lifeCycleStatusDescription": {
+        "@title": "Status",
+        "type": "cds.String",
+        "length": 255
+       },
+       "formOfAddress": {
+        "@title": "Title",
+        "type": "cds.String",
+        "length": 4
+       },
+       "formOfAddressDescription": {
+        "@title": "Title",
+        "type": "cds.String",
+        "length": 255
+       },
+       "academicTitle": {
+        "@title": "Academic Title",
+        "type": "cds.String",
+        "length": 4
+       },
+       "academicTitleDescription": {
+        "@title": "Academic Title",
+        "type": "cds.String",
+        "length": 255
+       },
+       "givenName": {
+        "@title": "First Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "middleName": {
+        "@title": "Middle Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "familyName": {
+        "@title": "Last Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "additionalFamilyName": {
+        "@title": "Additional Last Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "birthDate": {
+        "type": "cds.Date"
+       },
+       "nationalityCountry": {
+        "@title": "Nationality",
+        "type": "cds.String",
+        "length": 3
+       },
+       "nationalityCountryDescription": {
+        "@title": "Nationality",
+        "type": "cds.String",
+        "length": 255
+       },
+       "maritalStatus": {
+        "@title": "Marital Status",
+        "type": "cds.String",
+        "length": 1
+       },
+       "maritalStatusDescription": {
+        "@title": "Marital Status",
+        "type": "cds.String",
+        "length": 255
+       },
+       "gender": {
+        "@title": "Gender",
+        "type": "cds.String",
+        "length": 1
+       },
+       "genderDescription": {
+        "@title": "Gender",
+        "type": "cds.String",
+        "length": 255
+       },
+       "nonVerbalCommunicationLanguage": {
+        "@title": "Language",
+        "type": "cds.String",
+        "length": 5
+       },
+       "nonVerbalCommunicationLanguageDescription": {
+        "@title": "Language",
+        "type": "cds.String",
+        "length": 255
+       },
+       "defaultExternalBusinessPartnerId": {
+        "@title": "Default External Business Partner ID",
+        "type": "cds.String",
+        "length": 100
+       },
+       "defaultExternalEmployeeId": {
+        "@title": "Default External Employee ID",
+        "type": "cds.String",
+        "length": 100
+       },
+       "organizationalUnitId": {
+        "@title": "Organizational Unit Technical ID",
+        "type": "cds.UUID"
+       },
+       "organizationalUnitDisplayId": {
+        "@title": "Organizational Unit ID",
+        "type": "cds.String",
+        "length": 50
+       },
+       "organizationalUnitName": {
+        "@title": "Organizational Unit Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "managerId": {
+        "@title": "Manager Technical ID",
+        "type": "cds.UUID"
+       },
+       "managerEmployeeDisplayId": {
+        "@title": "Manager ID",
+        "type": "cds.String",
+        "length": 20
+       },
+       "managerFormattedName": {
+        "@title": "Manager Name",
+        "type": "cds.String",
+        "length": 255
+       },
+       "workplaceAddress": {
+        "elements": {
+         "streetName": {
+          "@title": "Street",
+          "type": "cds.String",
+          "length": 80
+         },
+         "houseId": {
+          "@title": "House Number",
+          "type": "cds.String",
+          "length": 10
+         },
+         "cityName": {
+          "@title": "City",
+          "type": "cds.String",
+          "length": 40
+         },
+         "postalCode": {
+          "@title": "Postal Code",
+          "type": "cds.String",
+          "length": 10
+         },
+         "country": {
+          "@title": "Country/Region",
+          "type": "cds.String",
+          "length": 3
+         },
+         "countryDescription": {
+          "@title": "Country/Region",
+          "type": "cds.String",
+          "length": 255
+         },
+         "region": {
+          "elements": {
+           "country": {
+            "@title": "Country/Region",
+            "type": "cds.String",
+            "length": 3
+           },
+           "region": {
+            "@title": "State",
+            "type": "cds.String",
+            "length": 6
+           }
+          }
+         },
+         "regionDescription": {
+          "@title": "State",
+          "type": "cds.String",
+          "length": 255
+         },
+         "districtName": {
+          "@title": "District",
+          "type": "cds.String",
+          "length": 40
+         },
+         "latitudeMeasure": {
+          "type": "cds.Decimal"
+         },
+         "longitudeMeasure": {
+          "type": "cds.Decimal"
+         },
+         "buildingId": {
+          "@title": "Building",
+          "type": "cds.String",
+          "length": 10
+         },
+         "floorId": {
+          "@title": "Floor",
+          "type": "cds.String",
+          "length": 10
+         },
+         "roomId": {
+          "@title": "Room",
+          "type": "cds.String",
+          "length": 10
+         },
+         "phoneFormattedNumber": {
+          "@title": "Phone",
+          "type": "cds.String",
+          "length": 40
+         },
+         "phoneNormalisedNumber": {
+          "@title": "Normalized Phone",
+          "type": "cds.String",
+          "length": 40
+         },
+         "mobileFormattedNumber": {
+          "@title": "Mobile",
+          "type": "cds.String",
+          "length": 40
+         },
+         "mobileNormalisedNumber": {
+          "@title": "Normalized Mobile",
+          "type": "cds.String",
+          "length": 40
+         },
+         "eMail": {
+          "@title": "Email",
+          "type": "cds.String",
+          "length": 255
+         },
+         "streetPrefixName": {
+          "@title": "Address Line 1",
+          "type": "cds.String",
+          "length": 40
+         },
+         "additionalStreetPrefixName": {
+          "@title": "Address Line 2",
+          "type": "cds.String",
+          "length": 40
+         },
+         "streetSuffixName": {
+          "@title": "Address Line 4",
+          "type": "cds.String",
+          "length": 40
+         },
+         "additionalStreetSuffixName": {
+          "@title": "Address Line 5",
+          "type": "cds.String",
+          "length": 40
+         },
+         "formattedPostalAddressDescription": {
+          "@title": "Address",
+          "type": "cds.String",
+          "length": 255
+         }
+        }
+       },
+       "isBusinessPurposeCompleted": {
+        "type": "cds.Boolean"
+       },
+       "adminData": {
+        "elements": {
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "createdBy": {
+          "@title": "Created by",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By Changed",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         }
+        }
+       },
+       "employeeTypes": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "isInternalEmployee": {
+           "type": "cds.Boolean"
+          },
+          "validFrom": {
+           "type": "cds.Date"
+          },
+          "validTo": {
+           "type": "cds.Date"
+          }
+         }
+        }
+       },
+       "workingHours": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "type": {
+           "@title": "Type",
+           "type": "cds.String",
+           "length": 13
+          },
+          "typeDescription": {
+           "@title": "Type",
+           "type": "cds.String",
+           "length": 255
+          },
+          "validFrom": {
+           "type": "cds.Date"
+          },
+          "validTo": {
+           "type": "cds.Date"
+          },
+          "timeZone": {
+           "@title": "Time Zone",
+           "type": "cds.String",
+           "length": 10
+          },
+          "timeZoneDescription": {
+           "@title": "Time Zone",
+           "type": "cds.String",
+           "length": 255
+          },
+          "workingDayCalendar": {
+           "@title": "Working Day Calendar",
+           "type": "cds.String",
+           "length": 6
+          },
+          "workingDayCalendarDescription": {
+           "@title": "Working Day Calendar",
+           "type": "cds.String",
+           "length": 255
+          },
+          "operatingPeriods": {
+           "items": {
+            "elements": {
+             "id": {
+              "@title": "Technical ID",
+              "type": "cds.UUID"
+             },
+             "weekday": {
+              "@title": "Weekday",
+              "type": "cds.String",
+              "length": 9
+             },
+             "startTime": {
+              "type": "cds.Time"
+             },
+             "endTime": {
+              "type": "cds.Time"
+             }
+            }
+           }
+          }
+         }
+        }
+       },
+       "employeeSalesResponsibilities": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "salesOrganizationId": {
+           "@title": "Sales Organization Technical ID",
+           "type": "cds.UUID"
+          },
+          "salesOrganizationDisplayId": {
+           "@title": "Sales Organization ID",
+           "type": "cds.String",
+           "length": 50
+          },
+          "salesOrganizationName": {
+           "@title": "Sales Organization Name",
+           "type": "cds.String",
+           "length": 40
+          },
+          "distributionChannel": {
+           "@title": "Distribution Channel",
+           "type": "cds.String",
+           "length": 2
+          },
+          "distributionChannelDescription": {
+           "@title": "Distribution Channel",
+           "type": "cds.String",
+           "length": 50
+          },
+          "division": {
+           "@title": "Division",
+           "type": "cds.String",
+           "length": 2
+          },
+          "divisionDescription": {
+           "@title": "Division",
+           "type": "cds.String",
+           "length": 50
+          },
+          "isDefault": {
+           "type": "cds.Boolean"
+          }
+         }
+        }
+       },
+       "attachments": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "title": {
+           "@title": "Title",
+           "type": "cds.String"
+          },
+          "type": {
+           "@title": "Type",
+           "type": "cds.String"
+          },
+          "category": {
+           "@title": "Category",
+           "type": "cds.String"
+          },
+          "fileSize": {
+           "type": "cds.Decimal"
+          },
+          "fileName": {
+           "@title": "File Name",
+           "type": "cds.String"
+          },
+          "contentType": {
+           "@title": "Content Type",
+           "type": "cds.String"
+          },
+          "url": {
+           "@title": "URL",
+           "type": "cds.String"
+          }
+         }
+        }
+       },
+       "externalIds": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "externalId": {
+           "@title": "External ID",
+           "type": "cds.String",
+           "length": 100
+          },
+          "communicationSystemId": {
+           "@title": "Business System Technical ID",
+           "type": "cds.UUID"
+          },
+          "communicationSystemDisplayId": {
+           "@title": "Business System ID",
+           "type": "cds.String"
+          },
+          "type": {
+           "@title": "ID Type",
+           "type": "cds.String",
+           "length": 15
+          },
+          "isDefault": {
+           "type": "cds.Boolean"
+          }
+         }
+        }
+       },
+       "extensions": {
+        "elements": {
+         "ZCHSharingTest": {
+          "type": "cds.Timestamp"
+         },
+         "shoesize": {
+          "type": "cds.Double"
+         },
+         "CurrentBonusPlan": {
+          "@title": "Current Bonus Plan",
+          "type": "cds.UUID"
+         },
+         "Bonusplan": {
+          "@title": "Bonusplan",
+          "type": "cds.UUID"
+         },
+         "testEmployee": {
+          "@title": "testEmployee",
+          "type": "cds.UUID"
+         },
+         "CurrentBonusplan1": {
+          "@title": "Current Bonusplan",
+          "type": "cds.String",
+          "length": 100
+         },
+         "TEST_AMPEL_6": {
+          "@title": "TEST_AMPEL_6",
+          "type": "cds.String",
+          "length": 80
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Open.Api.Specification.for.employee.service_types.Employeefile": {
+   "@title": "Employee file",
+   "elements": {
+    "value": {
+     "elements": {
+      "id": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "displayId": {
+       "@title": "Business Partner ID",
+       "type": "cds.String",
+       "length": 10
+      },
+      "employeeDisplayId": {
+       "@title": "Employee ID",
+       "type": "cds.String",
+       "length": 20
+      },
+      "isInternalEmployee": {
+       "type": "cds.Boolean"
+      },
+      "formattedName": {
+       "@title": "Name",
+       "type": "cds.String",
+       "length": 255
+      },
+      "lifeCycleStatus": {
+       "@title": "Status",
+       "type": "cds.String",
+       "length": 14
+      },
+      "lifeCycleStatusDescription": {
+       "@title": "Status",
+       "type": "cds.String",
+       "length": 255
+      },
+      "formOfAddress": {
+       "@title": "Title",
+       "type": "cds.String",
+       "length": 4
+      },
+      "formOfAddressDescription": {
+       "@title": "Title",
+       "type": "cds.String",
+       "length": 255
+      },
+      "academicTitle": {
+       "@title": "Academic Title",
+       "type": "cds.String",
+       "length": 4
+      },
+      "academicTitleDescription": {
+       "@title": "Academic Title",
+       "type": "cds.String",
+       "length": 255
+      },
+      "givenName": {
+       "@title": "First Name",
+       "type": "cds.String",
+       "length": 40
+      },
+      "middleName": {
+       "@title": "Middle Name",
+       "type": "cds.String",
+       "length": 40
+      },
+      "familyName": {
+       "@title": "Last Name",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalFamilyName": {
+       "@title": "Additional Last Name",
+       "type": "cds.String",
+       "length": 40
+      },
+      "birthDate": {
+       "type": "cds.Date"
+      },
+      "nationalityCountry": {
+       "@title": "Nationality",
+       "type": "cds.String",
+       "length": 3
+      },
+      "nationalityCountryDescription": {
+       "@title": "Nationality",
+       "type": "cds.String",
+       "length": 255
+      },
+      "maritalStatus": {
+       "@title": "Marital Status",
+       "type": "cds.String",
+       "length": 1
+      },
+      "maritalStatusDescription": {
+       "@title": "Marital Status",
+       "type": "cds.String",
+       "length": 255
+      },
+      "gender": {
+       "@title": "Gender",
+       "type": "cds.String",
+       "length": 1
+      },
+      "genderDescription": {
+       "@title": "Gender",
+       "type": "cds.String",
+       "length": 255
+      },
+      "nonVerbalCommunicationLanguage": {
+       "@title": "Language",
+       "type": "cds.String",
+       "length": 5
+      },
+      "nonVerbalCommunicationLanguageDescription": {
+       "@title": "Language",
+       "type": "cds.String",
+       "length": 255
+      },
+      "defaultExternalBusinessPartnerId": {
+       "@title": "Default External Business Partner ID",
+       "type": "cds.String",
+       "length": 100
+      },
+      "defaultExternalEmployeeId": {
+       "@title": "Default External Employee ID",
+       "type": "cds.String",
+       "length": 100
+      },
+      "organizationalUnitId": {
+       "@title": "Organizational Unit Technical ID",
+       "type": "cds.UUID"
+      },
+      "organizationalUnitDisplayId": {
+       "@title": "Organizational Unit ID",
+       "type": "cds.String",
+       "length": 50
+      },
+      "organizationalUnitName": {
+       "@title": "Organizational Unit Name",
+       "type": "cds.String",
+       "length": 40
+      },
+      "managerId": {
+       "@title": "Manager Technical ID",
+       "type": "cds.UUID"
+      },
+      "managerEmployeeDisplayId": {
+       "@title": "Manager ID",
+       "type": "cds.String",
+       "length": 20
+      },
+      "managerFormattedName": {
+       "@title": "Manager Name",
+       "type": "cds.String",
+       "length": 255
+      },
+      "workplaceAddress": {
+       "elements": {
+        "streetName": {
+         "@title": "Street",
+         "type": "cds.String",
+         "length": 80
+        },
+        "houseId": {
+         "@title": "House Number",
+         "type": "cds.String",
+         "length": 10
+        },
+        "cityName": {
+         "@title": "City",
+         "type": "cds.String",
+         "length": 40
+        },
+        "postalCode": {
+         "@title": "Postal Code",
+         "type": "cds.String",
+         "length": 10
+        },
+        "country": {
+         "@title": "Country/Region",
+         "type": "cds.String",
+         "length": 3
+        },
+        "countryDescription": {
+         "@title": "Country/Region",
+         "type": "cds.String",
+         "length": 255
+        },
+        "region": {
+         "elements": {
+          "country": {
+           "@title": "Country/Region",
+           "type": "cds.String",
+           "length": 3
+          },
+          "region": {
+           "@title": "State",
+           "type": "cds.String",
+           "length": 6
+          }
+         }
+        },
+        "regionDescription": {
+         "@title": "State",
+         "type": "cds.String",
+         "length": 255
+        },
+        "districtName": {
+         "@title": "District",
+         "type": "cds.String",
+         "length": 40
+        },
+        "latitudeMeasure": {
+         "type": "cds.Decimal"
+        },
+        "longitudeMeasure": {
+         "type": "cds.Decimal"
+        },
+        "buildingId": {
+         "@title": "Building",
+         "type": "cds.String",
+         "length": 10
+        },
+        "floorId": {
+         "@title": "Floor",
+         "type": "cds.String",
+         "length": 10
+        },
+        "roomId": {
+         "@title": "Room",
+         "type": "cds.String",
+         "length": 10
+        },
+        "phoneFormattedNumber": {
+         "@title": "Phone",
+         "type": "cds.String",
+         "length": 40
+        },
+        "phoneNormalisedNumber": {
+         "@title": "Normalized Phone",
+         "type": "cds.String",
+         "length": 40
+        },
+        "mobileFormattedNumber": {
+         "@title": "Mobile",
+         "type": "cds.String",
+         "length": 40
+        },
+        "mobileNormalisedNumber": {
+         "@title": "Normalized Mobile",
+         "type": "cds.String",
+         "length": 40
+        },
+        "eMail": {
+         "@title": "Email",
+         "type": "cds.String",
+         "length": 255
+        },
+        "streetPrefixName": {
+         "@title": "Address Line 1",
+         "type": "cds.String",
+         "length": 40
+        },
+        "additionalStreetPrefixName": {
+         "@title": "Address Line 2",
+         "type": "cds.String",
+         "length": 40
+        },
+        "streetSuffixName": {
+         "@title": "Address Line 4",
+         "type": "cds.String",
+         "length": 40
+        },
+        "additionalStreetSuffixName": {
+         "@title": "Address Line 5",
+         "type": "cds.String",
+         "length": 40
+        },
+        "formattedPostalAddressDescription": {
+         "@title": "Address",
+         "type": "cds.String",
+         "length": 255
+        }
+       }
+      },
+      "isBusinessPurposeCompleted": {
+       "type": "cds.Boolean"
+      },
+      "adminData": {
+       "elements": {
+        "createdOn": {
+         "type": "cds.Timestamp"
+        },
+        "createdBy": {
+         "@title": "Created by",
+         "type": "cds.UUID"
+        },
+        "createdByName": {
+         "@title": "Created By Changed",
+         "type": "cds.String"
+        },
+        "updatedOn": {
+         "type": "cds.Timestamp"
+        },
+        "updatedBy": {
+         "@title": "Changed By",
+         "type": "cds.UUID"
+        },
+        "updatedByName": {
+         "@title": "Changed By Name",
+         "type": "cds.String"
+        }
+       }
+      },
+      "employeeTypes": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "isInternalEmployee": {
+          "type": "cds.Boolean"
+         },
+         "validFrom": {
+          "type": "cds.Date"
+         },
+         "validTo": {
+          "type": "cds.Date"
+         }
+        }
+       }
+      },
+      "workingHours": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String",
+          "length": 13
+         },
+         "typeDescription": {
+          "@title": "Type",
+          "type": "cds.String",
+          "length": 255
+         },
+         "validFrom": {
+          "type": "cds.Date"
+         },
+         "validTo": {
+          "type": "cds.Date"
+         },
+         "timeZone": {
+          "@title": "Time Zone",
+          "type": "cds.String",
+          "length": 10
+         },
+         "timeZoneDescription": {
+          "@title": "Time Zone",
+          "type": "cds.String",
+          "length": 255
+         },
+         "workingDayCalendar": {
+          "@title": "Working Day Calendar",
+          "type": "cds.String",
+          "length": 6
+         },
+         "workingDayCalendarDescription": {
+          "@title": "Working Day Calendar",
+          "type": "cds.String",
+          "length": 255
+         },
+         "operatingPeriods": {
+          "items": {
+           "elements": {
+            "id": {
+             "@title": "Technical ID",
+             "type": "cds.UUID"
+            },
+            "weekday": {
+             "@title": "Weekday",
+             "type": "cds.String",
+             "length": 9
+            },
+            "startTime": {
+             "type": "cds.Time"
+            },
+            "endTime": {
+             "type": "cds.Time"
+            }
+           }
+          }
+         }
+        }
+       }
+      },
+      "employeeSalesResponsibilities": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesOrganizationId": {
+          "@title": "Sales Organization Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesOrganizationDisplayId": {
+          "@title": "Sales Organization ID",
+          "type": "cds.String",
+          "length": 50
+         },
+         "salesOrganizationName": {
+          "@title": "Sales Organization Name",
+          "type": "cds.String",
+          "length": 40
+         },
+         "distributionChannel": {
+          "@title": "Distribution Channel",
+          "type": "cds.String",
+          "length": 2
+         },
+         "distributionChannelDescription": {
+          "@title": "Distribution Channel",
+          "type": "cds.String",
+          "length": 50
+         },
+         "division": {
+          "@title": "Division",
+          "type": "cds.String",
+          "length": 2
+         },
+         "divisionDescription": {
+          "@title": "Division",
+          "type": "cds.String",
+          "length": 50
+         },
+         "isDefault": {
+          "type": "cds.Boolean"
+         }
+        }
+       }
+      },
+      "attachments": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "title": {
+          "@title": "Title",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "category": {
+          "@title": "Category",
+          "type": "cds.String"
+         },
+         "fileSize": {
+          "type": "cds.Decimal"
+         },
+         "fileName": {
+          "@title": "File Name",
+          "type": "cds.String"
+         },
+         "contentType": {
+          "@title": "Content Type",
+          "type": "cds.String"
+         },
+         "url": {
+          "@title": "URL",
+          "type": "cds.String"
+         }
+        }
+       }
+      },
+      "externalIds": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "externalId": {
+          "@title": "External ID",
+          "type": "cds.String",
+          "length": 100
+         },
+         "communicationSystemId": {
+          "@title": "Business System Technical ID",
+          "type": "cds.UUID"
+         },
+         "communicationSystemDisplayId": {
+          "@title": "Business System ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "ID Type",
+          "type": "cds.String",
+          "length": 15
+         },
+         "isDefault": {
+          "type": "cds.Boolean"
+         }
+        }
+       }
+      },
+      "extensions": {
+       "elements": {
+        "ZCHSharingTest": {
+         "type": "cds.Timestamp"
+        },
+        "shoesize": {
+         "type": "cds.Double"
+        },
+        "CurrentBonusPlan": {
+         "@title": "Current Bonus Plan",
+         "type": "cds.UUID"
+        },
+        "Bonusplan": {
+         "@title": "Bonusplan",
+         "type": "cds.UUID"
+        },
+        "testEmployee": {
+         "@title": "testEmployee",
+         "type": "cds.UUID"
+        },
+        "CurrentBonusplan1": {
+         "@title": "Current Bonusplan",
+         "type": "cds.String",
+         "length": 100
+        },
+        "TEST_AMPEL_6": {
+         "@title": "TEST_AMPEL_6",
+         "type": "cds.String",
+         "length": 80
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Open.Api.Specification.for.employee.service_types.Employeecreaterequest": {
+   "@title": "Employee create request",
+   "elements": {
+    "id": {
+     "@title": "Technical ID",
+     "type": "cds.UUID"
+    },
+    "displayId": {
+     "@title": "Business Partner ID",
+     "type": "cds.String",
+     "length": 10
+    },
+    "employeeDisplayId": {
+     "@title": "Employee ID",
+     "type": "cds.String",
+     "length": 20
+    },
+    "formOfAddress": {
+     "@title": "Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "academicTitle": {
+     "@title": "Academic Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "givenName": {
+     "@title": "First Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "middleName": {
+     "@title": "Middle Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "familyName": {
+     "@title": "Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "additionalFamilyName": {
+     "@title": "Additional Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "birthDate": {
+     "type": "cds.Date"
+    },
+    "nationalityCountry": {
+     "@title": "Nationality",
+     "type": "cds.String",
+     "length": 3
+    },
+    "maritalStatus": {
+     "@title": "Marital Status",
+     "type": "cds.String",
+     "length": 1
+    },
+    "gender": {
+     "@title": "Gender",
+     "type": "cds.String",
+     "length": 1
+    },
+    "nonVerbalCommunicationLanguage": {
+     "@title": "Language",
+     "type": "cds.String",
+     "length": 5
+    },
+    "workplaceAddress": {
+     "elements": {
+      "streetName": {
+       "@title": "Street",
+       "type": "cds.String",
+       "length": 80
+      },
+      "houseId": {
+       "@title": "House Number",
+       "type": "cds.String",
+       "length": 10
+      },
+      "cityName": {
+       "@title": "City",
+       "type": "cds.String",
+       "length": 40
+      },
+      "postalCode": {
+       "@title": "Postal Code",
+       "type": "cds.String",
+       "length": 10
+      },
+      "country": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 3
+      },
+      "countryDescription": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 255
+      },
+      "region": {
+       "elements": {
+        "country": {
+         "@title": "Country/Region",
+         "type": "cds.String",
+         "length": 3
+        },
+        "region": {
+         "@title": "State",
+         "type": "cds.String",
+         "length": 6
+        }
+       }
+      },
+      "regionDescription": {
+       "@title": "State",
+       "type": "cds.String",
+       "length": 255
+      },
+      "districtName": {
+       "@title": "District",
+       "type": "cds.String",
+       "length": 40
+      },
+      "latitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "longitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "buildingId": {
+       "@title": "Building",
+       "type": "cds.String",
+       "length": 10
+      },
+      "floorId": {
+       "@title": "Floor",
+       "type": "cds.String",
+       "length": 10
+      },
+      "roomId": {
+       "@title": "Room",
+       "type": "cds.String",
+       "length": 10
+      },
+      "phoneFormattedNumber": {
+       "@title": "Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "phoneNormalisedNumber": {
+       "@title": "Normalized Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileFormattedNumber": {
+       "@title": "Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileNormalisedNumber": {
+       "@title": "Normalized Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "eMail": {
+       "@title": "Email",
+       "type": "cds.String",
+       "length": 255
+      },
+      "streetPrefixName": {
+       "@title": "Address Line 1",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetPrefixName": {
+       "@title": "Address Line 2",
+       "type": "cds.String",
+       "length": 40
+      },
+      "streetSuffixName": {
+       "@title": "Address Line 4",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetSuffixName": {
+       "@title": "Address Line 5",
+       "type": "cds.String",
+       "length": 40
+      },
+      "formattedPostalAddressDescription": {
+       "@title": "Address",
+       "type": "cds.String",
+       "length": 255
+      }
+     }
+    },
+    "adminData": {
+     "elements": {
+      "createdOn": {
+       "type": "cds.Timestamp"
+      },
+      "createdBy": {
+       "@title": "Created by",
+       "type": "cds.UUID"
+      },
+      "createdByName": {
+       "@title": "Created By Changed",
+       "type": "cds.String"
+      },
+      "updatedOn": {
+       "type": "cds.Timestamp"
+      },
+      "updatedBy": {
+       "@title": "Changed By",
+       "type": "cds.UUID"
+      },
+      "updatedByName": {
+       "@title": "Changed By Name",
+       "type": "cds.String"
+      }
+     }
+    },
+    "employeeTypes": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "isInternalEmployee": {
+        "type": "cds.Boolean"
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       }
+      }
+     }
+    },
+    "workingHours": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 13
+       },
+       "typeDescription": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 255
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       },
+       "timeZone": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 10
+       },
+       "timeZoneDescription": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 255
+       },
+       "workingDayCalendar": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 6
+       },
+       "workingDayCalendarDescription": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 255
+       },
+       "operatingPeriods": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "weekday": {
+           "@title": "Weekday",
+           "type": "cds.String",
+           "length": 9
+          },
+          "startTime": {
+           "type": "cds.Time"
+          },
+          "endTime": {
+           "type": "cds.Time"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    "employeeSalesResponsibilities": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationId": {
+        "@title": "Sales Organization Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationDisplayId": {
+        "@title": "Sales Organization ID",
+        "type": "cds.String",
+        "length": 50
+       },
+       "salesOrganizationName": {
+        "@title": "Sales Organization Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "distributionChannel": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 2
+       },
+       "distributionChannelDescription": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 50
+       },
+       "division": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 2
+       },
+       "divisionDescription": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 50
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "externalIds": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "externalId": {
+        "@title": "External ID",
+        "type": "cds.String",
+        "length": 100
+       },
+       "communicationSystemId": {
+        "@title": "Business System Technical ID",
+        "type": "cds.UUID"
+       },
+       "communicationSystemDisplayId": {
+        "@title": "Business System ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "ID Type",
+        "type": "cds.String",
+        "length": 15
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "extensions": {
+     "elements": {
+      "ZCHSharingTest": {
+       "type": "cds.Timestamp"
+      },
+      "shoesize": {
+       "type": "cds.Double"
+      },
+      "CurrentBonusPlan": {
+       "@title": "Current Bonus Plan",
+       "type": "cds.UUID"
+      },
+      "Bonusplan": {
+       "@title": "Bonusplan",
+       "type": "cds.UUID"
+      },
+      "testEmployee": {
+       "@title": "testEmployee",
+       "type": "cds.UUID"
+      },
+      "CurrentBonusplan1": {
+       "@title": "Current Bonusplan",
+       "type": "cds.String",
+       "length": 100
+      },
+      "TEST_AMPEL_6": {
+       "@title": "TEST_AMPEL_6",
+       "type": "cds.String",
+       "length": 80
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Open.Api.Specification.for.employee.service_types.Employeeupdaterequest": {
+   "@title": "Employee update request",
+   "elements": {
+    "formOfAddress": {
+     "@title": "Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "academicTitle": {
+     "@title": "Academic Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "givenName": {
+     "@title": "First Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "middleName": {
+     "@title": "Middle Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "familyName": {
+     "@title": "Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "additionalFamilyName": {
+     "@title": "Additional Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "birthDate": {
+     "type": "cds.Date"
+    },
+    "nationalityCountry": {
+     "@title": "Nationality",
+     "type": "cds.String",
+     "length": 3
+    },
+    "maritalStatus": {
+     "@title": "Marital Status",
+     "type": "cds.String",
+     "length": 1
+    },
+    "gender": {
+     "@title": "Gender",
+     "type": "cds.String",
+     "length": 1
+    },
+    "nonVerbalCommunicationLanguage": {
+     "@title": "Language",
+     "type": "cds.String",
+     "length": 5
+    },
+    "workplaceAddress": {
+     "elements": {
+      "streetName": {
+       "@title": "Street",
+       "type": "cds.String",
+       "length": 80
+      },
+      "houseId": {
+       "@title": "House Number",
+       "type": "cds.String",
+       "length": 10
+      },
+      "cityName": {
+       "@title": "City",
+       "type": "cds.String",
+       "length": 40
+      },
+      "postalCode": {
+       "@title": "Postal Code",
+       "type": "cds.String",
+       "length": 10
+      },
+      "country": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 3
+      },
+      "countryDescription": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 255
+      },
+      "region": {
+       "elements": {
+        "country": {
+         "@title": "Country/Region",
+         "type": "cds.String",
+         "length": 3
+        },
+        "region": {
+         "@title": "State",
+         "type": "cds.String",
+         "length": 6
+        }
+       }
+      },
+      "regionDescription": {
+       "@title": "State",
+       "type": "cds.String",
+       "length": 255
+      },
+      "districtName": {
+       "@title": "District",
+       "type": "cds.String",
+       "length": 40
+      },
+      "latitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "longitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "buildingId": {
+       "@title": "Building",
+       "type": "cds.String",
+       "length": 10
+      },
+      "floorId": {
+       "@title": "Floor",
+       "type": "cds.String",
+       "length": 10
+      },
+      "roomId": {
+       "@title": "Room",
+       "type": "cds.String",
+       "length": 10
+      },
+      "phoneFormattedNumber": {
+       "@title": "Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "phoneNormalisedNumber": {
+       "@title": "Normalized Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileFormattedNumber": {
+       "@title": "Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileNormalisedNumber": {
+       "@title": "Normalized Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "eMail": {
+       "@title": "Email",
+       "type": "cds.String",
+       "length": 255
+      },
+      "streetPrefixName": {
+       "@title": "Address Line 1",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetPrefixName": {
+       "@title": "Address Line 2",
+       "type": "cds.String",
+       "length": 40
+      },
+      "streetSuffixName": {
+       "@title": "Address Line 4",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetSuffixName": {
+       "@title": "Address Line 5",
+       "type": "cds.String",
+       "length": 40
+      },
+      "formattedPostalAddressDescription": {
+       "@title": "Address",
+       "type": "cds.String",
+       "length": 255
+      }
+     }
+    },
+    "adminData": {
+     "elements": {
+      "createdOn": {
+       "type": "cds.Timestamp"
+      },
+      "createdBy": {
+       "@title": "Created by",
+       "type": "cds.UUID"
+      },
+      "createdByName": {
+       "@title": "Created By Changed",
+       "type": "cds.String"
+      },
+      "updatedOn": {
+       "type": "cds.Timestamp"
+      },
+      "updatedBy": {
+       "@title": "Changed By",
+       "type": "cds.UUID"
+      },
+      "updatedByName": {
+       "@title": "Changed By Name",
+       "type": "cds.String"
+      }
+     }
+    },
+    "employeeTypes": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "isInternalEmployee": {
+        "type": "cds.Boolean"
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       }
+      }
+     }
+    },
+    "workingHours": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 13
+       },
+       "typeDescription": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 255
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       },
+       "timeZone": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 10
+       },
+       "timeZoneDescription": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 255
+       },
+       "workingDayCalendar": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 6
+       },
+       "workingDayCalendarDescription": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 255
+       },
+       "operatingPeriods": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "weekday": {
+           "@title": "Weekday",
+           "type": "cds.String",
+           "length": 9
+          },
+          "startTime": {
+           "type": "cds.Time"
+          },
+          "endTime": {
+           "type": "cds.Time"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    "employeeSalesResponsibilities": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationId": {
+        "@title": "Sales Organization Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationDisplayId": {
+        "@title": "Sales Organization ID",
+        "type": "cds.String",
+        "length": 50
+       },
+       "salesOrganizationName": {
+        "@title": "Sales Organization Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "distributionChannel": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 2
+       },
+       "distributionChannelDescription": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 50
+       },
+       "division": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 2
+       },
+       "divisionDescription": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 50
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "attachments": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "title": {
+        "@title": "Title",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String"
+       },
+       "category": {
+        "@title": "Category",
+        "type": "cds.String"
+       },
+       "fileSize": {
+        "type": "cds.Decimal"
+       },
+       "fileName": {
+        "@title": "File Name",
+        "type": "cds.String"
+       },
+       "contentType": {
+        "@title": "Content Type",
+        "type": "cds.String"
+       },
+       "url": {
+        "@title": "URL",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "externalIds": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "externalId": {
+        "@title": "External ID",
+        "type": "cds.String",
+        "length": 100
+       },
+       "communicationSystemId": {
+        "@title": "Business System Technical ID",
+        "type": "cds.UUID"
+       },
+       "communicationSystemDisplayId": {
+        "@title": "Business System ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "ID Type",
+        "type": "cds.String",
+        "length": 15
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "extensions": {
+     "elements": {
+      "ZCHSharingTest": {
+       "type": "cds.Timestamp"
+      },
+      "shoesize": {
+       "type": "cds.Double"
+      },
+      "CurrentBonusPlan": {
+       "@title": "Current Bonus Plan",
+       "type": "cds.UUID"
+      },
+      "Bonusplan": {
+       "@title": "Bonusplan",
+       "type": "cds.UUID"
+      },
+      "testEmployee": {
+       "@title": "testEmployee",
+       "type": "cds.UUID"
+      },
+      "CurrentBonusplan1": {
+       "@title": "Current Bonusplan",
+       "type": "cds.String",
+       "length": 100
+      },
+      "TEST_AMPEL_6": {
+       "@title": "TEST_AMPEL_6",
+       "type": "cds.String",
+       "length": 80
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Open.Api.Specification.for.employee.service_types.Employeepatchupdaterequest": {
+   "@title": "Employee patchupdate request",
+   "elements": {
+    "formOfAddress": {
+     "@title": "Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "academicTitle": {
+     "@title": "Academic Title",
+     "type": "cds.String",
+     "length": 4
+    },
+    "givenName": {
+     "@title": "First Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "middleName": {
+     "@title": "Middle Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "familyName": {
+     "@title": "Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "additionalFamilyName": {
+     "@title": "Additional Last Name",
+     "type": "cds.String",
+     "length": 40
+    },
+    "birthDate": {
+     "type": "cds.Date"
+    },
+    "nationalityCountry": {
+     "@title": "Nationality",
+     "type": "cds.String",
+     "length": 3
+    },
+    "maritalStatus": {
+     "@title": "Marital Status",
+     "type": "cds.String",
+     "length": 1
+    },
+    "gender": {
+     "@title": "Gender",
+     "type": "cds.String",
+     "length": 1
+    },
+    "nonVerbalCommunicationLanguage": {
+     "@title": "Language",
+     "type": "cds.String",
+     "length": 5
+    },
+    "workplaceAddress": {
+     "elements": {
+      "streetName": {
+       "@title": "Street",
+       "type": "cds.String",
+       "length": 80
+      },
+      "houseId": {
+       "@title": "House Number",
+       "type": "cds.String",
+       "length": 10
+      },
+      "cityName": {
+       "@title": "City",
+       "type": "cds.String",
+       "length": 40
+      },
+      "postalCode": {
+       "@title": "Postal Code",
+       "type": "cds.String",
+       "length": 10
+      },
+      "country": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 3
+      },
+      "countryDescription": {
+       "@title": "Country/Region",
+       "type": "cds.String",
+       "length": 255
+      },
+      "region": {
+       "elements": {
+        "country": {
+         "@title": "Country/Region",
+         "type": "cds.String",
+         "length": 3
+        },
+        "region": {
+         "@title": "State",
+         "type": "cds.String",
+         "length": 6
+        }
+       }
+      },
+      "regionDescription": {
+       "@title": "State",
+       "type": "cds.String",
+       "length": 255
+      },
+      "districtName": {
+       "@title": "District",
+       "type": "cds.String",
+       "length": 40
+      },
+      "latitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "longitudeMeasure": {
+       "type": "cds.Decimal"
+      },
+      "buildingId": {
+       "@title": "Building",
+       "type": "cds.String",
+       "length": 10
+      },
+      "floorId": {
+       "@title": "Floor",
+       "type": "cds.String",
+       "length": 10
+      },
+      "roomId": {
+       "@title": "Room",
+       "type": "cds.String",
+       "length": 10
+      },
+      "phoneFormattedNumber": {
+       "@title": "Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "phoneNormalisedNumber": {
+       "@title": "Normalized Phone",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileFormattedNumber": {
+       "@title": "Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "mobileNormalisedNumber": {
+       "@title": "Normalized Mobile",
+       "type": "cds.String",
+       "length": 40
+      },
+      "eMail": {
+       "@title": "Email",
+       "type": "cds.String",
+       "length": 255
+      },
+      "streetPrefixName": {
+       "@title": "Address Line 1",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetPrefixName": {
+       "@title": "Address Line 2",
+       "type": "cds.String",
+       "length": 40
+      },
+      "streetSuffixName": {
+       "@title": "Address Line 4",
+       "type": "cds.String",
+       "length": 40
+      },
+      "additionalStreetSuffixName": {
+       "@title": "Address Line 5",
+       "type": "cds.String",
+       "length": 40
+      },
+      "formattedPostalAddressDescription": {
+       "@title": "Address",
+       "type": "cds.String",
+       "length": 255
+      }
+     }
+    },
+    "adminData": {
+     "elements": {
+      "createdOn": {
+       "type": "cds.Timestamp"
+      },
+      "createdBy": {
+       "@title": "Created by",
+       "type": "cds.UUID"
+      },
+      "createdByName": {
+       "@title": "Created By Changed",
+       "type": "cds.String"
+      },
+      "updatedOn": {
+       "type": "cds.Timestamp"
+      },
+      "updatedBy": {
+       "@title": "Changed By",
+       "type": "cds.UUID"
+      },
+      "updatedByName": {
+       "@title": "Changed By Name",
+       "type": "cds.String"
+      }
+     }
+    },
+    "employeeTypes": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "isInternalEmployee": {
+        "type": "cds.Boolean"
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       }
+      }
+     }
+    },
+    "workingHours": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 13
+       },
+       "typeDescription": {
+        "@title": "Type",
+        "type": "cds.String",
+        "length": 255
+       },
+       "validFrom": {
+        "type": "cds.Date"
+       },
+       "validTo": {
+        "type": "cds.Date"
+       },
+       "timeZone": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 10
+       },
+       "timeZoneDescription": {
+        "@title": "Time Zone",
+        "type": "cds.String",
+        "length": 255
+       },
+       "workingDayCalendar": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 6
+       },
+       "workingDayCalendarDescription": {
+        "@title": "Working Day Calendar",
+        "type": "cds.String",
+        "length": 255
+       },
+       "operatingPeriods": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "weekday": {
+           "@title": "Weekday",
+           "type": "cds.String",
+           "length": 9
+          },
+          "startTime": {
+           "type": "cds.Time"
+          },
+          "endTime": {
+           "type": "cds.Time"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    "employeeSalesResponsibilities": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationId": {
+        "@title": "Sales Organization Technical ID",
+        "type": "cds.UUID"
+       },
+       "salesOrganizationDisplayId": {
+        "@title": "Sales Organization ID",
+        "type": "cds.String",
+        "length": 50
+       },
+       "salesOrganizationName": {
+        "@title": "Sales Organization Name",
+        "type": "cds.String",
+        "length": 40
+       },
+       "distributionChannel": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 2
+       },
+       "distributionChannelDescription": {
+        "@title": "Distribution Channel",
+        "type": "cds.String",
+        "length": 50
+       },
+       "division": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 2
+       },
+       "divisionDescription": {
+        "@title": "Division",
+        "type": "cds.String",
+        "length": 50
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "attachments": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "title": {
+        "@title": "Title",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String"
+       },
+       "category": {
+        "@title": "Category",
+        "type": "cds.String"
+       },
+       "fileSize": {
+        "type": "cds.Decimal"
+       },
+       "fileName": {
+        "@title": "File Name",
+        "type": "cds.String"
+       },
+       "contentType": {
+        "@title": "Content Type",
+        "type": "cds.String"
+       },
+       "url": {
+        "@title": "URL",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "externalIds": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "externalId": {
+        "@title": "External ID",
+        "type": "cds.String",
+        "length": 100
+       },
+       "communicationSystemId": {
+        "@title": "Business System Technical ID",
+        "type": "cds.UUID"
+       },
+       "communicationSystemDisplayId": {
+        "@title": "Business System ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "ID Type",
+        "type": "cds.String",
+        "length": 15
+       },
+       "isDefault": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "extensions": {
+     "elements": {
+      "ZCHSharingTest": {
+       "type": "cds.Timestamp"
+      },
+      "shoesize": {
+       "type": "cds.Double"
+      },
+      "CurrentBonusPlan": {
+       "@title": "Current Bonus Plan",
+       "type": "cds.UUID"
+      },
+      "Bonusplan": {
+       "@title": "Bonusplan",
+       "type": "cds.UUID"
+      },
+      "testEmployee": {
+       "@title": "testEmployee",
+       "type": "cds.UUID"
+      },
+      "CurrentBonusplan1": {
+       "@title": "Current Bonusplan",
+       "type": "cds.String",
+       "length": 100
+      },
+      "TEST_AMPEL_6": {
+       "@title": "TEST_AMPEL_6",
+       "type": "cds.String",
+       "length": 80
+      }
+     }
+    }
+   },
+   "kind": "type"
+  }
+ },
+ "meta": {
+  "creator": "cds-import-openapi"
+ }
+}

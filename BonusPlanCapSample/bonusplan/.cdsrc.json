@@ -1,0 +1,26 @@
+{
+  "requires": {
+    "Open.Api.Specification.for.salesQuote.service": {
+      "[development]": {
+        "credentials": {
+          "url": "[url]",
+          "path": "/sap/c4c/api/v1/sales-quote-service",
+          "authentication": "BasicAuthentication",
+          "username": "[username]",
+          "password": "[password]"
+        }
+      }
+    },
+    "Open.Api.Specification.for.employee.service": {
+      "[development]": {
+        "credentials": {
+          "url": "[url]",
+          "path": "/sap/c4c/api/v1/employee-service",
+          "authentication": "BasicAuthentication",
+          "username": "[username]",
+          "password": "[password]"
+        }
+      }
+    }
+  }
+}

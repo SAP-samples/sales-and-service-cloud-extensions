@@ -1,0 +1,5988 @@
+{
+ "definitions": {
+  "Sales.Quote.Service": {
+   "kind": "service",
+   "@Capabilities.BatchSupported": false,
+   "@Capabilities.KeyAsSegmentSupported": true,
+   "@Core.Description": "Sales Quote Service",
+   "@Core.SchemaVersion": "1.0.0",
+   "@Core.LongDescription": "API for query, read, create, update and delete of Sales Quotes"
+  },
+  "Sales.Quote.Service.sap_c4c_api_v1_sales_quote_service_salesQuotes": {
+   "kind": "function",
+   "params": {
+    "_top": {
+     "type": "cds.Integer",
+     "@description": "Show only the first n sales quotes.",
+     "@openapi.in": "query",
+     "@openapi.name": "$top"
+    },
+    "_skip": {
+     "type": "cds.Integer",
+     "@description": "Skip the first n sales quotes.",
+     "@openapi.in": "query",
+     "@openapi.name": "$skip"
+    },
+    "_search": {
+     "type": "cds.String",
+     "@description": "Search for a string within sales quote.",
+     "@openapi.in": "query",
+     "@openapi.name": "$search"
+    },
+    "_orderby": {
+     "type": "cds.String",
+     "@description": "Order sales quotes by attribute.",
+     "@openapi.in": "query",
+     "@openapi.name": "$orderby"
+    },
+    "_filter": {
+     "type": "cds.String",
+     "@description": "Filter sales quotes by attribute.",
+     "@openapi.in": "query",
+     "@openapi.name": "$filter"
+    },
+    "_select": {
+     "type": "cds.String",
+     "@description": "Select attributes to be returned.",
+     "@openapi.in": "query",
+     "@openapi.name": "$select"
+    },
+    "_exclude": {
+     "type": "cds.String",
+     "@description": "Exclude attributes from response.",
+     "@openapi.in": "query",
+     "@openapi.name": "$exclude"
+    },
+    "_count": {
+     "type": "cds.Boolean",
+     "@description": "Indicates if count of sales quotes to be returned.",
+     "@openapi.in": "query",
+     "@openapi.name": "$count"
+    },
+    "_query": {
+     "type": "cds.String",
+     "@description": "Indicates the query to be used by sales quote service.",
+     "@openapi.in": "query",
+     "@openapi.name": "$query"
+    }
+   },
+   "@Common.Label": "SalesQuote",
+   "@Core.Description": "Query sales quotes.",
+   "@Core.LongDescription": "Specify query parameters to return sales quotes.",
+   "@openapi.path": "/sap/c4c/api/v1/sales-quote-service/salesQuotes",
+   "returns": {
+    "type": "Sales.Quote.Service_types.SalesQuotequeryresponse"
+   }
+  },
+  "Sales.Quote.Service.sap_c4c_api_v1_sales_quote_service_salesQuotes_post": {
+   "kind": "action",
+   "params": {
+    "body": {
+     "type": "Sales.Quote.Service_types.SalesQuotecreaterequest",
+     "@openapi.in": "body"
+    }
+   },
+   "@Common.Label": "SalesQuote",
+   "@Core.Description": "Create a new sales quote.",
+   "@Core.LongDescription": "Send sales quote information to create a sales quote entity.",
+   "@openapi.path": "/sap/c4c/api/v1/sales-quote-service/salesQuotes",
+   "returns": {
+    "type": "Sales.Quote.Service_types.SalesQuotefile"
+   }
+  },
+  "Sales.Quote.Service.sap_c4c_api_v1_sales_quote_service_salesQuotes_": {
+   "kind": "function",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@description": "Sales quote id.",
+     "@openapi.in": "path"
+    }
+   },
+   "@Common.Label": "SalesQuote",
+   "@Core.Description": "Retrieve a sales quote by ID.",
+   "@Core.LongDescription": "Retrieve a sales quote using the sales quote ID.",
+   "@openapi.path": "/sap/c4c/api/v1/sales-quote-service/salesQuotes/{id}",
+   "returns": {
+    "type": "Sales.Quote.Service_types.SalesQuotefile"
+   }
+  },
+  "Sales.Quote.Service.sap_c4c_api_v1_sales_quote_service_salesQuotes__patch": {
+   "kind": "action",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@description": "Sales quote ID.",
+     "@openapi.in": "path"
+    }
+   },
+   "@Common.Label": "SalesQuote",
+   "@Core.Description": "Update sales quote information.",
+   "@Core.LongDescription": "Update sales quote.",
+   "@openapi.method": "PATCH",
+   "@openapi.path": "/sap/c4c/api/v1/sales-quote-service/salesQuotes/{id}",
+   "returns": {
+    "type": "Sales.Quote.Service_types.SalesQuotefile"
+   }
+  },
+  "Sales.Quote.Service.sap_c4c_api_v1_sales_quote_service_salesQuotes__delete": {
+   "kind": "action",
+   "params": {
+    "id": {
+     "type": "cds.UUID",
+     "@description": "Sales quote id",
+     "@openapi.in": "path"
+    }
+   },
+   "@Common.Label": "SalesQuote",
+   "@Core.Description": "Delete a sales quote",
+   "@Core.LongDescription": "Delete a sales quote by ID.",
+   "@openapi.method": "DELETE",
+   "@openapi.path": "/sap/c4c/api/v1/sales-quote-service/salesQuotes/{id}"
+  },
+  "Sales.Quote.Service_types.error": {
+   "elements": {
+    "error": {
+     "elements": {
+      "code": {
+       "type": "cds.String"
+      },
+      "details": {
+       "items": {
+        "elements": {
+         "message": {
+          "type": "cds.String"
+         },
+         "code": {
+          "type": "cds.String"
+         },
+         "target": {
+          "type": "cds.String"
+         }
+        }
+       }
+      },
+      "message": {
+       "type": "cds.String"
+      },
+      "target": {
+       "type": "cds.String"
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Sales.Quote.Service_types.SalesQuotequeryresponse": {
+   "@title": "Sales Quote query response",
+   "elements": {
+    "count": {
+     "type": "cds.Integer"
+    },
+    "value": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "displayId": {
+        "@title": "ID",
+        "type": "cds.String",
+        "length": 35
+       },
+       "customerReferenceId": {
+        "@title": "Customer Reference",
+        "type": "cds.String"
+       },
+       "documentLanguage": {
+        "@title": "Language Code",
+        "type": "cds.String"
+       },
+       "documentLanguageDescription": {
+        "@title": "Language",
+        "type": "cds.String"
+       },
+       "documentDate": {
+        "type": "cds.Date"
+       },
+       "name": {
+        "@title": "Description",
+        "type": "cds.String"
+       },
+       "documentType": {
+        "@title": "Document Type",
+        "type": "cds.String"
+       },
+       "documentTypeDescription": {
+        "@title": "Document Type",
+        "type": "cds.String"
+       },
+       "validityPeriod": {
+        "elements": {
+         "startDate": {
+          "type": "cds.Date"
+         },
+         "endDate": {
+          "type": "cds.Date"
+         }
+        }
+       },
+       "requestedFulfillmentPeriod": {
+        "elements": {
+         "startDateTime": {
+          "type": "cds.Timestamp"
+         },
+         "endDateTime": {
+          "type": "cds.Timestamp"
+         }
+        }
+       },
+       "account": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Account ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Account",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "shipTo": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Ship-To ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Ship-To",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "billTo": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Bill-To ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Bill-To",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "owner": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Owner ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Owner",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "contactOfAccount": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Contact ID of Account",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Contact of Account",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "salesEmployee": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Sales Employee ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Sales Employee",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "salesUnit": {
+        "elements": {
+         "partyId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Sales Unit ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Sales Unit",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       },
+       "businessTerms": {
+        "elements": {
+         "deliveryPriority": {
+          "@title": "Delivery Priority Code",
+          "type": "cds.String"
+         },
+         "deliveryPriorityDescription": {
+          "@title": "Delivery Priority",
+          "type": "cds.String"
+         },
+         "currency": {
+          "@title": "Currency Code",
+          "type": "cds.String"
+         },
+         "currencyDescription": {
+          "@title": "Currency",
+          "type": "cds.String"
+         },
+         "priceDateTime": {
+          "type": "cds.Timestamp"
+         },
+         "probabilityPercent": {
+          "type": "cds.Double"
+         },
+         "cashDiscountTerms": {
+          "@title": "Payment Terms Code",
+          "type": "cds.String"
+         },
+         "cashDiscountTermsDescription": {
+          "@title": "Payment Terms",
+          "type": "cds.String"
+         },
+         "incoterms": {
+          "elements": {
+           "classification": {
+            "@title": "Incoterms Code",
+            "type": "cds.String"
+           },
+           "classificationDescription": {
+            "@title": "Incoterms",
+            "type": "cds.String"
+           },
+           "location": {
+            "@title": "Incoterms Location",
+            "type": "cds.String"
+           }
+          }
+         }
+        }
+       },
+       "lifeCycleStatus": {
+        "@title": "Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "OPEN": {},
+         "IN_PROCESS": {},
+         "COMPLETED": {},
+         "INACTIVE_VERSION": {}
+        }
+       },
+       "consistencyStatus": {
+        "@title": "Consistency",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "INCONSISTENT": {},
+         "CONSISTENT": {}
+        }
+       },
+       "creditWorthinessStatus": {
+        "@title": "Credit Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "NOT_RELEVANT": {},
+         "CHECK_PENDING": {},
+         "LIMIT_NOT_EXCEEDED": {},
+         "LIMIT_EXCEEDED": {},
+         "MANUALLY": {}
+        }
+       },
+       "availabilityStatus": {
+        "@title": "ATP Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "CONFIRMATION_PENDING": {},
+         "NOT_CONFIRMED": {},
+         "CONFIRMED_INSUFFICIENTLY": {},
+         "CONFIRMED_SUFFICIENTLY": {}
+        }
+       },
+       "progressStatus": {
+        "@title": "Progress",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "OPEN": {},
+         "IN_PROCESS": {},
+         "PENDING": {},
+         "WON": {},
+         "LOST": {},
+         "STOPPED": {}
+        }
+       },
+       "progressStatusReason": {
+        "@title": "Code: Reason for Progress",
+        "type": "cds.String"
+       },
+       "progressStatusReasonDescription": {
+        "@title": "Reason for Progress",
+        "type": "cds.String"
+       },
+       "parties": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "partyId": {
+           "@title": "Party Technical ID",
+           "type": "cds.UUID"
+          },
+          "partyDisplayId": {
+           "@title": "Party ID",
+           "type": "cds.String"
+          },
+          "type": {
+           "@title": "Type",
+           "type": "cds.String"
+          },
+          "partyName": {
+           "@title": "Name",
+           "type": "cds.String"
+          },
+          "isMain": {
+           "type": "cds.Boolean"
+          },
+          "roleCategory": {
+           "@title": "Role Category",
+           "type": "cds.String"
+          },
+          "role": {
+           "@title": "Party Role",
+           "type": "cds.String"
+          },
+          "determinationMethod": {
+           "@title": "Determination Method Code",
+           "type": "cds.String"
+          },
+          "determinationMethodDescription": {
+           "@title": "Determination Method",
+           "type": "cds.String"
+          },
+          "formattedPostalAddress": {
+           "@title": "Address",
+           "type": "cds.String"
+          }
+         }
+        }
+       },
+       "businessArea": {
+        "elements": {
+         "salesOrganisationId": {
+          "@title": "Sales Organization Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesOrganisationDisplayId": {
+          "@title": "Sales Organization ID",
+          "type": "cds.String"
+         },
+         "salesOrganisationName": {
+          "@title": "Sales Organization",
+          "type": "cds.String"
+         },
+         "salesOrganisationDeterminationMethod": {
+          "@title": "Sales Organization Determination Method Code",
+          "type": "cds.String"
+         },
+         "salesOrganisationDeterminationMethodDescription": {
+          "@title": "Sales Organization Determination Method",
+          "type": "cds.String"
+         },
+         "salesGroupId": {
+          "@title": "Sales Group Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesGroupDisplayId": {
+          "@title": "Sales Group ID",
+          "type": "cds.String"
+         },
+         "salesGroupName": {
+          "@title": "Sales Group",
+          "type": "cds.String"
+         },
+         "salesGroupDeterminationMethod": {
+          "@title": "Sales Group Determination Method Code",
+          "type": "cds.String"
+         },
+         "salesGroupDeterminationMethodDescription": {
+          "@title": "Sales Group Determination Method",
+          "type": "cds.String"
+         },
+         "salesOfficeId": {
+          "@title": "Sales Office Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesOfficeDisplayId": {
+          "@title": "Sales Office ID",
+          "type": "cds.String"
+         },
+         "salesOfficeName": {
+          "@title": "Sales Office",
+          "type": "cds.String"
+         },
+         "salesOfficeDeterminationMethod": {
+          "@title": "Sales Office Determination Method Code",
+          "type": "cds.String"
+         },
+         "salesOfficeDeterminationMethodDescription": {
+          "@title": "Sales Office Determination Method",
+          "type": "cds.String"
+         },
+         "salesTerritoryId": {
+          "@title": "Sales Territory Technical ID",
+          "type": "cds.UUID"
+         },
+         "salesTerritoryDisplayId": {
+          "@title": "Sales Territory ID",
+          "type": "cds.String"
+         },
+         "salesTerritoryName": {
+          "@title": "Sales Territory",
+          "type": "cds.String"
+         },
+         "salesTerritoryDeterminationMethod": {
+          "@title": "Sales Territory Determination Method Code",
+          "type": "cds.String"
+         },
+         "salesTerritoryDeterminationMethodDescription": {
+          "@title": "Sales Territory Determination Method",
+          "type": "cds.String"
+         },
+         "distributionChannel": {
+          "@title": "Distribution Channel Code",
+          "type": "cds.String"
+         },
+         "distributionChannelDescription": {
+          "@title": "Distribution Channel",
+          "type": "cds.String"
+         },
+         "distributionChannelDeterminationMethod": {
+          "@title": "Distribution Channel Determination Method Code",
+          "type": "cds.String"
+         },
+         "distributionChannelDeterminationMethodDescription": {
+          "@title": "Distribution Channel Determination Method",
+          "type": "cds.String"
+         },
+         "division": {
+          "@title": "Division Code",
+          "type": "cds.String"
+         },
+         "divisionDescription": {
+          "@title": "Division",
+          "type": "cds.String"
+         },
+         "divisionDeterminationMethod": {
+          "@title": "Division Determination Method Code",
+          "type": "cds.String"
+         },
+         "divisionDeterminationMethodDescription": {
+          "@title": "Division Determination Method",
+          "type": "cds.String"
+         }
+        }
+       },
+       "notes": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "type": {
+           "@title": "Note Type",
+           "type": "cds.String"
+          },
+          "content": {
+           "@title": "Note",
+           "type": "cds.String"
+          },
+          "adminData": {
+           "elements": {
+            "createdBy": {
+             "@title": "Created By",
+             "type": "cds.UUID"
+            },
+            "createdByName": {
+             "@title": "Created By",
+             "type": "cds.String"
+            },
+            "createdOn": {
+             "type": "cds.Timestamp"
+            },
+            "updatedBy": {
+             "@title": "Changed By",
+             "type": "cds.UUID"
+            },
+            "updatedByName": {
+             "@title": "Changed By Name",
+             "type": "cds.String"
+            },
+            "updatedOn": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "attachments": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "ID",
+           "type": "cds.UUID"
+          },
+          "title": {
+           "@title": "Title",
+           "type": "cds.String"
+          },
+          "category": {
+           "@title": "Category",
+           "type": "cds.String"
+          },
+          "fileName": {
+           "@title": "File Name",
+           "type": "cds.String"
+          },
+          "fileSize": {
+           "@title": "File Size",
+           "type": "cds.String"
+          },
+          "contentType": {
+           "@title": "Content Type",
+           "type": "cds.String"
+          },
+          "url": {
+           "@title": "URL",
+           "type": "cds.String"
+          },
+          "adminData": {
+           "elements": {
+            "createdBy": {
+             "@title": "Created By",
+             "type": "cds.UUID"
+            },
+            "createdByName": {
+             "@title": "Created By",
+             "type": "cds.String"
+            },
+            "createdOn": {
+             "type": "cds.Timestamp"
+            },
+            "updatedBy": {
+             "@title": "Changed By",
+             "type": "cds.UUID"
+            },
+            "updatedByName": {
+             "@title": "Changed By Name",
+             "type": "cds.String"
+            },
+            "updatedOn": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "items": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "displayId": {
+           "@title": "ID",
+           "type": "cds.String",
+           "length": 10
+          },
+          "description": {
+           "@title": "Description",
+           "type": "cds.String"
+          },
+          "itemType": {
+           "@title": "Item Type",
+           "type": "cds.String"
+          },
+          "itemTypeDescription": {
+           "@title": "Item Type",
+           "type": "cds.String"
+          },
+          "typeCode": {
+           "@title": "Type Code",
+           "type": "cds.String",
+           "@assert.range": true,
+           "enum": {
+            "PRODUCT": {},
+            "TEXT": {}
+           }
+          },
+          "parentItemId": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "parentItemDisplayId": {
+           "@title": "Parent ID",
+           "type": "cds.String",
+           "length": 10
+          },
+          "availabilityStatus": {
+           "@title": "ATP Status",
+           "type": "cds.String",
+           "@assert.range": true,
+           "enum": {
+            "CONFIRMATION_PENDING": {},
+            "NOT_CONFIRMED": {},
+            "CONFIRMED_INSUFFICIENTLY": {},
+            "CONFIRMED_SUFFICIENTLY": {}
+           }
+          },
+          "progressStatusReason": {
+           "@title": "Reason for Progress Code",
+           "type": "cds.String"
+          },
+          "progressStatusReasonDescription": {
+           "@title": "Reason for Progress",
+           "type": "cds.String"
+          },
+          "productData": {
+           "elements": {
+            "productId": {
+             "@title": "Product Technical ID",
+             "type": "cds.UUID"
+            },
+            "productDisplayId": {
+             "@title": "Product ID",
+             "type": "cds.String"
+            },
+            "productCategoryId": {
+             "@title": "Product Category Technical ID",
+             "type": "cds.UUID"
+            },
+            "productCategoryDisplayId": {
+             "@title": "Product Category ID",
+             "type": "cds.String"
+            },
+            "productQuantityMeasureUnit": {
+             "@title": "Unit Code",
+             "type": "cds.String"
+            },
+            "productQuantityMeasureUnitDescription": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "productListId": {
+           "@title": "Product List Technical ID",
+           "type": "cds.UUID"
+          },
+          "productListDisplayId": {
+           "@title": "Product List",
+           "type": "cds.String"
+          },
+          "scheduleLines": {
+           "items": {
+            "elements": {
+             "id": {
+              "@title": "Technical ID",
+              "type": "cds.UUID"
+             },
+             "displayId": {
+              "@title": "ID",
+              "type": "cds.String",
+              "length": 4
+             },
+             "quantity": {
+              "elements": {
+               "content": {
+                "type": "cds.Double"
+               },
+               "uomCode": {
+                "@title": "Unit",
+                "type": "cds.String"
+               }
+              }
+             },
+             "confirmedQuantity": {
+              "elements": {
+               "content": {
+                "type": "cds.Double"
+               },
+               "uomCode": {
+                "@title": "Unit",
+                "type": "cds.String"
+               }
+              }
+             },
+             "originalQuantity": {
+              "elements": {
+               "content": {
+                "type": "cds.Double"
+               },
+               "uomCode": {
+                "@title": "Unit",
+                "type": "cds.String"
+               }
+              }
+             },
+             "period": {
+              "elements": {
+               "startDateTime": {
+                "type": "cds.Timestamp"
+               },
+               "endDateTime": {
+                "type": "cds.Timestamp"
+               }
+              }
+             }
+            }
+           }
+          },
+          "notes": {
+           "items": {
+            "elements": {
+             "id": {
+              "@title": "Technical ID",
+              "type": "cds.UUID"
+             },
+             "type": {
+              "@title": "Note Type",
+              "type": "cds.String"
+             },
+             "content": {
+              "@title": "Note",
+              "type": "cds.String"
+             },
+             "adminData": {
+              "elements": {
+               "createdBy": {
+                "@title": "Created By",
+                "type": "cds.UUID"
+               },
+               "createdByName": {
+                "@title": "Created By",
+                "type": "cds.String"
+               },
+               "createdOn": {
+                "type": "cds.Timestamp"
+               },
+               "updatedBy": {
+                "@title": "Changed By",
+                "type": "cds.UUID"
+               },
+               "updatedByName": {
+                "@title": "Changed By Name",
+                "type": "cds.String"
+               },
+               "updatedOn": {
+                "type": "cds.Timestamp"
+               }
+              }
+             }
+            }
+           }
+          },
+          "totalValues": {
+           "elements": {
+            "netAmount": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "currencyCode": {
+               "@title": "Currency",
+               "type": "cds.String"
+              }
+             }
+            },
+            "grossAmount": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "currencyCode": {
+               "@title": "Currency",
+               "type": "cds.String"
+              }
+             }
+            },
+            "taxAmount": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "currencyCode": {
+               "@title": "Currency",
+               "type": "cds.String"
+              }
+             }
+            },
+            "requestedQuantity": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "uomCode": {
+               "@title": "Unit",
+               "type": "cds.String"
+              }
+             }
+            },
+            "netPrice": {
+             "elements": {
+              "amount": {
+               "elements": {
+                "content": {
+                 "type": "cds.Double"
+                },
+                "currencyCode": {
+                 "@title": "Currency",
+                 "type": "cds.String"
+                }
+               }
+              },
+              "baseQuantity": {
+               "elements": {
+                "content": {
+                 "type": "cds.Double"
+                },
+                "uomCode": {
+                 "@title": "Unit",
+                 "type": "cds.String"
+                }
+               }
+              }
+             }
+            },
+            "adminData": {
+             "elements": {
+              "createdBy": {
+               "@title": "Created By",
+               "type": "cds.UUID"
+              },
+              "createdByName": {
+               "@title": "Created By",
+               "type": "cds.String"
+              },
+              "createdOn": {
+               "type": "cds.Timestamp"
+              },
+              "updatedBy": {
+               "@title": "Changed By",
+               "type": "cds.UUID"
+              },
+              "updatedByName": {
+               "@title": "Changed By Name",
+               "type": "cds.String"
+              },
+              "updatedOn": {
+               "type": "cds.Timestamp"
+              }
+             }
+            }
+           }
+          },
+          "businessTerms": {
+           "elements": {
+            "deliveryPriority": {
+             "@title": "Delivery Priority Code",
+             "type": "cds.String"
+            },
+            "deliveryPriorityDescription": {
+             "@title": "Delivery Priority",
+             "type": "cds.String"
+            },
+            "currency": {
+             "@title": "Currency Code",
+             "type": "cds.String"
+            },
+            "currencyDescription": {
+             "@title": "Currency",
+             "type": "cds.String"
+            },
+            "priceDateTime": {
+             "type": "cds.Timestamp"
+            },
+            "probabilityPercent": {
+             "type": "cds.Double"
+            },
+            "cashDiscountTerms": {
+             "@title": "Payment Terms Code",
+             "type": "cds.String"
+            },
+            "cashDiscountTermsDescription": {
+             "@title": "Payment Terms",
+             "type": "cds.String"
+            },
+            "incoterms": {
+             "elements": {
+              "classification": {
+               "@title": "Incoterms Code",
+               "type": "cds.String"
+              },
+              "classificationDescription": {
+               "@title": "Incoterms",
+               "type": "cds.String"
+              },
+              "location": {
+               "@title": "Incoterms Location",
+               "type": "cds.String"
+              }
+             }
+            }
+           }
+          },
+          "priceElements": {
+           "items": {
+            "elements": {
+             "id": {
+              "@title": "Price Element ID",
+              "type": "cds.UUID"
+             },
+             "description": {
+              "@title": "Price Element Description",
+              "type": "cds.String"
+             },
+             "stepNumber": {
+              "type": "cds.Decimal"
+             },
+             "counter": {
+              "type": "cds.Decimal"
+             },
+             "conditionType": {
+              "@title": "Price Element Condition Type",
+              "type": "cds.String"
+             },
+             "categoryCode": {
+              "@title": "Price Element Category Code",
+              "type": "cds.String"
+             },
+             "originCode": {
+              "@title": "Price Element Origin Code",
+              "type": "cds.String"
+             },
+             "netValue": {
+              "@title": "Price Element Net Value",
+              "type": "cds.String"
+             },
+             "netCurrency": {
+              "@title": "Price Element Net Currency",
+              "type": "cds.String"
+             },
+             "pricingUnit": {
+              "@title": "Price Element Pricing Unit",
+              "type": "cds.String"
+             },
+             "unitOfMeasure": {
+              "@title": "Price Element Unit of Measure",
+              "type": "cds.String"
+             },
+             "netPrice": {
+              "@title": "Price Element Net Price",
+              "type": "cds.String"
+             },
+             "netPriceCurrency": {
+              "@title": "Price Element Net Price Currency",
+              "type": "cds.String"
+             },
+             "isManuallyChanged": {
+              "type": "cds.Boolean"
+             },
+             "isDeleteEnabled": {
+              "type": "cds.Boolean"
+             },
+             "inactiveReasonCode": {
+              "@title": "Reason Code for Inactive Price Element",
+              "type": "cds.String"
+             },
+             "isEffective": {
+              "type": "cds.Boolean"
+             }
+            }
+           }
+          },
+          "extensions": {
+           "elements": {}
+          }
+         }
+        }
+       },
+       "relatedObjects": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "objectId": {
+           "@title": "Related Entity Technical ID",
+           "type": "cds.String"
+          },
+          "displayId": {
+           "@title": "Related Entity ID",
+           "type": "cds.String"
+          },
+          "type": {
+           "@title": "Related Entity Type",
+           "type": "cds.String"
+          },
+          "role": {
+           "@title": "Related Entity Role",
+           "type": "cds.String"
+          },
+          "communicationSystemId": {
+           "@title": "Communication System ID",
+           "type": "cds.String"
+          },
+          "communicationSystemDisplayId": {
+           "@title": "Communication System",
+           "type": "cds.String"
+          }
+         }
+        }
+       },
+       "adminData": {
+        "elements": {
+         "createdBy": {
+          "@title": "Created By",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By",
+          "type": "cds.String"
+         },
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         }
+        }
+       },
+       "totalValues": {
+        "elements": {
+         "netAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "taxAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "grossAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         }
+        }
+       },
+       "pricingStatus": {
+        "@title": "Pricing Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "NOT_CALCULATED": {},
+         "CALCULATED_SUCCESSFULLY": {},
+         "CALCULATED_WITH_ERRORS": {},
+         "RECALCULATION_NEEDED": {},
+         "ESTIMATED_SUCCESSFULLY": {},
+         "ESTIMATED_WITH_ERRORS": {}
+        }
+       },
+       "pricingProcedureName": {
+        "@title": "Pricing Procedure",
+        "type": "cds.String"
+       },
+       "pricingProcedureIsExternal": {
+        "type": "cds.Boolean"
+       },
+       "priceElements": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Price Element ID",
+           "type": "cds.UUID"
+          },
+          "description": {
+           "@title": "Price Element Description",
+           "type": "cds.String"
+          },
+          "stepNumber": {
+           "type": "cds.Decimal"
+          },
+          "counter": {
+           "type": "cds.Decimal"
+          },
+          "conditionType": {
+           "@title": "Price Element Condition Type",
+           "type": "cds.String"
+          },
+          "categoryCode": {
+           "@title": "Price Element Category Code",
+           "type": "cds.String"
+          },
+          "originCode": {
+           "@title": "Price Element Origin Code",
+           "type": "cds.String"
+          },
+          "netValue": {
+           "@title": "Price Element Net Value",
+           "type": "cds.String"
+          },
+          "netCurrency": {
+           "@title": "Price Element Net Currency",
+           "type": "cds.String"
+          },
+          "pricingUnit": {
+           "@title": "Price Element Pricing Unit",
+           "type": "cds.String"
+          },
+          "unitOfMeasure": {
+           "@title": "Price Element Unit of Measure",
+           "type": "cds.String"
+          },
+          "netPrice": {
+           "@title": "Price Element Net Price",
+           "type": "cds.String"
+          },
+          "netPriceCurrency": {
+           "@title": "Price Element Net Price Currency",
+           "type": "cds.String"
+          },
+          "isManuallyChanged": {
+           "type": "cds.Boolean"
+          },
+          "isDeleteEnabled": {
+           "type": "cds.Boolean"
+          },
+          "inactiveReasonCode": {
+           "@title": "Reason Code for Inactive Price Element",
+           "type": "cds.String"
+          },
+          "isEffective": {
+           "type": "cds.Boolean"
+          }
+         }
+        }
+       },
+       "externalSalesOrderRequestStatus": {
+        "@title": "External Order Request Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "NOT_STARTED": {},
+         "IN_PROCESS": {},
+         "FINISHED": {},
+         "INTERRUPTED": {}
+        }
+       },
+       "extensions": {
+        "elements": {
+         "vs_test": {
+          "@title": "vs_test",
+          "type": "cds.String",
+          "length": 10
+         },
+         "vs2_test": {
+          "@title": "vs2_test",
+          "type": "cds.String",
+          "length": 80
+         },
+         "number_Ext": {
+          "type": "cds.Double"
+         },
+         "BooleanExtended": {
+          "type": "cds.Boolean"
+         },
+         "objectfiels": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "Test_bool": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "uomCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "test678_lfrpvhmo": {
+          "@title": "test6789",
+          "type": "cds.String",
+          "length": 1
+         },
+         "VS_EXT_TEXT": {
+          "@title": "VS_EXT_TEXT",
+          "type": "cds.String",
+          "length": 80
+         },
+         "Pra1": {
+          "type": "cds.Double"
+         },
+         "URL_Field": {
+          "@title": "URL_Field",
+          "type": "cds.String"
+         },
+         "Email_Field": {
+          "@title": "Email_Field",
+          "type": "cds.String"
+         },
+         "Date_Field": {
+          "type": "cds.Date"
+         },
+         "DateTime_Field": {
+          "type": "cds.Timestamp"
+         },
+         "Time_Field": {
+          "type": "cds.Time"
+         },
+         "Duration_Field": {
+          "type": "cds.String"
+         },
+         "CODE_LIST_FIELD": {
+          "@title": "CODE_LIST_FIELD",
+          "type": "cds.String",
+          "@assert.range": true,
+          "enum": {
+           "Code1": {},
+           "Code2": {},
+           "Code3": {}
+          }
+         },
+         "Amount_Field": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "Quantity_Field": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "uomCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "PropertyValidationTest": {
+          "@title": "PropertyValidationTest",
+          "type": "cds.String",
+          "length": 10
+         },
+         "KUT_TEXT": {
+          "elements": {
+           "content": {
+            "type": "cds.String"
+           },
+           "languageCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "KUT_AMOUNT": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "KUT_QUANTITY": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "uomCode": {
+            "type": "cds.String"
+           }
+          }
+         },
+         "KUT_STRING": {
+          "@title": "KUT_STRING",
+          "type": "cds.String",
+          "length": 50
+         },
+         "KUT_NUMBER_FLOAT": {
+          "type": "cds.Double"
+         },
+         "KUT_NUMBER_DOUBLE": {
+          "type": "cds.Double"
+         },
+         "KUT_UUID": {
+          "@title": "KUT_UUID",
+          "type": "cds.UUID"
+         },
+         "KUT_EMAIL": {
+          "@title": "KUT_EMAIL",
+          "type": "cds.String"
+         },
+         "KUT_CODE": {
+          "@title": "KUT_CODE",
+          "type": "cds.String",
+          "@assert.range": true,
+          "enum": {
+           "V1": {},
+           "V2": {}
+          }
+         },
+         "KUT_TOKEN": {
+          "@title": "KUT_TOKEN",
+          "type": "cds.String"
+         },
+         "KUT_URI": {
+          "@title": "KUT_URI",
+          "type": "cds.String"
+         },
+         "KUT_BOOLEAN": {
+          "type": "cds.Boolean"
+         },
+         "KUT_INTEGER32": {
+          "type": "cds.Integer"
+         },
+         "KUT_INTEGER64": {
+          "type": "cds.Integer64"
+         },
+         "KUT_DATETIME": {
+          "type": "cds.Timestamp"
+         },
+         "KUT_DATE": {
+          "type": "cds.Date"
+         },
+         "KUT_TIME": {
+          "type": "cds.Time"
+         },
+         "KUT_DURATION": {
+          "type": "cds.String"
+         },
+         "MarginRateH": {
+          "@title": "MarginRateH",
+          "type": "cds.String",
+          "length": 80
+         },
+         "lkgk": {
+          "type": "cds.Double"
+         },
+         "KUT_CODE1": {
+          "@title": "KUT_CODE1",
+          "type": "cds.String",
+          "@assert.range": true,
+          "enum": {
+           "_1": {
+            "val": "1"
+           },
+           "_2": {
+            "val": "2"
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Sales.Quote.Service_types.SalesQuotefile": {
+   "@title": "Sales Quote file",
+   "elements": {
+    "value": {
+     "elements": {
+      "id": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "displayId": {
+       "@title": "ID",
+       "type": "cds.String",
+       "length": 35
+      },
+      "customerReferenceId": {
+       "@title": "Customer Reference",
+       "type": "cds.String"
+      },
+      "documentLanguage": {
+       "@title": "Language Code",
+       "type": "cds.String"
+      },
+      "documentLanguageDescription": {
+       "@title": "Language",
+       "type": "cds.String"
+      },
+      "documentDate": {
+       "type": "cds.Date"
+      },
+      "name": {
+       "@title": "Description",
+       "type": "cds.String"
+      },
+      "documentType": {
+       "@title": "Document Type",
+       "type": "cds.String"
+      },
+      "documentTypeDescription": {
+       "@title": "Document Type",
+       "type": "cds.String"
+      },
+      "validityPeriod": {
+       "elements": {
+        "startDate": {
+         "type": "cds.Date"
+        },
+        "endDate": {
+         "type": "cds.Date"
+        }
+       }
+      },
+      "requestedFulfillmentPeriod": {
+       "elements": {
+        "startDateTime": {
+         "type": "cds.Timestamp"
+        },
+        "endDateTime": {
+         "type": "cds.Timestamp"
+        }
+       }
+      },
+      "account": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Account ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Account",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "shipTo": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Ship-To ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Ship-To",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "billTo": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Bill-To ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Bill-To",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "owner": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Owner ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Owner",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "contactOfAccount": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Contact ID of Account",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Contact of Account",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "salesEmployee": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Sales Employee ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Sales Employee",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "salesUnit": {
+       "elements": {
+        "partyId": {
+         "@title": "Technical ID",
+         "type": "cds.UUID"
+        },
+        "partyDisplayId": {
+         "@title": "Sales Unit ID",
+         "type": "cds.String"
+        },
+        "type": {
+         "@title": "Type",
+         "type": "cds.String"
+        },
+        "partyName": {
+         "@title": "Sales Unit",
+         "type": "cds.String"
+        },
+        "determinationMethod": {
+         "@title": "Determination Method Code",
+         "type": "cds.String"
+        },
+        "determinationMethodDescription": {
+         "@title": "Determination Method",
+         "type": "cds.String"
+        },
+        "formattedPostalAddress": {
+         "@title": "Address",
+         "type": "cds.String"
+        }
+       }
+      },
+      "businessTerms": {
+       "elements": {
+        "deliveryPriority": {
+         "@title": "Delivery Priority Code",
+         "type": "cds.String"
+        },
+        "deliveryPriorityDescription": {
+         "@title": "Delivery Priority",
+         "type": "cds.String"
+        },
+        "currency": {
+         "@title": "Currency Code",
+         "type": "cds.String"
+        },
+        "currencyDescription": {
+         "@title": "Currency",
+         "type": "cds.String"
+        },
+        "priceDateTime": {
+         "type": "cds.Timestamp"
+        },
+        "probabilityPercent": {
+         "type": "cds.Double"
+        },
+        "cashDiscountTerms": {
+         "@title": "Payment Terms Code",
+         "type": "cds.String"
+        },
+        "cashDiscountTermsDescription": {
+         "@title": "Payment Terms",
+         "type": "cds.String"
+        },
+        "incoterms": {
+         "elements": {
+          "classification": {
+           "@title": "Incoterms Code",
+           "type": "cds.String"
+          },
+          "classificationDescription": {
+           "@title": "Incoterms",
+           "type": "cds.String"
+          },
+          "location": {
+           "@title": "Incoterms Location",
+           "type": "cds.String"
+          }
+         }
+        }
+       }
+      },
+      "lifeCycleStatus": {
+       "@title": "Status",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "OPEN": {},
+        "IN_PROCESS": {},
+        "COMPLETED": {},
+        "INACTIVE_VERSION": {}
+       }
+      },
+      "consistencyStatus": {
+       "@title": "Consistency",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "INCONSISTENT": {},
+        "CONSISTENT": {}
+       }
+      },
+      "creditWorthinessStatus": {
+       "@title": "Credit Status",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "NOT_RELEVANT": {},
+        "CHECK_PENDING": {},
+        "LIMIT_NOT_EXCEEDED": {},
+        "LIMIT_EXCEEDED": {},
+        "MANUALLY": {}
+       }
+      },
+      "availabilityStatus": {
+       "@title": "ATP Status",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "CONFIRMATION_PENDING": {},
+        "NOT_CONFIRMED": {},
+        "CONFIRMED_INSUFFICIENTLY": {},
+        "CONFIRMED_SUFFICIENTLY": {}
+       }
+      },
+      "progressStatus": {
+       "@title": "Progress",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "OPEN": {},
+        "IN_PROCESS": {},
+        "PENDING": {},
+        "WON": {},
+        "LOST": {},
+        "STOPPED": {}
+       }
+      },
+      "progressStatusReason": {
+       "@title": "Code: Reason for Progress",
+       "type": "cds.String"
+      },
+      "progressStatusReasonDescription": {
+       "@title": "Reason for Progress",
+       "type": "cds.String"
+      },
+      "parties": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyId": {
+          "@title": "Party Technical ID",
+          "type": "cds.UUID"
+         },
+         "partyDisplayId": {
+          "@title": "Party ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Type",
+          "type": "cds.String"
+         },
+         "partyName": {
+          "@title": "Name",
+          "type": "cds.String"
+         },
+         "isMain": {
+          "type": "cds.Boolean"
+         },
+         "roleCategory": {
+          "@title": "Role Category",
+          "type": "cds.String"
+         },
+         "role": {
+          "@title": "Party Role",
+          "type": "cds.String"
+         },
+         "determinationMethod": {
+          "@title": "Determination Method Code",
+          "type": "cds.String"
+         },
+         "determinationMethodDescription": {
+          "@title": "Determination Method",
+          "type": "cds.String"
+         },
+         "formattedPostalAddress": {
+          "@title": "Address",
+          "type": "cds.String"
+         }
+        }
+       }
+      },
+      "businessArea": {
+       "elements": {
+        "salesOrganisationId": {
+         "@title": "Sales Organization Technical ID",
+         "type": "cds.UUID"
+        },
+        "salesOrganisationDisplayId": {
+         "@title": "Sales Organization ID",
+         "type": "cds.String"
+        },
+        "salesOrganisationName": {
+         "@title": "Sales Organization",
+         "type": "cds.String"
+        },
+        "salesOrganisationDeterminationMethod": {
+         "@title": "Sales Organization Determination Method Code",
+         "type": "cds.String"
+        },
+        "salesOrganisationDeterminationMethodDescription": {
+         "@title": "Sales Organization Determination Method",
+         "type": "cds.String"
+        },
+        "salesGroupId": {
+         "@title": "Sales Group Technical ID",
+         "type": "cds.UUID"
+        },
+        "salesGroupDisplayId": {
+         "@title": "Sales Group ID",
+         "type": "cds.String"
+        },
+        "salesGroupName": {
+         "@title": "Sales Group",
+         "type": "cds.String"
+        },
+        "salesGroupDeterminationMethod": {
+         "@title": "Sales Group Determination Method Code",
+         "type": "cds.String"
+        },
+        "salesGroupDeterminationMethodDescription": {
+         "@title": "Sales Group Determination Method",
+         "type": "cds.String"
+        },
+        "salesOfficeId": {
+         "@title": "Sales Office Technical ID",
+         "type": "cds.UUID"
+        },
+        "salesOfficeDisplayId": {
+         "@title": "Sales Office ID",
+         "type": "cds.String"
+        },
+        "salesOfficeName": {
+         "@title": "Sales Office",
+         "type": "cds.String"
+        },
+        "salesOfficeDeterminationMethod": {
+         "@title": "Sales Office Determination Method Code",
+         "type": "cds.String"
+        },
+        "salesOfficeDeterminationMethodDescription": {
+         "@title": "Sales Office Determination Method",
+         "type": "cds.String"
+        },
+        "salesTerritoryId": {
+         "@title": "Sales Territory Technical ID",
+         "type": "cds.UUID"
+        },
+        "salesTerritoryDisplayId": {
+         "@title": "Sales Territory ID",
+         "type": "cds.String"
+        },
+        "salesTerritoryName": {
+         "@title": "Sales Territory",
+         "type": "cds.String"
+        },
+        "salesTerritoryDeterminationMethod": {
+         "@title": "Sales Territory Determination Method Code",
+         "type": "cds.String"
+        },
+        "salesTerritoryDeterminationMethodDescription": {
+         "@title": "Sales Territory Determination Method",
+         "type": "cds.String"
+        },
+        "distributionChannel": {
+         "@title": "Distribution Channel Code",
+         "type": "cds.String"
+        },
+        "distributionChannelDescription": {
+         "@title": "Distribution Channel",
+         "type": "cds.String"
+        },
+        "distributionChannelDeterminationMethod": {
+         "@title": "Distribution Channel Determination Method Code",
+         "type": "cds.String"
+        },
+        "distributionChannelDeterminationMethodDescription": {
+         "@title": "Distribution Channel Determination Method",
+         "type": "cds.String"
+        },
+        "division": {
+         "@title": "Division Code",
+         "type": "cds.String"
+        },
+        "divisionDescription": {
+         "@title": "Division",
+         "type": "cds.String"
+        },
+        "divisionDeterminationMethod": {
+         "@title": "Division Determination Method Code",
+         "type": "cds.String"
+        },
+        "divisionDeterminationMethodDescription": {
+         "@title": "Division Determination Method",
+         "type": "cds.String"
+        }
+       }
+      },
+      "notes": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "type": {
+          "@title": "Note Type",
+          "type": "cds.String"
+         },
+         "content": {
+          "@title": "Note",
+          "type": "cds.String"
+         },
+         "adminData": {
+          "elements": {
+           "createdBy": {
+            "@title": "Created By",
+            "type": "cds.UUID"
+           },
+           "createdByName": {
+            "@title": "Created By",
+            "type": "cds.String"
+           },
+           "createdOn": {
+            "type": "cds.Timestamp"
+           },
+           "updatedBy": {
+            "@title": "Changed By",
+            "type": "cds.UUID"
+           },
+           "updatedByName": {
+            "@title": "Changed By Name",
+            "type": "cds.String"
+           },
+           "updatedOn": {
+            "type": "cds.Timestamp"
+           }
+          }
+         }
+        }
+       }
+      },
+      "attachments": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "ID",
+          "type": "cds.UUID"
+         },
+         "title": {
+          "@title": "Title",
+          "type": "cds.String"
+         },
+         "category": {
+          "@title": "Category",
+          "type": "cds.String"
+         },
+         "fileName": {
+          "@title": "File Name",
+          "type": "cds.String"
+         },
+         "fileSize": {
+          "@title": "File Size",
+          "type": "cds.String"
+         },
+         "contentType": {
+          "@title": "Content Type",
+          "type": "cds.String"
+         },
+         "url": {
+          "@title": "URL",
+          "type": "cds.String"
+         },
+         "adminData": {
+          "elements": {
+           "createdBy": {
+            "@title": "Created By",
+            "type": "cds.UUID"
+           },
+           "createdByName": {
+            "@title": "Created By",
+            "type": "cds.String"
+           },
+           "createdOn": {
+            "type": "cds.Timestamp"
+           },
+           "updatedBy": {
+            "@title": "Changed By",
+            "type": "cds.UUID"
+           },
+           "updatedByName": {
+            "@title": "Changed By Name",
+            "type": "cds.String"
+           },
+           "updatedOn": {
+            "type": "cds.Timestamp"
+           }
+          }
+         }
+        }
+       }
+      },
+      "items": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "displayId": {
+          "@title": "ID",
+          "type": "cds.String",
+          "length": 10
+         },
+         "description": {
+          "@title": "Description",
+          "type": "cds.String"
+         },
+         "itemType": {
+          "@title": "Item Type",
+          "type": "cds.String"
+         },
+         "itemTypeDescription": {
+          "@title": "Item Type",
+          "type": "cds.String"
+         },
+         "typeCode": {
+          "@title": "Type Code",
+          "type": "cds.String",
+          "@assert.range": true,
+          "enum": {
+           "PRODUCT": {},
+           "TEXT": {}
+          }
+         },
+         "parentItemId": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "parentItemDisplayId": {
+          "@title": "Parent ID",
+          "type": "cds.String",
+          "length": 10
+         },
+         "availabilityStatus": {
+          "@title": "ATP Status",
+          "type": "cds.String",
+          "@assert.range": true,
+          "enum": {
+           "CONFIRMATION_PENDING": {},
+           "NOT_CONFIRMED": {},
+           "CONFIRMED_INSUFFICIENTLY": {},
+           "CONFIRMED_SUFFICIENTLY": {}
+          }
+         },
+         "progressStatusReason": {
+          "@title": "Reason for Progress Code",
+          "type": "cds.String"
+         },
+         "progressStatusReasonDescription": {
+          "@title": "Reason for Progress",
+          "type": "cds.String"
+         },
+         "productData": {
+          "elements": {
+           "productId": {
+            "@title": "Product Technical ID",
+            "type": "cds.UUID"
+           },
+           "productDisplayId": {
+            "@title": "Product ID",
+            "type": "cds.String"
+           },
+           "productCategoryId": {
+            "@title": "Product Category Technical ID",
+            "type": "cds.UUID"
+           },
+           "productCategoryDisplayId": {
+            "@title": "Product Category ID",
+            "type": "cds.String"
+           },
+           "productQuantityMeasureUnit": {
+            "@title": "Unit Code",
+            "type": "cds.String"
+           },
+           "productQuantityMeasureUnitDescription": {
+            "@title": "Unit",
+            "type": "cds.String"
+           }
+          }
+         },
+         "productListId": {
+          "@title": "Product List Technical ID",
+          "type": "cds.UUID"
+         },
+         "productListDisplayId": {
+          "@title": "Product List",
+          "type": "cds.String"
+         },
+         "scheduleLines": {
+          "items": {
+           "elements": {
+            "id": {
+             "@title": "Technical ID",
+             "type": "cds.UUID"
+            },
+            "displayId": {
+             "@title": "ID",
+             "type": "cds.String",
+             "length": 4
+            },
+            "quantity": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "uomCode": {
+               "@title": "Unit",
+               "type": "cds.String"
+              }
+             }
+            },
+            "confirmedQuantity": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "uomCode": {
+               "@title": "Unit",
+               "type": "cds.String"
+              }
+             }
+            },
+            "originalQuantity": {
+             "elements": {
+              "content": {
+               "type": "cds.Double"
+              },
+              "uomCode": {
+               "@title": "Unit",
+               "type": "cds.String"
+              }
+             }
+            },
+            "period": {
+             "elements": {
+              "startDateTime": {
+               "type": "cds.Timestamp"
+              },
+              "endDateTime": {
+               "type": "cds.Timestamp"
+              }
+             }
+            }
+           }
+          }
+         },
+         "notes": {
+          "items": {
+           "elements": {
+            "id": {
+             "@title": "Technical ID",
+             "type": "cds.UUID"
+            },
+            "type": {
+             "@title": "Note Type",
+             "type": "cds.String"
+            },
+            "content": {
+             "@title": "Note",
+             "type": "cds.String"
+            },
+            "adminData": {
+             "elements": {
+              "createdBy": {
+               "@title": "Created By",
+               "type": "cds.UUID"
+              },
+              "createdByName": {
+               "@title": "Created By",
+               "type": "cds.String"
+              },
+              "createdOn": {
+               "type": "cds.Timestamp"
+              },
+              "updatedBy": {
+               "@title": "Changed By",
+               "type": "cds.UUID"
+              },
+              "updatedByName": {
+               "@title": "Changed By Name",
+               "type": "cds.String"
+              },
+              "updatedOn": {
+               "type": "cds.Timestamp"
+              }
+             }
+            }
+           }
+          }
+         },
+         "totalValues": {
+          "elements": {
+           "netAmount": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "currencyCode": {
+              "@title": "Currency",
+              "type": "cds.String"
+             }
+            }
+           },
+           "grossAmount": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "currencyCode": {
+              "@title": "Currency",
+              "type": "cds.String"
+             }
+            }
+           },
+           "taxAmount": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "currencyCode": {
+              "@title": "Currency",
+              "type": "cds.String"
+             }
+            }
+           },
+           "requestedQuantity": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "uomCode": {
+              "@title": "Unit",
+              "type": "cds.String"
+             }
+            }
+           },
+           "netPrice": {
+            "elements": {
+             "amount": {
+              "elements": {
+               "content": {
+                "type": "cds.Double"
+               },
+               "currencyCode": {
+                "@title": "Currency",
+                "type": "cds.String"
+               }
+              }
+             },
+             "baseQuantity": {
+              "elements": {
+               "content": {
+                "type": "cds.Double"
+               },
+               "uomCode": {
+                "@title": "Unit",
+                "type": "cds.String"
+               }
+              }
+             }
+            }
+           },
+           "adminData": {
+            "elements": {
+             "createdBy": {
+              "@title": "Created By",
+              "type": "cds.UUID"
+             },
+             "createdByName": {
+              "@title": "Created By",
+              "type": "cds.String"
+             },
+             "createdOn": {
+              "type": "cds.Timestamp"
+             },
+             "updatedBy": {
+              "@title": "Changed By",
+              "type": "cds.UUID"
+             },
+             "updatedByName": {
+              "@title": "Changed By Name",
+              "type": "cds.String"
+             },
+             "updatedOn": {
+              "type": "cds.Timestamp"
+             }
+            }
+           }
+          }
+         },
+         "businessTerms": {
+          "elements": {
+           "deliveryPriority": {
+            "@title": "Delivery Priority Code",
+            "type": "cds.String"
+           },
+           "deliveryPriorityDescription": {
+            "@title": "Delivery Priority",
+            "type": "cds.String"
+           },
+           "currency": {
+            "@title": "Currency Code",
+            "type": "cds.String"
+           },
+           "currencyDescription": {
+            "@title": "Currency",
+            "type": "cds.String"
+           },
+           "priceDateTime": {
+            "type": "cds.Timestamp"
+           },
+           "probabilityPercent": {
+            "type": "cds.Double"
+           },
+           "cashDiscountTerms": {
+            "@title": "Payment Terms Code",
+            "type": "cds.String"
+           },
+           "cashDiscountTermsDescription": {
+            "@title": "Payment Terms",
+            "type": "cds.String"
+           },
+           "incoterms": {
+            "elements": {
+             "classification": {
+              "@title": "Incoterms Code",
+              "type": "cds.String"
+             },
+             "classificationDescription": {
+              "@title": "Incoterms",
+              "type": "cds.String"
+             },
+             "location": {
+              "@title": "Incoterms Location",
+              "type": "cds.String"
+             }
+            }
+           }
+          }
+         },
+         "priceElements": {
+          "items": {
+           "elements": {
+            "id": {
+             "@title": "Price Element ID",
+             "type": "cds.UUID"
+            },
+            "description": {
+             "@title": "Price Element Description",
+             "type": "cds.String"
+            },
+            "stepNumber": {
+             "type": "cds.Decimal"
+            },
+            "counter": {
+             "type": "cds.Decimal"
+            },
+            "conditionType": {
+             "@title": "Price Element Condition Type",
+             "type": "cds.String"
+            },
+            "categoryCode": {
+             "@title": "Price Element Category Code",
+             "type": "cds.String"
+            },
+            "originCode": {
+             "@title": "Price Element Origin Code",
+             "type": "cds.String"
+            },
+            "netValue": {
+             "@title": "Price Element Net Value",
+             "type": "cds.String"
+            },
+            "netCurrency": {
+             "@title": "Price Element Net Currency",
+             "type": "cds.String"
+            },
+            "pricingUnit": {
+             "@title": "Price Element Pricing Unit",
+             "type": "cds.String"
+            },
+            "unitOfMeasure": {
+             "@title": "Price Element Unit of Measure",
+             "type": "cds.String"
+            },
+            "netPrice": {
+             "@title": "Price Element Net Price",
+             "type": "cds.String"
+            },
+            "netPriceCurrency": {
+             "@title": "Price Element Net Price Currency",
+             "type": "cds.String"
+            },
+            "isManuallyChanged": {
+             "type": "cds.Boolean"
+            },
+            "isDeleteEnabled": {
+             "type": "cds.Boolean"
+            },
+            "inactiveReasonCode": {
+             "@title": "Reason Code for Inactive Price Element",
+             "type": "cds.String"
+            },
+            "isEffective": {
+             "type": "cds.Boolean"
+            }
+           }
+          }
+         },
+         "extensions": {
+          "elements": {}
+         }
+        }
+       }
+      },
+      "relatedObjects": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Technical ID",
+          "type": "cds.UUID"
+         },
+         "objectId": {
+          "@title": "Related Entity Technical ID",
+          "type": "cds.String"
+         },
+         "displayId": {
+          "@title": "Related Entity ID",
+          "type": "cds.String"
+         },
+         "type": {
+          "@title": "Related Entity Type",
+          "type": "cds.String"
+         },
+         "role": {
+          "@title": "Related Entity Role",
+          "type": "cds.String"
+         },
+         "communicationSystemId": {
+          "@title": "Communication System ID",
+          "type": "cds.String"
+         },
+         "communicationSystemDisplayId": {
+          "@title": "Communication System",
+          "type": "cds.String"
+         }
+        }
+       }
+      },
+      "adminData": {
+       "elements": {
+        "createdBy": {
+         "@title": "Created By",
+         "type": "cds.UUID"
+        },
+        "createdByName": {
+         "@title": "Created By",
+         "type": "cds.String"
+        },
+        "createdOn": {
+         "type": "cds.Timestamp"
+        },
+        "updatedBy": {
+         "@title": "Changed By",
+         "type": "cds.UUID"
+        },
+        "updatedByName": {
+         "@title": "Changed By Name",
+         "type": "cds.String"
+        },
+        "updatedOn": {
+         "type": "cds.Timestamp"
+        }
+       }
+      },
+      "totalValues": {
+       "elements": {
+        "netAmount": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "@title": "Currency",
+           "type": "cds.String"
+          }
+         }
+        },
+        "taxAmount": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "@title": "Currency",
+           "type": "cds.String"
+          }
+         }
+        },
+        "grossAmount": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "@title": "Currency",
+           "type": "cds.String"
+          }
+         }
+        }
+       }
+      },
+      "pricingStatus": {
+       "@title": "Pricing Status",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "NOT_CALCULATED": {},
+        "CALCULATED_SUCCESSFULLY": {},
+        "CALCULATED_WITH_ERRORS": {},
+        "RECALCULATION_NEEDED": {},
+        "ESTIMATED_SUCCESSFULLY": {},
+        "ESTIMATED_WITH_ERRORS": {}
+       }
+      },
+      "pricingProcedureName": {
+       "@title": "Pricing Procedure",
+       "type": "cds.String"
+      },
+      "pricingProcedureIsExternal": {
+       "type": "cds.Boolean"
+      },
+      "priceElements": {
+       "items": {
+        "elements": {
+         "id": {
+          "@title": "Price Element ID",
+          "type": "cds.UUID"
+         },
+         "description": {
+          "@title": "Price Element Description",
+          "type": "cds.String"
+         },
+         "stepNumber": {
+          "type": "cds.Decimal"
+         },
+         "counter": {
+          "type": "cds.Decimal"
+         },
+         "conditionType": {
+          "@title": "Price Element Condition Type",
+          "type": "cds.String"
+         },
+         "categoryCode": {
+          "@title": "Price Element Category Code",
+          "type": "cds.String"
+         },
+         "originCode": {
+          "@title": "Price Element Origin Code",
+          "type": "cds.String"
+         },
+         "netValue": {
+          "@title": "Price Element Net Value",
+          "type": "cds.String"
+         },
+         "netCurrency": {
+          "@title": "Price Element Net Currency",
+          "type": "cds.String"
+         },
+         "pricingUnit": {
+          "@title": "Price Element Pricing Unit",
+          "type": "cds.String"
+         },
+         "unitOfMeasure": {
+          "@title": "Price Element Unit of Measure",
+          "type": "cds.String"
+         },
+         "netPrice": {
+          "@title": "Price Element Net Price",
+          "type": "cds.String"
+         },
+         "netPriceCurrency": {
+          "@title": "Price Element Net Price Currency",
+          "type": "cds.String"
+         },
+         "isManuallyChanged": {
+          "type": "cds.Boolean"
+         },
+         "isDeleteEnabled": {
+          "type": "cds.Boolean"
+         },
+         "inactiveReasonCode": {
+          "@title": "Reason Code for Inactive Price Element",
+          "type": "cds.String"
+         },
+         "isEffective": {
+          "type": "cds.Boolean"
+         }
+        }
+       }
+      },
+      "externalSalesOrderRequestStatus": {
+       "@title": "External Order Request Status",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "NOT_STARTED": {},
+        "IN_PROCESS": {},
+        "FINISHED": {},
+        "INTERRUPTED": {}
+       }
+      },
+      "extensions": {
+       "elements": {
+        "vs_test": {
+         "@title": "vs_test",
+         "type": "cds.String",
+         "length": 10
+        },
+        "vs2_test": {
+         "@title": "vs2_test",
+         "type": "cds.String",
+         "length": 80
+        },
+        "number_Ext": {
+         "type": "cds.Double"
+        },
+        "BooleanExtended": {
+         "type": "cds.Boolean"
+        },
+        "objectfiels": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "Test_bool": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "uomCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "test678_lfrpvhmo": {
+         "@title": "test6789",
+         "type": "cds.String",
+         "length": 1
+        },
+        "VS_EXT_TEXT": {
+         "@title": "VS_EXT_TEXT",
+         "type": "cds.String",
+         "length": 80
+        },
+        "Pra1": {
+         "type": "cds.Double"
+        },
+        "URL_Field": {
+         "@title": "URL_Field",
+         "type": "cds.String"
+        },
+        "Email_Field": {
+         "@title": "Email_Field",
+         "type": "cds.String"
+        },
+        "Date_Field": {
+         "type": "cds.Date"
+        },
+        "DateTime_Field": {
+         "type": "cds.Timestamp"
+        },
+        "Time_Field": {
+         "type": "cds.Time"
+        },
+        "Duration_Field": {
+         "type": "cds.String"
+        },
+        "CODE_LIST_FIELD": {
+         "@title": "CODE_LIST_FIELD",
+         "type": "cds.String",
+         "@assert.range": true,
+         "enum": {
+          "Code1": {},
+          "Code2": {},
+          "Code3": {}
+         }
+        },
+        "Amount_Field": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "Quantity_Field": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "uomCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "PropertyValidationTest": {
+         "@title": "PropertyValidationTest",
+         "type": "cds.String",
+         "length": 10
+        },
+        "KUT_TEXT": {
+         "elements": {
+          "content": {
+           "type": "cds.String"
+          },
+          "languageCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "KUT_AMOUNT": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "currencyCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "KUT_QUANTITY": {
+         "elements": {
+          "content": {
+           "type": "cds.Double"
+          },
+          "uomCode": {
+           "type": "cds.String"
+          }
+         }
+        },
+        "KUT_STRING": {
+         "@title": "KUT_STRING",
+         "type": "cds.String",
+         "length": 50
+        },
+        "KUT_NUMBER_FLOAT": {
+         "type": "cds.Double"
+        },
+        "KUT_NUMBER_DOUBLE": {
+         "type": "cds.Double"
+        },
+        "KUT_UUID": {
+         "@title": "KUT_UUID",
+         "type": "cds.UUID"
+        },
+        "KUT_EMAIL": {
+         "@title": "KUT_EMAIL",
+         "type": "cds.String"
+        },
+        "KUT_CODE": {
+         "@title": "KUT_CODE",
+         "type": "cds.String",
+         "@assert.range": true,
+         "enum": {
+          "V1": {},
+          "V2": {}
+         }
+        },
+        "KUT_TOKEN": {
+         "@title": "KUT_TOKEN",
+         "type": "cds.String"
+        },
+        "KUT_URI": {
+         "@title": "KUT_URI",
+         "type": "cds.String"
+        },
+        "KUT_BOOLEAN": {
+         "type": "cds.Boolean"
+        },
+        "KUT_INTEGER32": {
+         "type": "cds.Integer"
+        },
+        "KUT_INTEGER64": {
+         "type": "cds.Integer64"
+        },
+        "KUT_DATETIME": {
+         "type": "cds.Timestamp"
+        },
+        "KUT_DATE": {
+         "type": "cds.Date"
+        },
+        "KUT_TIME": {
+         "type": "cds.Time"
+        },
+        "KUT_DURATION": {
+         "type": "cds.String"
+        },
+        "MarginRateH": {
+         "@title": "MarginRateH",
+         "type": "cds.String",
+         "length": 80
+        },
+        "lkgk": {
+         "type": "cds.Double"
+        },
+        "KUT_CODE1": {
+         "@title": "KUT_CODE1",
+         "type": "cds.String",
+         "@assert.range": true,
+         "enum": {
+          "_1": {
+           "val": "1"
+          },
+          "_2": {
+           "val": "2"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Sales.Quote.Service_types.SalesQuotecreaterequest": {
+   "@title": "Sales Quote create request",
+   "elements": {
+    "id": {
+     "@title": "Technical ID",
+     "type": "cds.UUID"
+    },
+    "displayId": {
+     "@title": "ID",
+     "type": "cds.String",
+     "length": 35
+    },
+    "customerReferenceId": {
+     "@title": "Customer Reference",
+     "type": "cds.String"
+    },
+    "documentLanguage": {
+     "@title": "Language Code",
+     "type": "cds.String"
+    },
+    "documentDate": {
+     "type": "cds.Date"
+    },
+    "name": {
+     "@title": "Description",
+     "type": "cds.String"
+    },
+    "documentType": {
+     "@title": "Document Type",
+     "type": "cds.String"
+    },
+    "validityPeriod": {
+     "elements": {
+      "startDate": {
+       "type": "cds.Date"
+      },
+      "endDate": {
+       "type": "cds.Date"
+      }
+     }
+    },
+    "requestedFulfillmentPeriod": {
+     "elements": {
+      "startDateTime": {
+       "type": "cds.Timestamp"
+      },
+      "endDateTime": {
+       "type": "cds.Timestamp"
+      }
+     }
+    },
+    "account": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Account ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Account",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "shipTo": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Ship-To ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Ship-To",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "billTo": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Bill-To ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Bill-To",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "owner": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Owner ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Owner",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "contactOfAccount": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Contact ID of Account",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Contact of Account",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "salesEmployee": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Sales Employee ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Sales Employee",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "salesUnit": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Sales Unit ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Sales Unit",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "businessTerms": {
+     "elements": {
+      "deliveryPriority": {
+       "@title": "Delivery Priority Code",
+       "type": "cds.String"
+      },
+      "deliveryPriorityDescription": {
+       "@title": "Delivery Priority",
+       "type": "cds.String"
+      },
+      "currency": {
+       "@title": "Currency Code",
+       "type": "cds.String"
+      },
+      "currencyDescription": {
+       "@title": "Currency",
+       "type": "cds.String"
+      },
+      "priceDateTime": {
+       "type": "cds.Timestamp"
+      },
+      "probabilityPercent": {
+       "type": "cds.Double"
+      },
+      "cashDiscountTerms": {
+       "@title": "Payment Terms Code",
+       "type": "cds.String"
+      },
+      "cashDiscountTermsDescription": {
+       "@title": "Payment Terms",
+       "type": "cds.String"
+      },
+      "incoterms": {
+       "elements": {
+        "classification": {
+         "@title": "Incoterms Code",
+         "type": "cds.String"
+        },
+        "classificationDescription": {
+         "@title": "Incoterms",
+         "type": "cds.String"
+        },
+        "location": {
+         "@title": "Incoterms Location",
+         "type": "cds.String"
+        }
+       }
+      }
+     }
+    },
+    "lifeCycleStatus": {
+     "@title": "Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "OPEN": {},
+      "IN_PROCESS": {},
+      "COMPLETED": {},
+      "INACTIVE_VERSION": {}
+     }
+    },
+    "progressStatus": {
+     "@title": "Progress",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "OPEN": {},
+      "IN_PROCESS": {},
+      "PENDING": {},
+      "WON": {},
+      "LOST": {},
+      "STOPPED": {}
+     }
+    },
+    "progressStatusReason": {
+     "@title": "Code: Reason for Progress",
+     "type": "cds.String"
+    },
+    "parties": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "partyId": {
+        "@title": "Party Technical ID",
+        "type": "cds.UUID"
+       },
+       "partyDisplayId": {
+        "@title": "Party ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String"
+       },
+       "partyName": {
+        "@title": "Name",
+        "type": "cds.String"
+       },
+       "isMain": {
+        "type": "cds.Boolean"
+       },
+       "roleCategory": {
+        "@title": "Role Category",
+        "type": "cds.String"
+       },
+       "role": {
+        "@title": "Party Role",
+        "type": "cds.String"
+       },
+       "determinationMethod": {
+        "@title": "Determination Method Code",
+        "type": "cds.String"
+       },
+       "determinationMethodDescription": {
+        "@title": "Determination Method",
+        "type": "cds.String"
+       },
+       "formattedPostalAddress": {
+        "@title": "Address",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "businessArea": {
+     "elements": {
+      "salesOrganisationId": {
+       "@title": "Sales Organization Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesOrganisationDisplayId": {
+       "@title": "Sales Organization ID",
+       "type": "cds.String"
+      },
+      "salesOrganisationName": {
+       "@title": "Sales Organization",
+       "type": "cds.String"
+      },
+      "salesOrganisationDeterminationMethod": {
+       "@title": "Sales Organization Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesOrganisationDeterminationMethodDescription": {
+       "@title": "Sales Organization Determination Method",
+       "type": "cds.String"
+      },
+      "salesGroupId": {
+       "@title": "Sales Group Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesGroupDisplayId": {
+       "@title": "Sales Group ID",
+       "type": "cds.String"
+      },
+      "salesGroupName": {
+       "@title": "Sales Group",
+       "type": "cds.String"
+      },
+      "salesGroupDeterminationMethod": {
+       "@title": "Sales Group Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesGroupDeterminationMethodDescription": {
+       "@title": "Sales Group Determination Method",
+       "type": "cds.String"
+      },
+      "salesOfficeId": {
+       "@title": "Sales Office Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesOfficeDisplayId": {
+       "@title": "Sales Office ID",
+       "type": "cds.String"
+      },
+      "salesOfficeName": {
+       "@title": "Sales Office",
+       "type": "cds.String"
+      },
+      "salesOfficeDeterminationMethod": {
+       "@title": "Sales Office Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesOfficeDeterminationMethodDescription": {
+       "@title": "Sales Office Determination Method",
+       "type": "cds.String"
+      },
+      "salesTerritoryId": {
+       "@title": "Sales Territory Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesTerritoryDisplayId": {
+       "@title": "Sales Territory ID",
+       "type": "cds.String"
+      },
+      "salesTerritoryName": {
+       "@title": "Sales Territory",
+       "type": "cds.String"
+      },
+      "salesTerritoryDeterminationMethod": {
+       "@title": "Sales Territory Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesTerritoryDeterminationMethodDescription": {
+       "@title": "Sales Territory Determination Method",
+       "type": "cds.String"
+      },
+      "distributionChannel": {
+       "@title": "Distribution Channel Code",
+       "type": "cds.String"
+      },
+      "distributionChannelDescription": {
+       "@title": "Distribution Channel",
+       "type": "cds.String"
+      },
+      "distributionChannelDeterminationMethod": {
+       "@title": "Distribution Channel Determination Method Code",
+       "type": "cds.String"
+      },
+      "distributionChannelDeterminationMethodDescription": {
+       "@title": "Distribution Channel Determination Method",
+       "type": "cds.String"
+      },
+      "division": {
+       "@title": "Division Code",
+       "type": "cds.String"
+      },
+      "divisionDescription": {
+       "@title": "Division",
+       "type": "cds.String"
+      },
+      "divisionDeterminationMethod": {
+       "@title": "Division Determination Method Code",
+       "type": "cds.String"
+      },
+      "divisionDeterminationMethodDescription": {
+       "@title": "Division Determination Method",
+       "type": "cds.String"
+      }
+     }
+    },
+    "notes": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "type": {
+        "@title": "Note Type",
+        "type": "cds.String"
+       },
+       "content": {
+        "@title": "Note",
+        "type": "cds.String"
+       },
+       "adminData": {
+        "elements": {
+         "createdBy": {
+          "@title": "Created By",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By",
+          "type": "cds.String"
+         },
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         }
+        }
+       }
+      }
+     }
+    },
+    "attachments": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "ID",
+        "type": "cds.UUID"
+       },
+       "title": {
+        "@title": "Title",
+        "type": "cds.String"
+       },
+       "category": {
+        "@title": "Category",
+        "type": "cds.String"
+       },
+       "fileName": {
+        "@title": "File Name",
+        "type": "cds.String"
+       },
+       "fileSize": {
+        "@title": "File Size",
+        "type": "cds.String"
+       },
+       "contentType": {
+        "@title": "Content Type",
+        "type": "cds.String"
+       },
+       "url": {
+        "@title": "URL",
+        "type": "cds.String"
+       },
+       "adminData": {
+        "elements": {
+         "createdBy": {
+          "@title": "Created By",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By",
+          "type": "cds.String"
+         },
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         }
+        }
+       }
+      }
+     }
+    },
+    "items": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "displayId": {
+        "@title": "ID",
+        "type": "cds.String",
+        "length": 10
+       },
+       "description": {
+        "@title": "Description",
+        "type": "cds.String"
+       },
+       "itemType": {
+        "@title": "Item Type",
+        "type": "cds.String"
+       },
+       "itemTypeDescription": {
+        "@title": "Item Type",
+        "type": "cds.String"
+       },
+       "typeCode": {
+        "@title": "Type Code",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "PRODUCT": {},
+         "TEXT": {}
+        }
+       },
+       "parentItemId": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "parentItemDisplayId": {
+        "@title": "Parent ID",
+        "type": "cds.String",
+        "length": 10
+       },
+       "availabilityStatus": {
+        "@title": "ATP Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "CONFIRMATION_PENDING": {},
+         "NOT_CONFIRMED": {},
+         "CONFIRMED_INSUFFICIENTLY": {},
+         "CONFIRMED_SUFFICIENTLY": {}
+        }
+       },
+       "progressStatusReason": {
+        "@title": "Reason for Progress Code",
+        "type": "cds.String"
+       },
+       "progressStatusReasonDescription": {
+        "@title": "Reason for Progress",
+        "type": "cds.String"
+       },
+       "productData": {
+        "elements": {
+         "productId": {
+          "@title": "Product Technical ID",
+          "type": "cds.UUID"
+         },
+         "productDisplayId": {
+          "@title": "Product ID",
+          "type": "cds.String"
+         },
+         "productCategoryId": {
+          "@title": "Product Category Technical ID",
+          "type": "cds.UUID"
+         },
+         "productCategoryDisplayId": {
+          "@title": "Product Category ID",
+          "type": "cds.String"
+         },
+         "productQuantityMeasureUnit": {
+          "@title": "Unit Code",
+          "type": "cds.String"
+         },
+         "productQuantityMeasureUnitDescription": {
+          "@title": "Unit",
+          "type": "cds.String"
+         }
+        }
+       },
+       "productListId": {
+        "@title": "Product List Technical ID",
+        "type": "cds.UUID"
+       },
+       "productListDisplayId": {
+        "@title": "Product List",
+        "type": "cds.String"
+       },
+       "scheduleLines": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "displayId": {
+           "@title": "ID",
+           "type": "cds.String",
+           "length": 4
+          },
+          "quantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "confirmedQuantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "originalQuantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "period": {
+           "elements": {
+            "startDateTime": {
+             "type": "cds.Timestamp"
+            },
+            "endDateTime": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "notes": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "type": {
+           "@title": "Note Type",
+           "type": "cds.String"
+          },
+          "content": {
+           "@title": "Note",
+           "type": "cds.String"
+          },
+          "adminData": {
+           "elements": {
+            "createdBy": {
+             "@title": "Created By",
+             "type": "cds.UUID"
+            },
+            "createdByName": {
+             "@title": "Created By",
+             "type": "cds.String"
+            },
+            "createdOn": {
+             "type": "cds.Timestamp"
+            },
+            "updatedBy": {
+             "@title": "Changed By",
+             "type": "cds.UUID"
+            },
+            "updatedByName": {
+             "@title": "Changed By Name",
+             "type": "cds.String"
+            },
+            "updatedOn": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "totalValues": {
+        "elements": {
+         "netAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "grossAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "taxAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "requestedQuantity": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "uomCode": {
+            "@title": "Unit",
+            "type": "cds.String"
+           }
+          }
+         },
+         "netPrice": {
+          "elements": {
+           "amount": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "currencyCode": {
+              "@title": "Currency",
+              "type": "cds.String"
+             }
+            }
+           },
+           "baseQuantity": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "uomCode": {
+              "@title": "Unit",
+              "type": "cds.String"
+             }
+            }
+           }
+          }
+         },
+         "adminData": {
+          "elements": {
+           "createdBy": {
+            "@title": "Created By",
+            "type": "cds.UUID"
+           },
+           "createdByName": {
+            "@title": "Created By",
+            "type": "cds.String"
+           },
+           "createdOn": {
+            "type": "cds.Timestamp"
+           },
+           "updatedBy": {
+            "@title": "Changed By",
+            "type": "cds.UUID"
+           },
+           "updatedByName": {
+            "@title": "Changed By Name",
+            "type": "cds.String"
+           },
+           "updatedOn": {
+            "type": "cds.Timestamp"
+           }
+          }
+         }
+        }
+       },
+       "businessTerms": {
+        "elements": {
+         "deliveryPriority": {
+          "@title": "Delivery Priority Code",
+          "type": "cds.String"
+         },
+         "deliveryPriorityDescription": {
+          "@title": "Delivery Priority",
+          "type": "cds.String"
+         },
+         "currency": {
+          "@title": "Currency Code",
+          "type": "cds.String"
+         },
+         "currencyDescription": {
+          "@title": "Currency",
+          "type": "cds.String"
+         },
+         "priceDateTime": {
+          "type": "cds.Timestamp"
+         },
+         "probabilityPercent": {
+          "type": "cds.Double"
+         },
+         "cashDiscountTerms": {
+          "@title": "Payment Terms Code",
+          "type": "cds.String"
+         },
+         "cashDiscountTermsDescription": {
+          "@title": "Payment Terms",
+          "type": "cds.String"
+         },
+         "incoterms": {
+          "elements": {
+           "classification": {
+            "@title": "Incoterms Code",
+            "type": "cds.String"
+           },
+           "classificationDescription": {
+            "@title": "Incoterms",
+            "type": "cds.String"
+           },
+           "location": {
+            "@title": "Incoterms Location",
+            "type": "cds.String"
+           }
+          }
+         }
+        }
+       },
+       "priceElements": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Price Element ID",
+           "type": "cds.UUID"
+          },
+          "description": {
+           "@title": "Price Element Description",
+           "type": "cds.String"
+          },
+          "stepNumber": {
+           "type": "cds.Decimal"
+          },
+          "counter": {
+           "type": "cds.Decimal"
+          },
+          "conditionType": {
+           "@title": "Price Element Condition Type",
+           "type": "cds.String"
+          },
+          "categoryCode": {
+           "@title": "Price Element Category Code",
+           "type": "cds.String"
+          },
+          "originCode": {
+           "@title": "Price Element Origin Code",
+           "type": "cds.String"
+          },
+          "netValue": {
+           "@title": "Price Element Net Value",
+           "type": "cds.String"
+          },
+          "netCurrency": {
+           "@title": "Price Element Net Currency",
+           "type": "cds.String"
+          },
+          "pricingUnit": {
+           "@title": "Price Element Pricing Unit",
+           "type": "cds.String"
+          },
+          "unitOfMeasure": {
+           "@title": "Price Element Unit of Measure",
+           "type": "cds.String"
+          },
+          "netPrice": {
+           "@title": "Price Element Net Price",
+           "type": "cds.String"
+          },
+          "netPriceCurrency": {
+           "@title": "Price Element Net Price Currency",
+           "type": "cds.String"
+          },
+          "isManuallyChanged": {
+           "type": "cds.Boolean"
+          },
+          "isDeleteEnabled": {
+           "type": "cds.Boolean"
+          },
+          "inactiveReasonCode": {
+           "@title": "Reason Code for Inactive Price Element",
+           "type": "cds.String"
+          },
+          "isEffective": {
+           "type": "cds.Boolean"
+          }
+         }
+        }
+       },
+       "extensions": {
+        "elements": {}
+       }
+      }
+     }
+    },
+    "relatedObjects": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "objectId": {
+        "@title": "Related Entity Technical ID",
+        "type": "cds.String"
+       },
+       "displayId": {
+        "@title": "Related Entity ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Related Entity Type",
+        "type": "cds.String"
+       },
+       "role": {
+        "@title": "Related Entity Role",
+        "type": "cds.String"
+       },
+       "communicationSystemId": {
+        "@title": "Communication System ID",
+        "type": "cds.String"
+       },
+       "communicationSystemDisplayId": {
+        "@title": "Communication System",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "pricingStatus": {
+     "@title": "Pricing Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "NOT_CALCULATED": {},
+      "CALCULATED_SUCCESSFULLY": {},
+      "CALCULATED_WITH_ERRORS": {},
+      "RECALCULATION_NEEDED": {},
+      "ESTIMATED_SUCCESSFULLY": {},
+      "ESTIMATED_WITH_ERRORS": {}
+     }
+    },
+    "pricingProcedureName": {
+     "@title": "Pricing Procedure",
+     "type": "cds.String"
+    },
+    "priceElements": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Price Element ID",
+        "type": "cds.UUID"
+       },
+       "description": {
+        "@title": "Price Element Description",
+        "type": "cds.String"
+       },
+       "stepNumber": {
+        "type": "cds.Decimal"
+       },
+       "counter": {
+        "type": "cds.Decimal"
+       },
+       "conditionType": {
+        "@title": "Price Element Condition Type",
+        "type": "cds.String"
+       },
+       "categoryCode": {
+        "@title": "Price Element Category Code",
+        "type": "cds.String"
+       },
+       "originCode": {
+        "@title": "Price Element Origin Code",
+        "type": "cds.String"
+       },
+       "netValue": {
+        "@title": "Price Element Net Value",
+        "type": "cds.String"
+       },
+       "netCurrency": {
+        "@title": "Price Element Net Currency",
+        "type": "cds.String"
+       },
+       "pricingUnit": {
+        "@title": "Price Element Pricing Unit",
+        "type": "cds.String"
+       },
+       "unitOfMeasure": {
+        "@title": "Price Element Unit of Measure",
+        "type": "cds.String"
+       },
+       "netPrice": {
+        "@title": "Price Element Net Price",
+        "type": "cds.String"
+       },
+       "netPriceCurrency": {
+        "@title": "Price Element Net Price Currency",
+        "type": "cds.String"
+       },
+       "isManuallyChanged": {
+        "type": "cds.Boolean"
+       },
+       "isDeleteEnabled": {
+        "type": "cds.Boolean"
+       },
+       "inactiveReasonCode": {
+        "@title": "Reason Code for Inactive Price Element",
+        "type": "cds.String"
+       },
+       "isEffective": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "externalSalesOrderRequestStatus": {
+     "@title": "External Order Request Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "NOT_STARTED": {},
+      "IN_PROCESS": {},
+      "FINISHED": {},
+      "INTERRUPTED": {}
+     }
+    },
+    "extensions": {
+     "elements": {
+      "vs_test": {
+       "@title": "vs_test",
+       "type": "cds.String",
+       "length": 10
+      },
+      "vs2_test": {
+       "@title": "vs2_test",
+       "type": "cds.String",
+       "length": 80
+      },
+      "number_Ext": {
+       "type": "cds.Double"
+      },
+      "BooleanExtended": {
+       "type": "cds.Boolean"
+      },
+      "objectfiels": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "Test_bool": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "test678_lfrpvhmo": {
+       "@title": "test6789",
+       "type": "cds.String",
+       "length": 1
+      },
+      "VS_EXT_TEXT": {
+       "@title": "VS_EXT_TEXT",
+       "type": "cds.String",
+       "length": 80
+      },
+      "Pra1": {
+       "type": "cds.Double"
+      },
+      "URL_Field": {
+       "@title": "URL_Field",
+       "type": "cds.String"
+      },
+      "Email_Field": {
+       "@title": "Email_Field",
+       "type": "cds.String"
+      },
+      "Date_Field": {
+       "type": "cds.Date"
+      },
+      "DateTime_Field": {
+       "type": "cds.Timestamp"
+      },
+      "Time_Field": {
+       "type": "cds.Time"
+      },
+      "Duration_Field": {
+       "type": "cds.String"
+      },
+      "CODE_LIST_FIELD": {
+       "@title": "CODE_LIST_FIELD",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "Code1": {},
+        "Code2": {},
+        "Code3": {}
+       }
+      },
+      "Amount_Field": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "Quantity_Field": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "PropertyValidationTest": {
+       "@title": "PropertyValidationTest",
+       "type": "cds.String",
+       "length": 10
+      },
+      "KUT_TEXT": {
+       "elements": {
+        "content": {
+         "type": "cds.String"
+        },
+        "languageCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_AMOUNT": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_QUANTITY": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_STRING": {
+       "@title": "KUT_STRING",
+       "type": "cds.String",
+       "length": 50
+      },
+      "KUT_NUMBER_FLOAT": {
+       "type": "cds.Double"
+      },
+      "KUT_NUMBER_DOUBLE": {
+       "type": "cds.Double"
+      },
+      "KUT_UUID": {
+       "@title": "KUT_UUID",
+       "type": "cds.UUID"
+      },
+      "KUT_EMAIL": {
+       "@title": "KUT_EMAIL",
+       "type": "cds.String"
+      },
+      "KUT_CODE": {
+       "@title": "KUT_CODE",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "V1": {},
+        "V2": {}
+       }
+      },
+      "KUT_TOKEN": {
+       "@title": "KUT_TOKEN",
+       "type": "cds.String"
+      },
+      "KUT_URI": {
+       "@title": "KUT_URI",
+       "type": "cds.String"
+      },
+      "KUT_BOOLEAN": {
+       "type": "cds.Boolean"
+      },
+      "KUT_INTEGER32": {
+       "type": "cds.Integer"
+      },
+      "KUT_INTEGER64": {
+       "type": "cds.Integer64"
+      },
+      "KUT_DATETIME": {
+       "type": "cds.Timestamp"
+      },
+      "KUT_DATE": {
+       "type": "cds.Date"
+      },
+      "KUT_TIME": {
+       "type": "cds.Time"
+      },
+      "KUT_DURATION": {
+       "type": "cds.String"
+      },
+      "MarginRateH": {
+       "@title": "MarginRateH",
+       "type": "cds.String",
+       "length": 80
+      },
+      "lkgk": {
+       "type": "cds.Double"
+      },
+      "KUT_CODE1": {
+       "@title": "KUT_CODE1",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "_1": {
+         "val": "1"
+        },
+        "_2": {
+         "val": "2"
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  },
+  "Sales.Quote.Service_types.SalesQuotepatchupdaterequest": {
+   "@title": "Sales Quote patchupdate request",
+   "elements": {
+    "customerReferenceId": {
+     "@title": "Customer Reference",
+     "type": "cds.String"
+    },
+    "documentLanguage": {
+     "@title": "Language Code",
+     "type": "cds.String"
+    },
+    "documentDate": {
+     "type": "cds.Date"
+    },
+    "name": {
+     "@title": "Description",
+     "type": "cds.String"
+    },
+    "documentType": {
+     "@title": "Document Type",
+     "type": "cds.String"
+    },
+    "validityPeriod": {
+     "elements": {
+      "startDate": {
+       "type": "cds.Date"
+      },
+      "endDate": {
+       "type": "cds.Date"
+      }
+     }
+    },
+    "requestedFulfillmentPeriod": {
+     "elements": {
+      "startDateTime": {
+       "type": "cds.Timestamp"
+      },
+      "endDateTime": {
+       "type": "cds.Timestamp"
+      }
+     }
+    },
+    "account": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Account ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Account",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "shipTo": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Ship-To ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Ship-To",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "billTo": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Bill-To ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Bill-To",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "owner": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Owner ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Owner",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "contactOfAccount": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Contact ID of Account",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Contact of Account",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "salesEmployee": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Sales Employee ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Sales Employee",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "salesUnit": {
+     "elements": {
+      "partyId": {
+       "@title": "Technical ID",
+       "type": "cds.UUID"
+      },
+      "partyDisplayId": {
+       "@title": "Sales Unit ID",
+       "type": "cds.String"
+      },
+      "type": {
+       "@title": "Type",
+       "type": "cds.String"
+      },
+      "partyName": {
+       "@title": "Sales Unit",
+       "type": "cds.String"
+      },
+      "determinationMethod": {
+       "@title": "Determination Method Code",
+       "type": "cds.String"
+      },
+      "determinationMethodDescription": {
+       "@title": "Determination Method",
+       "type": "cds.String"
+      },
+      "formattedPostalAddress": {
+       "@title": "Address",
+       "type": "cds.String"
+      }
+     }
+    },
+    "businessTerms": {
+     "elements": {
+      "deliveryPriority": {
+       "@title": "Delivery Priority Code",
+       "type": "cds.String"
+      },
+      "deliveryPriorityDescription": {
+       "@title": "Delivery Priority",
+       "type": "cds.String"
+      },
+      "currency": {
+       "@title": "Currency Code",
+       "type": "cds.String"
+      },
+      "currencyDescription": {
+       "@title": "Currency",
+       "type": "cds.String"
+      },
+      "priceDateTime": {
+       "type": "cds.Timestamp"
+      },
+      "probabilityPercent": {
+       "type": "cds.Double"
+      },
+      "cashDiscountTerms": {
+       "@title": "Payment Terms Code",
+       "type": "cds.String"
+      },
+      "cashDiscountTermsDescription": {
+       "@title": "Payment Terms",
+       "type": "cds.String"
+      },
+      "incoterms": {
+       "elements": {
+        "classification": {
+         "@title": "Incoterms Code",
+         "type": "cds.String"
+        },
+        "classificationDescription": {
+         "@title": "Incoterms",
+         "type": "cds.String"
+        },
+        "location": {
+         "@title": "Incoterms Location",
+         "type": "cds.String"
+        }
+       }
+      }
+     }
+    },
+    "lifeCycleStatus": {
+     "@title": "Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "OPEN": {},
+      "IN_PROCESS": {},
+      "COMPLETED": {},
+      "INACTIVE_VERSION": {}
+     }
+    },
+    "progressStatus": {
+     "@title": "Progress",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "OPEN": {},
+      "IN_PROCESS": {},
+      "PENDING": {},
+      "WON": {},
+      "LOST": {},
+      "STOPPED": {}
+     }
+    },
+    "progressStatusReason": {
+     "@title": "Code: Reason for Progress",
+     "type": "cds.String"
+    },
+    "parties": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "partyId": {
+        "@title": "Party Technical ID",
+        "type": "cds.UUID"
+       },
+       "partyDisplayId": {
+        "@title": "Party ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Type",
+        "type": "cds.String"
+       },
+       "partyName": {
+        "@title": "Name",
+        "type": "cds.String"
+       },
+       "isMain": {
+        "type": "cds.Boolean"
+       },
+       "roleCategory": {
+        "@title": "Role Category",
+        "type": "cds.String"
+       },
+       "role": {
+        "@title": "Party Role",
+        "type": "cds.String"
+       },
+       "determinationMethod": {
+        "@title": "Determination Method Code",
+        "type": "cds.String"
+       },
+       "determinationMethodDescription": {
+        "@title": "Determination Method",
+        "type": "cds.String"
+       },
+       "formattedPostalAddress": {
+        "@title": "Address",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "businessArea": {
+     "elements": {
+      "salesOrganisationId": {
+       "@title": "Sales Organization Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesOrganisationDisplayId": {
+       "@title": "Sales Organization ID",
+       "type": "cds.String"
+      },
+      "salesOrganisationName": {
+       "@title": "Sales Organization",
+       "type": "cds.String"
+      },
+      "salesOrganisationDeterminationMethod": {
+       "@title": "Sales Organization Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesOrganisationDeterminationMethodDescription": {
+       "@title": "Sales Organization Determination Method",
+       "type": "cds.String"
+      },
+      "salesGroupId": {
+       "@title": "Sales Group Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesGroupDisplayId": {
+       "@title": "Sales Group ID",
+       "type": "cds.String"
+      },
+      "salesGroupName": {
+       "@title": "Sales Group",
+       "type": "cds.String"
+      },
+      "salesGroupDeterminationMethod": {
+       "@title": "Sales Group Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesGroupDeterminationMethodDescription": {
+       "@title": "Sales Group Determination Method",
+       "type": "cds.String"
+      },
+      "salesOfficeId": {
+       "@title": "Sales Office Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesOfficeDisplayId": {
+       "@title": "Sales Office ID",
+       "type": "cds.String"
+      },
+      "salesOfficeName": {
+       "@title": "Sales Office",
+       "type": "cds.String"
+      },
+      "salesOfficeDeterminationMethod": {
+       "@title": "Sales Office Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesOfficeDeterminationMethodDescription": {
+       "@title": "Sales Office Determination Method",
+       "type": "cds.String"
+      },
+      "salesTerritoryId": {
+       "@title": "Sales Territory Technical ID",
+       "type": "cds.UUID"
+      },
+      "salesTerritoryDisplayId": {
+       "@title": "Sales Territory ID",
+       "type": "cds.String"
+      },
+      "salesTerritoryName": {
+       "@title": "Sales Territory",
+       "type": "cds.String"
+      },
+      "salesTerritoryDeterminationMethod": {
+       "@title": "Sales Territory Determination Method Code",
+       "type": "cds.String"
+      },
+      "salesTerritoryDeterminationMethodDescription": {
+       "@title": "Sales Territory Determination Method",
+       "type": "cds.String"
+      },
+      "distributionChannel": {
+       "@title": "Distribution Channel Code",
+       "type": "cds.String"
+      },
+      "distributionChannelDescription": {
+       "@title": "Distribution Channel",
+       "type": "cds.String"
+      },
+      "distributionChannelDeterminationMethod": {
+       "@title": "Distribution Channel Determination Method Code",
+       "type": "cds.String"
+      },
+      "distributionChannelDeterminationMethodDescription": {
+       "@title": "Distribution Channel Determination Method",
+       "type": "cds.String"
+      },
+      "division": {
+       "@title": "Division Code",
+       "type": "cds.String"
+      },
+      "divisionDescription": {
+       "@title": "Division",
+       "type": "cds.String"
+      },
+      "divisionDeterminationMethod": {
+       "@title": "Division Determination Method Code",
+       "type": "cds.String"
+      },
+      "divisionDeterminationMethodDescription": {
+       "@title": "Division Determination Method",
+       "type": "cds.String"
+      }
+     }
+    },
+    "notes": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "type": {
+        "@title": "Note Type",
+        "type": "cds.String"
+       },
+       "content": {
+        "@title": "Note",
+        "type": "cds.String"
+       },
+       "adminData": {
+        "elements": {
+         "createdBy": {
+          "@title": "Created By",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By",
+          "type": "cds.String"
+         },
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         }
+        }
+       }
+      }
+     }
+    },
+    "attachments": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "ID",
+        "type": "cds.UUID"
+       },
+       "title": {
+        "@title": "Title",
+        "type": "cds.String"
+       },
+       "category": {
+        "@title": "Category",
+        "type": "cds.String"
+       },
+       "fileName": {
+        "@title": "File Name",
+        "type": "cds.String"
+       },
+       "fileSize": {
+        "@title": "File Size",
+        "type": "cds.String"
+       },
+       "contentType": {
+        "@title": "Content Type",
+        "type": "cds.String"
+       },
+       "url": {
+        "@title": "URL",
+        "type": "cds.String"
+       },
+       "adminData": {
+        "elements": {
+         "createdBy": {
+          "@title": "Created By",
+          "type": "cds.UUID"
+         },
+         "createdByName": {
+          "@title": "Created By",
+          "type": "cds.String"
+         },
+         "createdOn": {
+          "type": "cds.Timestamp"
+         },
+         "updatedBy": {
+          "@title": "Changed By",
+          "type": "cds.UUID"
+         },
+         "updatedByName": {
+          "@title": "Changed By Name",
+          "type": "cds.String"
+         },
+         "updatedOn": {
+          "type": "cds.Timestamp"
+         }
+        }
+       }
+      }
+     }
+    },
+    "items": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "displayId": {
+        "@title": "ID",
+        "type": "cds.String",
+        "length": 10
+       },
+       "description": {
+        "@title": "Description",
+        "type": "cds.String"
+       },
+       "itemType": {
+        "@title": "Item Type",
+        "type": "cds.String"
+       },
+       "itemTypeDescription": {
+        "@title": "Item Type",
+        "type": "cds.String"
+       },
+       "typeCode": {
+        "@title": "Type Code",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "PRODUCT": {},
+         "TEXT": {}
+        }
+       },
+       "parentItemId": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "parentItemDisplayId": {
+        "@title": "Parent ID",
+        "type": "cds.String",
+        "length": 10
+       },
+       "availabilityStatus": {
+        "@title": "ATP Status",
+        "type": "cds.String",
+        "@assert.range": true,
+        "enum": {
+         "CONFIRMATION_PENDING": {},
+         "NOT_CONFIRMED": {},
+         "CONFIRMED_INSUFFICIENTLY": {},
+         "CONFIRMED_SUFFICIENTLY": {}
+        }
+       },
+       "progressStatusReason": {
+        "@title": "Reason for Progress Code",
+        "type": "cds.String"
+       },
+       "progressStatusReasonDescription": {
+        "@title": "Reason for Progress",
+        "type": "cds.String"
+       },
+       "productData": {
+        "elements": {
+         "productId": {
+          "@title": "Product Technical ID",
+          "type": "cds.UUID"
+         },
+         "productDisplayId": {
+          "@title": "Product ID",
+          "type": "cds.String"
+         },
+         "productCategoryId": {
+          "@title": "Product Category Technical ID",
+          "type": "cds.UUID"
+         },
+         "productCategoryDisplayId": {
+          "@title": "Product Category ID",
+          "type": "cds.String"
+         },
+         "productQuantityMeasureUnit": {
+          "@title": "Unit Code",
+          "type": "cds.String"
+         },
+         "productQuantityMeasureUnitDescription": {
+          "@title": "Unit",
+          "type": "cds.String"
+         }
+        }
+       },
+       "productListId": {
+        "@title": "Product List Technical ID",
+        "type": "cds.UUID"
+       },
+       "productListDisplayId": {
+        "@title": "Product List",
+        "type": "cds.String"
+       },
+       "scheduleLines": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "displayId": {
+           "@title": "ID",
+           "type": "cds.String",
+           "length": 4
+          },
+          "quantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "confirmedQuantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "originalQuantity": {
+           "elements": {
+            "content": {
+             "type": "cds.Double"
+            },
+            "uomCode": {
+             "@title": "Unit",
+             "type": "cds.String"
+            }
+           }
+          },
+          "period": {
+           "elements": {
+            "startDateTime": {
+             "type": "cds.Timestamp"
+            },
+            "endDateTime": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "notes": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Technical ID",
+           "type": "cds.UUID"
+          },
+          "type": {
+           "@title": "Note Type",
+           "type": "cds.String"
+          },
+          "content": {
+           "@title": "Note",
+           "type": "cds.String"
+          },
+          "adminData": {
+           "elements": {
+            "createdBy": {
+             "@title": "Created By",
+             "type": "cds.UUID"
+            },
+            "createdByName": {
+             "@title": "Created By",
+             "type": "cds.String"
+            },
+            "createdOn": {
+             "type": "cds.Timestamp"
+            },
+            "updatedBy": {
+             "@title": "Changed By",
+             "type": "cds.UUID"
+            },
+            "updatedByName": {
+             "@title": "Changed By Name",
+             "type": "cds.String"
+            },
+            "updatedOn": {
+             "type": "cds.Timestamp"
+            }
+           }
+          }
+         }
+        }
+       },
+       "totalValues": {
+        "elements": {
+         "netAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "grossAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "taxAmount": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "currencyCode": {
+            "@title": "Currency",
+            "type": "cds.String"
+           }
+          }
+         },
+         "requestedQuantity": {
+          "elements": {
+           "content": {
+            "type": "cds.Double"
+           },
+           "uomCode": {
+            "@title": "Unit",
+            "type": "cds.String"
+           }
+          }
+         },
+         "netPrice": {
+          "elements": {
+           "amount": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "currencyCode": {
+              "@title": "Currency",
+              "type": "cds.String"
+             }
+            }
+           },
+           "baseQuantity": {
+            "elements": {
+             "content": {
+              "type": "cds.Double"
+             },
+             "uomCode": {
+              "@title": "Unit",
+              "type": "cds.String"
+             }
+            }
+           }
+          }
+         },
+         "adminData": {
+          "elements": {
+           "createdBy": {
+            "@title": "Created By",
+            "type": "cds.UUID"
+           },
+           "createdByName": {
+            "@title": "Created By",
+            "type": "cds.String"
+           },
+           "createdOn": {
+            "type": "cds.Timestamp"
+           },
+           "updatedBy": {
+            "@title": "Changed By",
+            "type": "cds.UUID"
+           },
+           "updatedByName": {
+            "@title": "Changed By Name",
+            "type": "cds.String"
+           },
+           "updatedOn": {
+            "type": "cds.Timestamp"
+           }
+          }
+         }
+        }
+       },
+       "businessTerms": {
+        "elements": {
+         "deliveryPriority": {
+          "@title": "Delivery Priority Code",
+          "type": "cds.String"
+         },
+         "deliveryPriorityDescription": {
+          "@title": "Delivery Priority",
+          "type": "cds.String"
+         },
+         "currency": {
+          "@title": "Currency Code",
+          "type": "cds.String"
+         },
+         "currencyDescription": {
+          "@title": "Currency",
+          "type": "cds.String"
+         },
+         "priceDateTime": {
+          "type": "cds.Timestamp"
+         },
+         "probabilityPercent": {
+          "type": "cds.Double"
+         },
+         "cashDiscountTerms": {
+          "@title": "Payment Terms Code",
+          "type": "cds.String"
+         },
+         "cashDiscountTermsDescription": {
+          "@title": "Payment Terms",
+          "type": "cds.String"
+         },
+         "incoterms": {
+          "elements": {
+           "classification": {
+            "@title": "Incoterms Code",
+            "type": "cds.String"
+           },
+           "classificationDescription": {
+            "@title": "Incoterms",
+            "type": "cds.String"
+           },
+           "location": {
+            "@title": "Incoterms Location",
+            "type": "cds.String"
+           }
+          }
+         }
+        }
+       },
+       "priceElements": {
+        "items": {
+         "elements": {
+          "id": {
+           "@title": "Price Element ID",
+           "type": "cds.UUID"
+          },
+          "description": {
+           "@title": "Price Element Description",
+           "type": "cds.String"
+          },
+          "stepNumber": {
+           "type": "cds.Decimal"
+          },
+          "counter": {
+           "type": "cds.Decimal"
+          },
+          "conditionType": {
+           "@title": "Price Element Condition Type",
+           "type": "cds.String"
+          },
+          "categoryCode": {
+           "@title": "Price Element Category Code",
+           "type": "cds.String"
+          },
+          "originCode": {
+           "@title": "Price Element Origin Code",
+           "type": "cds.String"
+          },
+          "netValue": {
+           "@title": "Price Element Net Value",
+           "type": "cds.String"
+          },
+          "netCurrency": {
+           "@title": "Price Element Net Currency",
+           "type": "cds.String"
+          },
+          "pricingUnit": {
+           "@title": "Price Element Pricing Unit",
+           "type": "cds.String"
+          },
+          "unitOfMeasure": {
+           "@title": "Price Element Unit of Measure",
+           "type": "cds.String"
+          },
+          "netPrice": {
+           "@title": "Price Element Net Price",
+           "type": "cds.String"
+          },
+          "netPriceCurrency": {
+           "@title": "Price Element Net Price Currency",
+           "type": "cds.String"
+          },
+          "isManuallyChanged": {
+           "type": "cds.Boolean"
+          },
+          "isDeleteEnabled": {
+           "type": "cds.Boolean"
+          },
+          "inactiveReasonCode": {
+           "@title": "Reason Code for Inactive Price Element",
+           "type": "cds.String"
+          },
+          "isEffective": {
+           "type": "cds.Boolean"
+          }
+         }
+        }
+       },
+       "extensions": {
+        "elements": {}
+       }
+      }
+     }
+    },
+    "relatedObjects": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Technical ID",
+        "type": "cds.UUID"
+       },
+       "objectId": {
+        "@title": "Related Entity Technical ID",
+        "type": "cds.String"
+       },
+       "displayId": {
+        "@title": "Related Entity ID",
+        "type": "cds.String"
+       },
+       "type": {
+        "@title": "Related Entity Type",
+        "type": "cds.String"
+       },
+       "role": {
+        "@title": "Related Entity Role",
+        "type": "cds.String"
+       },
+       "communicationSystemId": {
+        "@title": "Communication System ID",
+        "type": "cds.String"
+       },
+       "communicationSystemDisplayId": {
+        "@title": "Communication System",
+        "type": "cds.String"
+       }
+      }
+     }
+    },
+    "pricingStatus": {
+     "@title": "Pricing Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "NOT_CALCULATED": {},
+      "CALCULATED_SUCCESSFULLY": {},
+      "CALCULATED_WITH_ERRORS": {},
+      "RECALCULATION_NEEDED": {},
+      "ESTIMATED_SUCCESSFULLY": {},
+      "ESTIMATED_WITH_ERRORS": {}
+     }
+    },
+    "pricingProcedureName": {
+     "@title": "Pricing Procedure",
+     "type": "cds.String"
+    },
+    "priceElements": {
+     "items": {
+      "elements": {
+       "id": {
+        "@title": "Price Element ID",
+        "type": "cds.UUID"
+       },
+       "description": {
+        "@title": "Price Element Description",
+        "type": "cds.String"
+       },
+       "stepNumber": {
+        "type": "cds.Decimal"
+       },
+       "counter": {
+        "type": "cds.Decimal"
+       },
+       "conditionType": {
+        "@title": "Price Element Condition Type",
+        "type": "cds.String"
+       },
+       "categoryCode": {
+        "@title": "Price Element Category Code",
+        "type": "cds.String"
+       },
+       "originCode": {
+        "@title": "Price Element Origin Code",
+        "type": "cds.String"
+       },
+       "netValue": {
+        "@title": "Price Element Net Value",
+        "type": "cds.String"
+       },
+       "netCurrency": {
+        "@title": "Price Element Net Currency",
+        "type": "cds.String"
+       },
+       "pricingUnit": {
+        "@title": "Price Element Pricing Unit",
+        "type": "cds.String"
+       },
+       "unitOfMeasure": {
+        "@title": "Price Element Unit of Measure",
+        "type": "cds.String"
+       },
+       "netPrice": {
+        "@title": "Price Element Net Price",
+        "type": "cds.String"
+       },
+       "netPriceCurrency": {
+        "@title": "Price Element Net Price Currency",
+        "type": "cds.String"
+       },
+       "isManuallyChanged": {
+        "type": "cds.Boolean"
+       },
+       "isDeleteEnabled": {
+        "type": "cds.Boolean"
+       },
+       "inactiveReasonCode": {
+        "@title": "Reason Code for Inactive Price Element",
+        "type": "cds.String"
+       },
+       "isEffective": {
+        "type": "cds.Boolean"
+       }
+      }
+     }
+    },
+    "externalSalesOrderRequestStatus": {
+     "@title": "External Order Request Status",
+     "type": "cds.String",
+     "@assert.range": true,
+     "enum": {
+      "NOT_STARTED": {},
+      "IN_PROCESS": {},
+      "FINISHED": {},
+      "INTERRUPTED": {}
+     }
+    },
+    "extensions": {
+     "elements": {
+      "vs_test": {
+       "@title": "vs_test",
+       "type": "cds.String",
+       "length": 10
+      },
+      "vs2_test": {
+       "@title": "vs2_test",
+       "type": "cds.String",
+       "length": 80
+      },
+      "number_Ext": {
+       "type": "cds.Double"
+      },
+      "BooleanExtended": {
+       "type": "cds.Boolean"
+      },
+      "objectfiels": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "Test_bool": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "test678_lfrpvhmo": {
+       "@title": "test6789",
+       "type": "cds.String",
+       "length": 1
+      },
+      "VS_EXT_TEXT": {
+       "@title": "VS_EXT_TEXT",
+       "type": "cds.String",
+       "length": 80
+      },
+      "Pra1": {
+       "type": "cds.Double"
+      },
+      "URL_Field": {
+       "@title": "URL_Field",
+       "type": "cds.String"
+      },
+      "Email_Field": {
+       "@title": "Email_Field",
+       "type": "cds.String"
+      },
+      "Date_Field": {
+       "type": "cds.Date"
+      },
+      "DateTime_Field": {
+       "type": "cds.Timestamp"
+      },
+      "Time_Field": {
+       "type": "cds.Time"
+      },
+      "Duration_Field": {
+       "type": "cds.String"
+      },
+      "CODE_LIST_FIELD": {
+       "@title": "CODE_LIST_FIELD",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "Code1": {},
+        "Code2": {},
+        "Code3": {}
+       }
+      },
+      "Amount_Field": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "Quantity_Field": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "PropertyValidationTest": {
+       "@title": "PropertyValidationTest",
+       "type": "cds.String",
+       "length": 10
+      },
+      "KUT_TEXT": {
+       "elements": {
+        "content": {
+         "type": "cds.String"
+        },
+        "languageCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_AMOUNT": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "currencyCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_QUANTITY": {
+       "elements": {
+        "content": {
+         "type": "cds.Double"
+        },
+        "uomCode": {
+         "type": "cds.String"
+        }
+       }
+      },
+      "KUT_STRING": {
+       "@title": "KUT_STRING",
+       "type": "cds.String",
+       "length": 50
+      },
+      "KUT_NUMBER_FLOAT": {
+       "type": "cds.Double"
+      },
+      "KUT_NUMBER_DOUBLE": {
+       "type": "cds.Double"
+      },
+      "KUT_UUID": {
+       "@title": "KUT_UUID",
+       "type": "cds.UUID"
+      },
+      "KUT_EMAIL": {
+       "@title": "KUT_EMAIL",
+       "type": "cds.String"
+      },
+      "KUT_CODE": {
+       "@title": "KUT_CODE",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "V1": {},
+        "V2": {}
+       }
+      },
+      "KUT_TOKEN": {
+       "@title": "KUT_TOKEN",
+       "type": "cds.String"
+      },
+      "KUT_URI": {
+       "@title": "KUT_URI",
+       "type": "cds.String"
+      },
+      "KUT_BOOLEAN": {
+       "type": "cds.Boolean"
+      },
+      "KUT_INTEGER32": {
+       "type": "cds.Integer"
+      },
+      "KUT_INTEGER64": {
+       "type": "cds.Integer64"
+      },
+      "KUT_DATETIME": {
+       "type": "cds.Timestamp"
+      },
+      "KUT_DATE": {
+       "type": "cds.Date"
+      },
+      "KUT_TIME": {
+       "type": "cds.Time"
+      },
+      "KUT_DURATION": {
+       "type": "cds.String"
+      },
+      "MarginRateH": {
+       "@title": "MarginRateH",
+       "type": "cds.String",
+       "length": 80
+      },
+      "lkgk": {
+       "type": "cds.Double"
+      },
+      "KUT_CODE1": {
+       "@title": "KUT_CODE1",
+       "type": "cds.String",
+       "@assert.range": true,
+       "enum": {
+        "_1": {
+         "val": "1"
+        },
+        "_2": {
+         "val": "2"
+        }
+       }
+      }
+     }
+    }
+   },
+   "kind": "type"
+  }
+ },
+ "meta": {
+  "creator": "cds-import-openapi"
+ }
+}

@@ -1,0 +1,124 @@
+_schema-version: "3.1"
+ID: bonusplan
+description: A simple CAP project.
+version: 1.0.0
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npx cds build --production
+        # - npx -p @sap/cds-dk cds build --production
+        # include the app in the deployment artifact
+        - cp -r app gen/srv/
+        # include the.cds for re-use in app
+        - cp srv/bonuspolicy-service.cds gen/srv/srv/
+        - cp srv/employee-service.cds gen/srv/srv/
+        - cp srv/sscv2-employee-service.cds gen/srv/srv/
+        - cp srv/sscv2-salesorder-service.cds gen/srv/srv/
+        - cp srv/bonusplan-service.cds gen/srv/srv/
+        - mkdir -p gen/srv/db
+        - cp db/schema.cds gen/srv/db/
+        - cp srv/external/sap.crm.md.employeeservice.openapischema.employee.csn
+          gen/srv/srv/external/
+        - cp srv/external/sap.crm.salesorderservice.openapischema.salesQuote.csn
+          gen/srv/srv/external/
+        - rm gen/srv/srv/csn.json
+modules:
+  - name: bonusplan-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: bonusplan-db
+      - name: bonusplan-destination
+      - name: bonusplan-logging
+      - name: bonusplan-uaa
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+  - name: bonusplan-db-deployer
+    type: hdb
+    path: gen/db
+    requires:
+      - name: bonusplan-db
+    parameters:
+      buildpack: nodejs_buildpack
+  - name: bonusplan
+    type: approuter.nodejs
+    path: app/router
+    requires:
+      - name: bonusplan-destination
+      - name: srv-api
+        group: destinations
+        properties:
+          forwardAuthToken: true
+          # name: ui5
+          # url: https://ui5.sap.com
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+      - name: bonusplan-uaa
+    parameters:
+      disk-quota: 256M
+      keep-existing-routes: true
+      memory: 256M
+    properties:
+      SEND_XFRAMEOPTIONS: false
+      COOKIES: { "SameSite":"None" }
+resources:
+  - name: bonusplan-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: bonusplan-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: false
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+              - Authentication: NoAuthentication
+                HTML5.DynamicDestination: true
+                HTML5.ForwardAuthToken: true
+                Name: bonusplan-srv-api
+                ProxyType: Internet
+                Type: HTTP
+                URL: ~{srv-api/srv-url}
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
+    requires:
+      - name: srv-api
+  - name: bonusplan-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: bonusplan-html5-srv
+      service-plan: app-host
+  - name: bonusplan-logging
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs
+      service-plan: lite
+  - name: bonusplan-uaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: bonusplan-${org}-${space}
+        tenant-mode: dedicated

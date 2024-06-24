@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="MyService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="BonusPlans" EntityType="MyService.BonusPlans">
+                    <NavigationPropertyBinding Path="bonusPolicy" Target="BonusPolicies"/>
+                    <NavigationPropertyBinding Path="bonusDetails" Target="BonusDetails"/>
+                </EntitySet>
+                <EntitySet Name="BonusPolicies" EntityType="MyService.BonusPolicies">
+                    <NavigationPropertyBinding Path="bonusRates" Target="BonusRates"/>
+                    <NavigationPropertyBinding Path="bonusPlan" Target="BonusPlans"/>
+                    <NavigationPropertyBinding Path="texts" Target="BonusPolicies_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="BonusPolicies_texts"/>
+                </EntitySet>
+                <EntitySet Name="BonusDetails" EntityType="MyService.BonusDetails">
+                    <NavigationPropertyBinding Path="bonusPlan" Target="BonusPlans"/>
+                    <NavigationPropertyBinding Path="bonusRate" Target="BonusRates"/>
+                </EntitySet>
+                <EntitySet Name="BonusRates" EntityType="MyService.BonusRates">
+                    <NavigationPropertyBinding Path="bonusPolicy" Target="BonusPolicies"/>
+                    <NavigationPropertyBinding Path="bonusDetail" Target="BonusDetails"/>
+                </EntitySet>
+                <EntitySet Name="BonusPolicies_texts" EntityType="MyService.BonusPolicies_texts"/>
+            </EntityContainer>
+            <EntityType Name="BonusPlans">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="bonusPolicy" Type="MyService.BonusPolicies" Partner="bonusPlan">
+                    <ReferentialConstraint Property="bonusPolicy_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="bonusPolicy_ID" Type="Edm.Guid"/>
+                <Property Name="employee_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="bonusDetails" Type="Collection(MyService.BonusDetails)" Partner="bonusPlan">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="BonusPolicies">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="startDate" Type="Edm.Date"/>
+                <Property Name="endDate" Type="Edm.Date"/>
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="description" Type="Edm.String"/>
+                <NavigationProperty Name="bonusRates" Type="Collection(MyService.BonusRates)" Partner="bonusPolicy">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="bonusPlan" Type="MyService.BonusPlans" Partner="bonusPolicy">
+                    <ReferentialConstraint Property="bonusPolicy_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <NavigationProperty Name="texts" Type="Collection(MyService.BonusPolicies_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="MyService.BonusPolicies_texts">
+                    <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="BonusDetails">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="bonusAmount" Type="Edm.Int32"/>
+                <NavigationProperty Name="bonusPlan" Type="MyService.BonusPlans" Partner="bonusDetails">
+                    <ReferentialConstraint Property="bonusPlan_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="bonusPlan_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="bonusRate" Type="MyService.BonusRates" Partner="bonusDetail">
+                    <ReferentialConstraint Property="bonusRate_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="bonusRate_ID" Type="Edm.Guid"/>
+                <Property Name="bonusRateName" Type="Edm.String"/>
+                <Property Name="bonusRateRatePercent" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="BonusRates">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="bonusPolicy" Type="MyService.BonusPolicies" Partner="bonusRates">
+                    <ReferentialConstraint Property="bonusPolicy_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="bonusPolicy_ID" Type="Edm.Guid"/>
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="ratePercent" Type="Edm.Int32"/>
+                <NavigationProperty Name="bonusDetail" Type="MyService.BonusDetails" Partner="bonusRate">
+                    <ReferentialConstraint Property="bonusRate_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="BonusPolicies_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="description" Type="Edm.String"/>
+            </EntityType>
+            <Annotations Target="MyService.EntityContainer/BonusPlans">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="MyService.BonusPlans/bonusPolicy_ID">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="MyService.BonusPlans/employee_ID">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+            </Annotations>
+            <Annotations Target="MyService.EntityContainer/BonusPolicies">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="MyService.EntityContainer/BonusDetails">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="MyService.EntityContainer/BonusRates">
+                <Annotation Term="Capabilities.DeleteRestrictions">
+                    <Record Type="Capabilities.DeleteRestrictionsType">
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.InsertRestrictions">
+                    <Record Type="Capabilities.InsertRestrictionsType">
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Capabilities.UpdateRestrictions">
+                    <Record Type="Capabilities.UpdateRestrictionsType">
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="MyService.BonusPolicies_texts/locale">
+                <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+                </Annotations>
+            </Schema>
+        </edmx:DataServices>
+    </edmx:Edmx>
