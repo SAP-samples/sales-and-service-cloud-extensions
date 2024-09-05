@@ -17,7 +17,7 @@ The key features covered in this implementation are:
 * Deployed external application on Cloud Foundry in SAP BTP. [Details](./Files/deploy.md).
 * Implemented access restrictions for the external(Bonus Plan) application based on XSUAA authentication. [Details for ading user to BTP account for authentication](./Files/user.md). [Details for XSUAA Implementation](./Files/authorization.md)
 * Implemented role based authorizations for the external(Bonus Plan) application. [Details](./Files/userAccessBTP.md).
-* Integrated SAP Sales and Service Cloud V2 REST apis for fetching and updating data in the external(Bonus Plan) application. [Details](./Files/codeStructure.md).
+* Integrated SAP Sales and Service Cloud V2 REST apis for fetching and updating data in the external(Bonus Plan) application. [Details](./Files/createDestination.md).
 * Embedded the external application in SAP Sales and Service Cloud V2 via Mashup. [Details](./Files/EmbedMashup.md).
 * User propagation across SAP Sales and Service Cloud V2 and the external application.
 
