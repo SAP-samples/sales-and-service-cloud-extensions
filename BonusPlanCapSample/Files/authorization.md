@@ -42,11 +42,11 @@ Follow below process on how to add user to role-collection ([know more about rol
 * Search and open your created Role collection.
 * Click on Edit button and add user in users section and save it.
 
-## Authorization details as per our sample applicaiton (BonusPlan)
+## Authorization details as per this sample applicaiton (BonusPlan)
 Authorization is implemented in this application. As explained in reference scenario, we have 2 roles/personas- Admin and Employee. For Admin users, role collection -**read_write_bplan_rolecollection** needs to be assigned.
 If this role is not assigned, user is treated as employee means user has employee persona.
 
-## Example as per our sample application
+Follow steps below to add authorization:
 
 * Go to your BTP sub account > Security, and click on "Role Collections"
 * Search and open "read_write_bplan_rolecollection" Role collection. This role should be there after deployment of application, as its created via code.  
