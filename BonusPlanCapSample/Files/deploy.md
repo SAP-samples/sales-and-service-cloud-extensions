@@ -29,15 +29,15 @@ Once the bukld is created, the application can now be deployed to cloud foudry. 
 
 ### MTA configuration for UI
 * All the UIs and related schema, cds and other required files  should be added to mta.yaml file as per below image.
-    ![MTA ui config](../Images/deploy/mta-ui-config.png "mta")
+    ![MTA ui config](../Images/mta-ui-config.png "mta")
 
 * Once the build is created, the build file will look like this - build-path
 
-    ![build path](../Images/deploy/build-path.png "build path")
+    ![build path](../Images/build-path.png "build path")
 
 ### Login to CF
 The login to CF script output will look like below-
-![cf login](../Images/deploy/cf-login.png "cf login")
+![cf login](../Images/cf-login.png "cf login")
 
 
 ### Deploy mtar file
