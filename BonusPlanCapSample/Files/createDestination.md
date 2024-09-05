@@ -17,11 +17,11 @@ In this sample, we have consumed 2 external APIs from SAP Sales and Service Clou
 1. Sales.Quote.Service
 2. Employee.Service
 
-Once the desired API models are imported following the [CAP document](https://cap.cloud.sap/docs/guides/using-services), the API definitions are added automatically to the package.json in the CAP project.
+Once the desired API models are imported by  following the [CAP document](https://cap.cloud.sap/docs/guides/using-services), the API definitions are added automatically to the package.json in the CAP project.
 
-The API models can be found in the `bonusplan/srv/external` folder.
+The API models can be found in the project, such as for this reference sample case in  `bonusplan/srv/external` folder.
 
-![API Models](../Images/api-models.png "API Models")
+// ![API Models](../Images/api-models.png "API Models")
 
 So, after adding destination in BTP, the destination name has to be updated for those API definitions in [package.json](../bonusplan/package.json#L90-L108).
 
