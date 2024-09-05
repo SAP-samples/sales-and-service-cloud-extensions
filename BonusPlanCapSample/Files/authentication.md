@@ -14,14 +14,14 @@ You need to have administration rights in this Sales and Service cloud tenant.
 1.	Log in to the system as an administrator.
 2.	Navigate to user profile on the right-top corner and access the Settings page.
 3.	Go to All Settings > Users and Control > Users.
-    ![setting users](../Images/auth/setting-users.png "setting users")
+    ![setting users](../Images/setting-users.png "setting users")
 4.	Choose Business Users from the dropdown on the page.
 5.	Click the add icon (+) on the Business Users page.
-    ![create-business-user-1](../Images/auth/create-business-user-1.png "create-business-user-1")
+    ![create-business-user-1](../Images/create-business-user-1.png "create-business-user-1")
 6.	Search and select an employee for whom you wish to create the business user.
 7.	Once you select an employee, the User Data section is auto-populated. By default, the user ID is created with the last name followed by the first name of the employee. If you wish to modify the user ID details, you can modify them.
 8.	Once you've verified all the details, click Create. The business user is now created and linked to the employee. Refresh the business users' list to view your newly created business user.
-    ![create-business-user-2](../Images/auth/create-business-user-2.png "create-business-user-2")
+    ![create-business-user-2](../Images/create-business-user-2.png "create-business-user-2")
 9.	Choose your business user, and then navigate to the Assigned Business Roles tab.
 10.	Add business roles to your user by using the Search and Add functionality on the screen. All the business roles that you assigned to your business user now appear in the list format on the Assigned Business Roles tab.
 You've now created a business user and assigned the user to a business role.
@@ -38,7 +38,7 @@ As an administrator, you can create users in your subaccount.
 1.	Open the SAP BTP cockpit.
 2.	Go to your global account and/or subaccount 
 3.	Choose Security > Users.
-    ![btp-user-create](../Images/auth/btp-user-create.png "btp-user-create")
+    ![btp-user-create](../Images/btp-user-create.png "btp-user-create")
 4.	Choose Create.
 The SAP BTP cockpit displays a new row where you can enter the user data.
 5.	Enter the user ID and e-mail address.
