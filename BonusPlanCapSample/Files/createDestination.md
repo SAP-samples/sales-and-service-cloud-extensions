@@ -55,7 +55,7 @@ After updating the package.json, a secret file needs to be added to save the cre
 <br>
 
 # Code for consuming external APIs
-Please find the code details for consuming SAP Sales and Service Cloud V2 REST APIs, in this section. The API authentication is implemented through BTP destinations which is described [here](#create-destination).
+Please find the code details for consuming SAP Sales and Service Cloud V2 REST APIs, in this section. The API authentication is implemented through BTP destinations which is already described above in create destination section.
 
 * **SSC V2 Employee API**:  Connects to external Employee API to get the list of employee and to update Employee extension field.
 
