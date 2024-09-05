@@ -1,4 +1,4 @@
-# Build and Deploy Applicatiom to Cloudfoundry
+# Build and Deploy Application to Cloudfoundry
 Once the application is developed in local system, we can start our preparation to deploy to cloud foundry.
 
 ## Preparation 
