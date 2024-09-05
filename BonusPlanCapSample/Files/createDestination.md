@@ -21,8 +21,6 @@ Once the desired API models are imported by  following the [CAP document](https:
 
 The API models can be found in the project, such as for this reference sample case in  `bonusplan/srv/external` folder.
 
-// ![API Models](../Images/api-models.png "API Models")
-
 So, after adding destination in BTP, the destination name has to be updated for those API definitions in [package.json](../bonusplan/package.json#L90-L108).
 
 ![Destination in package.json ](../Images/updated-destination-in-package-json.png "Destination in package.json")
