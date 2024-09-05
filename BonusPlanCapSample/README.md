@@ -14,9 +14,10 @@ We have created external application- service and UI, respectively using **SAP C
 The key features covered in this implementation are:  
 * Development of external(Bonus Plan) application following the golden path of programming model using [SAP CAP](#references-to-cap-development-guides).
 * Used SAP Fiori UX Standards and SAP UI5 library for creating UIs for the external(Bonus Plan) application.
-* Implemented access restrictions for the external(Bonus Plan) application based on XSUAA authentication. [Details for ading user to BTP account for authentication](./Files/user.md). [Details for XSUAA Implementation](./Files/authorization.md)
-* Implemented role based authorizations for the external(Bonus Plan) application. [Details](./Files/userAccessBTP.md).
+* Implement authentication for the external(Bonus Plan) application based on BTP XSUAA. [Details](./Files/authentication.md).
+* Implement role based authorizations for the external(Bonus Plan) application. [Details](./Files/authorization.md).
 * Integrated SAP Sales and Service Cloud V2 REST apis for fetching and updating data in the external(Bonus Plan) application. [Details](./Files/createDestination.md).
+* Deploy external application on Cloud Foundry in SAP BTP. [Details](./Files/deploy.md).
 * Embedded the external application in SAP Sales and Service Cloud V2 via Mashup. [Details](./Files/EmbedMashup.md).
 * Deployed external application on Cloud Foundry in SAP BTP. [Details](./Files/deploy.md).
 * User propagation across SAP Sales and Service Cloud V2 and the external application.
