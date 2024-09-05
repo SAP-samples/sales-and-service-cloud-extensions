@@ -1,6 +1,6 @@
 Our application access SAP Sales and Service Cloud open apis to access employee, sales data etc, through BTP destinations. Please follow steps mentioned below to create destination:
 
-##Create Destination
+## Create Destination
 
 * Go to your BTP main account and then navigate to subaccount
 * Go to "connectivity" from left navigation and select destination.
