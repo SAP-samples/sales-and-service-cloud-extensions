@@ -33,7 +33,8 @@ In SAP Build, the self.window object represents the global window context.
 <u>Return:</u>
 SAP Build requires a return statement at the end of the JavaScript code. "Result" should be returned here. For our refresh, we are just returning true.
 
-Please refer the images below for more details on where JS is added in SAP Build and how code is written
+Please refer the images below for more details on where and how JS code is added in SAP Build<br><br>
+
 
 ![Case ExtensionField ](../Images/BuildAppsOne.png "Case fields")
 
