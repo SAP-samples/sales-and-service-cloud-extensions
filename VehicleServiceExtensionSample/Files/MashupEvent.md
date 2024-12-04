@@ -1,4 +1,4 @@
-# Triggering Standard SSCV2 event from mashup
+# Triggering standard SSCV2 event from mashup
 SAP Sales and Service Cloud V2 offers the capability to trigger standard events from mashups. To fully leverage this feature, the following adjustments are necessary:
    1) Mashup Application(External) – Implement a window postmessage function to trigger the custom event along with the relevant event parameters.
    2) Mashup Authoring(SSCV2) – Configure the custom event and define its parameters within the specific mashup.
