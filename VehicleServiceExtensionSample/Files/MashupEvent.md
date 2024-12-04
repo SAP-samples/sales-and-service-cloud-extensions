@@ -24,13 +24,13 @@ SAP Sales and Service Cloud V2 offers the capability to trigger standard events 
 <b>Event:</b>
 The event is a custom-defined action, and it will be configured within the Mashup Authoring feature in SSCV2.
 
-<u>Params:</u>
+<b>Params:</b>
 This parameter is optional. It contains information that will be passed to SSCV2 when the event is triggered. In our specific use case, params are not required since the event is solely intended to trigger a refresh. However, for completeness and to provide more information, it has been mentioned here.
 
-s<u>elf.window:</u>
+<b>self.window:</b>
 In SAP Build, the self.window object represents the global window context.
 
-<u>Return:</u>
+<b>Return:</b>
 SAP Build requires a return statement at the end of the JavaScript code. "Result" should be returned here. For our refresh, we are just returning true.
 
 Please refer the images below for more details on where and how JS code is added in SAP Build<br><br>
