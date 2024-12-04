@@ -65,7 +65,7 @@ Please follow below mentioned steps to run this application.
 * Additional Features:
    * [Pagination](./Files/pagination.md)
    * [Search & Filter](./Files/searchAndFilter.md)
-   * [Raise SSCV2 standard event from mashup](./Files.MashupEvent.md)
+   * [Raise SSCV2 standard event from mashup](./Files/MashupEvent.md)
 
 
 
