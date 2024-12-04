@@ -21,7 +21,7 @@ SAP Sales and Service Cloud V2 offers the capability to trigger standard events 
 *self.window.parent.postMessage(customEvent, '*');*<br>
  *return { result: true };*    
 
-<u>Event:</u>
+<b>Event:</b>
 The event is a custom-defined action, and it will be configured within the Mashup Authoring feature in SSCV2.
 
 <u>Params:</u>
