@@ -35,13 +35,15 @@ SAP Build requires a return statement at the end of the JavaScript code. "Result
 
 Please refer the images below for more details on where JS is added in SAP Build and how code is written
 
-<todo>- add image
+(../Images/BuildAppsOne.png "Search")
+
+(../Images/BuildAppsJS.png "Search")
 
 #### Mashup Authoring(SSCV2) – Configure the custom event and define its parameters within the specific mashup.
 In SSCV2 application, goto Mashup Authoring settings. Create mashup and add event configuration.For our use case, specify the event name as "customRefreshEvent". While parameters can also be added, they are not required for our refresh scenario.
 Please refer the screenshot below for more details:
 
-<todo>-ādd screeshot for MA
+(../Images/MA.png "Search")
 
 #### Adaptation(SSCV2) – Link the custom event to the corresponding standard event, ensuring proper binding of event parameters.
 When adding the mashup in SSCV2, bind the custom event to a standard event that is exposed. Parameter binding is also supported.
