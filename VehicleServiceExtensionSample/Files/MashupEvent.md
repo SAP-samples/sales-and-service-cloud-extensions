@@ -5,7 +5,7 @@ SAP Sales and Service Cloud V2 offers the capability to trigger standard events 
    3) Adaptation(SSCV2) – Link the custom event to the corresponding standard event, ensuring proper binding of event parameters.
 
    ## Use case and implementation details
-  Consider the following use case in a vehicle service scenario- When a service form and job card are created, their respective IDs are updated in the Case UI through an API call from the backend service. Additionally, the case status is updated. However, while these changes are successfully reflected at the backend, they do not appear immediately on the UI, requiring a manual refresh to display the updates.
+  Consider the following use case in this sample vehicle service scenario- When a service form and job card are created, their respective IDs are updated in the Case UI through an API call from the backend service. Additionally, the case status is updated. However, while these changes are successfully reflected at the backend, they do not appear immediately on the UI, requiring a manual refresh to display the updates.
 
    This is not an ideal business flow, as the UI should display real-time updates. Let’s explore in below sections on how we can address this use case and identify the necessary changes. 
 
