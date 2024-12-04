@@ -46,6 +46,8 @@ Please refer the screenshot below for more details:
 
 ![Case ExtensionField ](../Images/MA.png "Case fields")
 
+*Please Note - Event configuration in mashup authoring is based on feature flag. Please raise customer incident to get it enabled for your tenant*
+
 #### Adaptation(SSCV2) – Link the custom event to the corresponding standard event, ensuring proper binding of event parameters.
 When adding the mashup in SSCV2, bind the custom event to a standard event that is exposed. Parameter binding is also supported.
 For our refresh use case, we have bound the custom event "customRefreshEvent" to the standard exposed refresh event ("").
