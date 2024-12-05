@@ -50,11 +50,15 @@ Please refer the screenshot below for more details:
 
 #### Adaptation(SSCV2) – Link the custom event to the corresponding standard event, ensuring proper binding of event parameters.
 When adding the mashup in SSCV2, bind the custom event to a standard event that is exposed. Parameter binding is also supported.
-For our refresh use case, we have bound the custom event "customRefreshEvent" to the standard exposed refresh event ("").
+For our refresh use case, we have bound the custom event "customRefreshEvent" to the standard exposed refresh event - refreshCaseDataEvent.
 
 Image below shows "Event Parameters" option while adding mashup. Drilling down will give option to bind custom event with standard event along with parameters
 
 ![Case ](../Images/FlexOne.png "Case fields")
+
+Image below shows how event is binded:
+
+![Case ](../Images/flexTwo.png "Case fields")
 
 Once the above configuration is complete, the Case UI will automatically refresh upon creating a job card. This ensures that the job card ID and case status are updated promptly.
 
