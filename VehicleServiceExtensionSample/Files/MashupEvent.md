@@ -54,7 +54,7 @@ For our refresh use case, we have bound the custom event "customRefreshEvent" to
 
 Image below shows "Event Parameters" option while adding mashup. Drilling down will give option to bind custom event with standard event along with parameters
 
-![Case ExtensionField ](../Images/FlexOne.png "Case fields")
+![Case ](./Images/FlexOne.png "Case fields")
 
 Once the above configuration is complete, the Case UI will automatically refresh upon creating a job card. This ensures that the job card ID and case status are updated promptly.
 
