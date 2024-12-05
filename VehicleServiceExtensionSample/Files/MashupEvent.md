@@ -41,7 +41,7 @@ Please refer the images below for more details on where and how JS code is added
 ![Case ExtensionField ](../Images/BuildAppsJS.png "Case fields")
 
 #### Mashup Authoring(SSCV2) – Configure the custom event and define its parameters within the specific mashup.
-In SSCV2 application, goto Mashup Authoring settings. Create mashup and add event configuration.For our use case, specify the event name as "customRefreshEvent". While parameters can also be added, they are not required for our refresh scenario.
+In SSCV2 application, goto Mashup Authoring settings. Create mashup and add event configuration.For our use case, specify the event name as "customRefreshEvent".This is same event which is given in post message above. While parameters can also be added, they are not required for our refresh scenario.
 Please refer the screenshot below for more details:
 
 ![Case ExtensionField ](../Images/MA.png "Case fields")
