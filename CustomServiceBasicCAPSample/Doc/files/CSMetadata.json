@@ -1,0 +1,310 @@
+{
+  "service": {
+    "name": "projectOrderV11",
+    "title": "ProjectOrderV11",
+    "description": "This service maintains ProjectOrder",
+    "authorizationRelevant" :true
+  },
+  "apis": [
+    {
+      "name": "POApiV11",
+      "title": "project Order API",
+      "description": "API for interacting with project order service",
+      "apiPath": "/project-order-service/ProjectOrder",
+      "operations": [
+        {
+          "id": "readProjectOrder",
+          "path": "/",
+          "method": "READ",
+          "request": {
+            "pathVariables": []
+          },
+          "responses": [
+            {
+              "summary": "200 OK",
+              "responseCode": "200"
+            },
+            {
+              "summary": "400 BAD_REQUEST",
+              "responseCode": "400"
+            },
+            {
+              "summary": "401 UNAUTHORIZED",
+              "responseCode": "401"
+            },
+            {
+              "summary": "403 FORBIDDEN",
+              "responseCode": "403"
+            },
+            {
+              "summary": "404 NOT_FOUND",
+              "responseCode": "404"
+            },
+            {
+              "summary": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "readProjectOrder",
+          "path": "/{id}",
+          "method": "READ",
+          "request": {
+            "pathVariables": [
+              {
+                "name": "id",
+                "dataType": "STRING",
+                "dataFormat": "UUID"
+              }
+            ]
+          },
+          "responses": [
+            {
+              "summary": "200 OK",
+              "responseCode": "200"
+            },
+            {
+              "summary": "400 BAD_REQUEST",
+              "responseCode": "400"
+            },
+            {
+              "summary": "401 UNAUTHORIZED",
+              "responseCode": "401"
+            },
+            {
+              "summary": "403 FORBIDDEN",
+              "responseCode": "403"
+            },
+            {
+              "summary": "404 NOT_FOUND",
+              "responseCode": "404"
+            },
+            {
+              "summary": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "createProjectOrderCAP",
+          "path": "/",
+          "method": "POST",
+          "request": {
+            "pathVariables": []
+          },
+          "responses": [
+            {
+              "summary": "201 Created",
+              "responseCode": "201"
+            },
+            {
+              "summary": "400 BAD_REQUEST",
+              "responseCode": "400"
+            },
+            {
+              "summary": "401 UNAUTHORIZED",
+              "responseCode": "401"
+            },
+            {
+              "summary": "403 FORBIDDEN",
+              "responseCode": "403"
+            },
+            {
+              "summary": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "updateProjectOrderCAP",
+          "path": "/{id}",
+          "method": "PATCH",
+          "request": {
+            "pathVariables": [
+              {
+                "name": "id",
+                "dataType": "STRING",
+                "dataFormat": "UUID"
+              }
+            ]
+          },
+          "responses": [
+            {
+              "summary": "200 OK",
+              "responseCode": "200"
+            },
+            {
+              "summary": "400 BAD_REQUEST",
+              "responseCode": "400"
+            },
+            {
+              "summary": "401 UNAUTHORIZED",
+              "responseCode": "401"
+            },
+            {
+              "summary": "403 FORBIDDEN",
+              "responseCode": "403"
+            },
+            {
+              "summary": "404 NOT_FOUND",
+              "responseCode": "404"
+            },
+            {
+              "summary": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        },
+        {
+          "id": "deleteProjectOrderCAP",
+          "path": "/{id}",
+          "method": "DELETE",
+          "request": {
+            "pathVariables": [
+              {
+                "name": "id",
+                "dataType": "STRING",
+                "dataFormat": "UUID"
+              }
+            ]
+          },
+          "responses": [
+            {
+              "summary": "200 OK",
+              "responseCode": "200"
+            },
+            {
+              "summary": "400 BAD_REQUEST",
+              "responseCode": "400"
+            },
+            {
+              "summary": "401 UNAUTHORIZED",
+              "responseCode": "401"
+            },
+            {
+              "summary": "403 FORBIDDEN",
+              "responseCode": "403"
+            },
+            {
+              "summary": "404 NOT_FOUND",
+              "responseCode": "404"
+            },
+            {
+              "summary": "500 INTERNAL_SERVER_ERROR",
+              "responseCode": "500"
+            }
+          ]
+        }
+      ],
+      "entityReference": "ProjectOrderv11"
+    }
+  ],
+  "entities": [
+    {
+      "name": "ProjectOrderv11",
+      "entityType": "BUSINESS",
+      "label":"Project Order",
+      "objectTypeCode": "cus1001",
+      "root": true,
+      "attributes": [
+          {
+          "name": "id",
+          "label": "id",
+          "dataType": "STRING",
+          "dataFormat": "UUID",
+          "keyType": "PRIMARY",
+          "nullable": false,
+          "creatable": true,
+          "updatable": false,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        },{
+          "name": "name",
+          "dataType": "STRING",
+          "label": "Name",
+          "nullable": false,
+          "creatable": true,
+          "updatable": true,
+          "searchWeightage": 1,
+          "description":true,
+          "analyticsRelevant": true
+        },
+       {
+          "name": "customerName",
+          "dataType": "STRING",
+"label": "Customer",
+          "nullable": false,
+          "creatable": true,
+          "updatable": true,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        },
+        {
+         "name": "status",
+              "label": "Status",
+              "dataType": "STRING",
+              "dataFormat": "CODE",
+              "nullable": false,
+              "creatable": true,
+              "updatable": true,
+              "filterable": true,
+              "searchable": true,
+              "enumOptions": [
+                {
+                  "code": "ACTIVE",
+                  "summary": "Active"
+                },
+                {
+                  "code": "INACTIVE",
+                  "summary": "Inactive"
+                }
+              ], "searchWeightage": 1,
+          "analyticsRelevant": true
+},
+        {
+          "name": "isIndividualCustomer",
+"label": "Individual Customer",
+          "dataType": "BOOLEAN",
+          "creatable": true,
+          "updatable": true,
+          "nullable": false,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        },
+        {
+          "name": "customerEmail",
+"label": "Email",
+          "dataType": "STRING",
+          "creatable": true,
+          "updatable": true,
+          "nullable": false,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        },
+         {
+          "name": "startDate",
+"label": "Start Date",
+          "dataType": "DATETIME",
+          "dataFormat": "DATETIME",
+          "creatable": true,
+          "updatable": true,
+          "nullable": false,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        },
+{
+          "name": "endDate",
+"label": "End Date",
+          "dataType": "DATETIME",
+          "dataFormat": "DATETIME",
+          "creatable": true,
+          "updatable": true,
+          "nullable": false,
+          "searchWeightage": 1,
+          "analyticsRelevant": true
+        }
+       ]
+}
+]
+}

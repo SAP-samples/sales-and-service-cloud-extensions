@@ -1,0 +1,83 @@
+{
+  "welcomeFile": "app/index.html",
+  "authenticationMethod": "none",
+  "routes": [
+    {
+      "source": "^/app/(.*)$",
+      "target": "$1",
+      "localDir": ".",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    },
+    {
+      "source": "^/appconfig/",
+      "localDir": ".",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    },
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": true
+    }
+  ],
+  "cors": [
+    {
+      "uriPattern": "(.*)",
+      "allowedMethods": [
+        "GET",
+        "POST",
+        "OPTIONS",
+        "PATCH",
+        "PUT",
+        "DELETE"
+      ],
+      "allowedOrigin": [
+        {
+          "host": "localhost",
+          "protocol": "http",
+          "port": 5000
+        },
+        {
+          "host": "localhost",
+          "protocol": "http",
+          "port": 4100
+        },
+        {
+          "host": "localhost",
+          "protocol": "http",
+          "port": 4200
+        },
+        {
+          "host": "ext-webcomponent-ui.c7faf5c.kyma.ondemand.com",
+          "protocol": "https"
+        },
+        {
+          "host": "service7-staging.cxm-salescloud.com",
+          "protocol": "https"
+        },
+        {
+          "host": "ns-staging.cxm-salescloud.com",
+          "protocol": "https"
+        },
+        {
+          "host": "my1000265.vlab.crm.cloud.sap",
+          "protocol": "https"
+        }
+      ],
+      "allowedHeaders": [
+        "Accept",
+        "Authorization",
+        "Content-Type",
+        "Access-Control-Allow-Credentials",
+        "sap-c4c-rawagent",
+        "X-Csrf-Token",
+        "If-Match"
+      ],
+      "exposeHeaders": [
+        "Etag",
+        "X-Csrf-Token"
+      ],
+      "allowedCredentials": true
+    }
+  ]
+}
