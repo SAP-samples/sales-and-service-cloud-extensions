@@ -49,17 +49,7 @@ This feature will support conversion of CAP - CDS based metadata to sales and se
 ## OPEN POINTS AND FUTURE WORK:
 
 -   ObjectTypeCode support is not yet supported because we can't use randomInt as well because generated integer can match with cns entitie's object type code.
--   Dynamic Code List is not yet supported but it can be done based on enum of entity types and using custom annotation like `@type`. And then build association based on that.
-
-    For example: 
-
-        type Etype          : String @assert.range enum {
-            BUSINESS  = 'Business';
-            CODEVALUE = 'Code Value';
-        }
-
-        @type  : Etype.CODEVALUE
-        entity ProjectOrder {}
+-   Dynamic Code List is not yet fully supported. Partial implementation exists but needs testing and modifications can be made.
 -   Association to external entity(for example entity in CNS) where data is stored in CNS by defining the CNS entity structure in `schema.cds` in the same custom external(CAP) service which will then become association with entity in same custom service but logically not. 
 
     `Idea:` Define custom annotation something like `@isCnsEntity`. For example, defined `Accounts` entity for now in  `Project Order` CAP service where attribute `accounts` in `ProjectOrder` entity in this CAP service is coming from `Accounts` entity in CNS. And data from accounts in cns is fetched using service.js file logic written in CAP but we will not have access to it, atleast it wont be part of JSON file being uploaded. This is not yet implemented.
@@ -69,8 +59,9 @@ This feature will support conversion of CAP - CDS based metadata to sales and se
 - OVS association is not yet tested. Some code is written to get description attribute with `@description : true` property and add it as targetAttribute for description but didnt tested it with exact data and build actual association.
 
 -   `Searchable` is not yet supported as it needed further analysis on `cds.search`.
--   UI and integrating with service for this feature is yet to be developed.
+-   UI, integration with service, k8s configurations, pipelines setup, etc., required for deployment of service.
 -   As of now admin data also will be formed based on input only just like other attributes, it won't be part of admin data array as such, no associations built.
+- 
 
 
 ### Comparision with templateData.json:
