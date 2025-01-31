@@ -66,6 +66,8 @@ This feature will support conversion of CAP - CDS based metadata to sales and se
 
 -   Association to any of the CNS entities can't be identified, hence targetEntity and targetService is no where refered to sales and service cloud services like i18n currencies, etc.,
 
+- OVS association is not yet tested. Some code is written to get description attribute with `@description : true` property and add it as targetAttribute for description but didnt tested it with exact data and build actual association.
+
 -   `Searchable` is not yet supported as it needed further analysis on `cds.search`.
 -   UI and integrating with service for this feature is yet to be developed.
 -   As of now admin data also will be formed based on input only just like other attributes, it won't be part of admin data array as such, no associations built.
