@@ -1,13 +1,13 @@
 {
     "service": {
-        "technicalName": "zsubscription",
+        "name": "zsubscription",
         "title": "zsubscription",
         "description": "zsubscription",
         "authorizationRelevant": true
     },
     "entities": [
         {
-            "technicalName": "zsubscription",
+            "name": "zsubscription",
             "label": "zsubscription",
             "entityType": "BUSINESS",
             "objectTypeCode": "SR002",
@@ -143,13 +143,13 @@
     "apis": [],
     "events": [
         {
-            "technicalName": "zsubscriptionCreate",
+            "name": "zsubscriptionCreate",
             "label": "zsubscription Create",
             "entityReference": "zsubscription",
             "trigger": "CREATE"
         },
         {
-            "technicalName": "zsubscriptionUpdate",
+            "name": "zsubscriptionUpdate",
             "label": "zsubscription Update",
             "entityReference": "zsubscription",
             "trigger": "UPDATE"
