@@ -70,37 +70,7 @@
                         }
                     ]
                 },
-                {
-                    "name": "cases",
-                    "dataType": "ARRAY",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "label": "Cases",
-                    "itemDataType": "OBJECT",
-                    "objectDefinition": [
-                          {
-                            "name": "id",
-                            "dataType": "STRING",
-                            "nullable": true,
-                            "creatable": true,
-                            "updatable": true,
-                            "label": "Case UUID",
-                            "dataFormat": "UUID",
-                            "keyType": "FOREIGN",
-                            "objectReference": {
-                                "associationType": "ASSOCIATION",
-                                "sourceEntity": "customer.ssc.zsubscriptionservice.entity.zsubscription",
-                                "sourceAttribute": "cases.id",
-                                "targetAttribute": "id",
-                                "targetEntity": "sap.ssc.caseservice.entity.case",
-                                "keyGroup": "case",
-                                "targetService": "sap.ssc.service.caseService"
-                            }
-                        }
-                    ]
-                },
-                {
+                  {
                     "name": "status",
                     "label": "Status",
                     "dataType": "STRING",
