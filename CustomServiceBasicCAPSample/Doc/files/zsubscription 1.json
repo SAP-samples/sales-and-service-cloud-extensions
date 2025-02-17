@@ -1,0 +1,158 @@
+{
+    "service": {
+        "technicalName": "zsubscription",
+        "title": "zsubscription",
+        "description": "zsubscription",
+        "authorizationRelevant": true
+    },
+    "entities": [
+        {
+            "technicalName": "zsubscription",
+            "label": "zsubscription",
+            "entityType": "BUSINESS",
+            "objectTypeCode": "SR002",
+            "root": true,
+            "attributes": [
+                {
+                    "name": "id",
+                    "label": "Id",
+                    "dataType": "STRING",
+                    "dataFormat": "UUID",
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": false
+                },
+                {
+                    "name": "name",
+                    "label": "Name",
+                    "dataType": "STRING",
+                    "description": true,
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": false
+                },
+                {
+                    "name": "zsubscriptionId",
+                    "label": "zsubscription ID",
+                    "dataType": "STRING",
+                    "displayId": true,
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": false
+                },
+
+                {
+                    "name": "account",
+                    "label": "Account",
+                    "dataType": "OBJECT",
+                    "nullable": true,
+                    "creatable": false,
+                    "updatable": false,
+                    "objectDefinition": [
+                        {
+                            "name": "id",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "label": "Account UUID",
+                            "dataFormat": "UUID",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "associationType": "ASSOCIATION",
+                                "sourceEntity": "customer.ssc.zsubscriptionservice.entity.zsubscription",
+                                "sourceAttribute": "account.id",
+                                "targetAttribute": "id",
+                                "targetEntity": "sap.ssc.md.accountservice.entity.account",
+                                "keyGroup": "account",
+                                "targetService": "sap.ssc.md.service.accountService"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "cases",
+                    "dataType": "ARRAY",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "label": "Cases",
+                    "itemDataType": "OBJECT",
+                    "objectDefinition": [
+                          {
+                            "name": "id",
+                            "dataType": "STRING",
+                            "nullable": true,
+                            "creatable": true,
+                            "updatable": true,
+                            "label": "Case UUID",
+                            "dataFormat": "UUID",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "associationType": "ASSOCIATION",
+                                "sourceEntity": "customer.ssc.zsubscriptionservice.entity.zsubscription",
+                                "sourceAttribute": "cases.id",
+                                "targetAttribute": "id",
+                                "targetEntity": "sap.ssc.caseservice.entity.case",
+                                "keyGroup": "case",
+                                "targetService": "sap.ssc.service.caseService"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "dataType": "STRING",
+                    "dataFormat": "CODE",
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": true,
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        },
+                        {
+                            "code": "IN_PROGRESS",
+                            "description": "In Progress"
+                        },
+                        {
+                            "code": "COMPLETED",
+                            "description": "Completed"
+                        },
+                        {
+                            "code": "CANCELLED",
+                            "description": "Cancelled"
+                        },
+                        {
+                            "code": "OBSOLETE",
+                            "description": "Obsolete"
+                        }
+                    ]
+                }
+
+
+            ]
+        }
+    ],
+    "apis": [],
+    "events": [
+        {
+            "technicalName": "zsubscriptionCreate",
+            "label": "zsubscription Create",
+            "entityReference": "zsubscription",
+            "trigger": "CREATE"
+        },
+        {
+            "technicalName": "zsubscriptionUpdate",
+            "label": "zsubscription Update",
+            "entityReference": "zsubscription",
+            "trigger": "UPDATE"
+        }
+    ]
+}
