@@ -87,9 +87,9 @@ Consider scenario, where customer(account) for a project order is fetched from S
       "keyType": "FOREIGN",
       "objectReference": {
         "targetAttribute": "id",
-        "targetEntity": "sap.crm.md.accountservice.entity.account",
+        "targetEntity": "sap.ssc.md.accountservice.entity.account",
         "keyGroup": "account",
-        "targetService": "sap.crm.md.service.accountService",
+        "targetService": "sap.ssc.md.service.accountService",
         "associationType": "ASSOCIATION",
         "sourceAttribute": "account.id"
       },
@@ -140,8 +140,8 @@ Response payload for such field will look like
 
 Few points: 
 - In this example, Account is object, which has id, displayId, and formatted Name(description/Account Name).
-- Target Entity is taken from SSCV2. 
-- As of now, from SSCV2 only "Accounts" and "Products" are exposed for association 
+- Target Entity name can be taken from SSCV2 extensibility administration as shown below. 
+![Entity](../Images/EntityInfo.png)
 
 ### Add Enums as codelist
 Enum based codelists are also supported.<br>
