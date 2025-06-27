@@ -1,13 +1,13 @@
 {
   "service": {
-    "name": "projectOrderV11",
-    "title": "ProjectOrderV11",
+    "name": "projectOrder",
+    "title": "ProjectOrder",
     "description": "This service maintains ProjectOrder",
     "authorizationRelevant" :true
   },
   "apis": [
     {
-      "name": "POApiV11",
+      "name": "POApi",
       "title": "project Order API",
       "description": "API for interacting with project order service",
       "apiPath": "/project-order-service/ProjectOrder",
@@ -87,7 +87,7 @@
           ]
         },
         {
-          "id": "createProjectOrderCAP",
+          "id": "createProjectOrder",
           "path": "/",
           "method": "POST",
           "request": {
@@ -117,7 +117,7 @@
           ]
         },
         {
-          "id": "updateProjectOrderCAP",
+          "id": "updateProjectOrder",
           "path": "/{id}",
           "method": "PATCH",
           "request": {
@@ -157,7 +157,7 @@
           ]
         },
         {
-          "id": "deleteProjectOrderCAP",
+          "id": "deleteProjectOrder",
           "path": "/{id}",
           "method": "DELETE",
           "request": {
@@ -197,12 +197,12 @@
           ]
         }
       ],
-      "entityReference": "ProjectOrderv11"
+      "entityReference": "ProjectOrder"
     }
   ],
   "entities": [
     {
-      "name": "ProjectOrderv11",
+      "name": "ProjectOrder",
       "entityType": "BUSINESS",
       "label":"Project Order",
       "objectTypeCode": "cus1001",
@@ -216,32 +216,25 @@
           "keyType": "PRIMARY",
           "nullable": false,
           "creatable": true,
-          "updatable": false,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "updatable": false
         },{
           "name": "name",
           "dataType": "STRING",
           "label": "Name",
           "nullable": false,
           "creatable": true,
-          "updatable": true,
-          "searchWeightage": 1,
-          "description":true,
-          "analyticsRelevant": true
+          "updatable": true
         },
        {
           "name": "customerName",
           "dataType": "STRING",
-"label": "Customer",
+          "label": "Customer",
           "nullable": false,
           "creatable": true,
-          "updatable": true,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "updatable": true
         },
         {
-         "name": "status",
+              "name": "status",
               "label": "Status",
               "dataType": "STRING",
               "dataFormat": "CODE",
@@ -259,50 +252,41 @@
                   "code": "INACTIVE",
                   "summary": "Inactive"
                 }
-              ], "searchWeightage": 1,
-          "analyticsRelevant": true
+              ]
 },
         {
           "name": "isIndividualCustomer",
-"label": "Individual Customer",
+          "label": "Individual Customer",
           "dataType": "BOOLEAN",
           "creatable": true,
           "updatable": true,
-          "nullable": false,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "nullable": false
         },
         {
           "name": "customerEmail",
-"label": "Email",
+          "label": "Email",
           "dataType": "STRING",
           "creatable": true,
           "updatable": true,
-          "nullable": false,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "nullable": false
         },
          {
           "name": "startDate",
-"label": "Start Date",
+          "label": "Start Date",
           "dataType": "DATETIME",
           "dataFormat": "DATETIME",
           "creatable": true,
           "updatable": true,
-          "nullable": false,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "nullable": false
         },
 {
           "name": "endDate",
-"label": "End Date",
+          "label": "End Date",
           "dataType": "DATETIME",
           "dataFormat": "DATETIME",
           "creatable": true,
           "updatable": true,
-          "nullable": false,
-          "searchWeightage": 1,
-          "analyticsRelevant": true
+          "nullable": false
         }
        ]
 }

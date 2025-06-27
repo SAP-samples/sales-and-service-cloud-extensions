@@ -8,7 +8,7 @@ For eg: Project order can have products child entity.
 
 Since, its a child entity, any operation will require parent entity UUID as foreign key and get URL should be in this format: 
 
-`https://<application-url>/<service-name>/<root-entity-name>/<root-entity-ID>/<child-entity>`
+`https://<application-url>/<api-path>`
 
 Example URL:
 To get products for particular project order:
@@ -17,10 +17,7 @@ https://xyz.hana.ondemand.com/project-order-service/ProjectOrder/4de13335-b2df-1
 
 Here:<br>
 - xyz.hana.ondemand.com : is application URL.
--  project-order-service : is service name
-- ProjectOrder : root entity
-- 4de13335-b2df-11ef-82e8-bb3595fd7bed : example project order id
-- Products : is child entity
+- project-order-service/ProjectOrder/4de13335-b2df-11ef-82e8-bb3595fd7bed/Products : is apiPath
 
 
 

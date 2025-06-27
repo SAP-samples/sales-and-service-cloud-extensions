@@ -1,16 +1,26 @@
 ## Create Custom Service in SAP Sales and Service Cloud
 Please follow the steps mentioned below to create custom service and generate UIs in SAP Sales and Service Cloud using this sample CAP service. <br>
-
- - Login with admin user in SAP Sales and Service Cloud and goto "Custom Services" settings.<br>
+ - Login with admin user in SAP Sales and Service Cloud and goto "Custom Services" settings.<br>    
      ![customService](../Images/CSSettings.png)
- - Click on "+" to create new Custom Service. Just enter the Domain Path - Base url where service is deployed.
+ - Click on "+" to create new Custom Service. select Entity Based Custom service.
+
+   ![customService](../Images/NewCS.png)
+    
+ - Just enter the Domain Path - Base url where service is deployed.
        ![customService](../Images/NewCS1.png)
  - Upload the metadata from previous step. Once uploaded UI will look like :
       ![customService](../Images/NewCS2.png)
- - Once service is created, next step is to create Ui App. For that, click on "Design App" from actions column in customer services OWL.
+ - Once service is created, next step is to create Ui App. For that, click on "Design App" from actions column in custom services OWL.
     ![customService](../Images/DA1.png)
- - From UiApp UI, click on "+" to create and select "custom ui" radio button as shown below. Give name - Project Order, which is Work center name. Select all the     patterns which are required for this usecase. Select the icon and click on save.
-    ![customService](../Images/DA2.png)
+ - From UiApp UI, click on "+" to create. It will open creat view UI
+      ![customService](../Images/newDA.png)
+   
+ -   Give name - Project Order, which is Work center name. Fill all mandatory inputs needed. Select all the patterns which are required for this usecase. Select the + and click on save.
+
+   ![customService](../Images/adduiView.png)
+
+   In case any view contains mashup, that can also be selected. Which basically means, uiViews can either be gnerated custom ui or a mashup.
+
   - Once App is created, enable navigation launchpoint switch from list.
     ![customService](../Images/DA3.png)
  - Once app is also created, assign the newly created service and app to the business role for user who need to see this project order UI.
