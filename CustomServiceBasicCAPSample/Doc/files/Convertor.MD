@@ -26,7 +26,7 @@ The conversion involves below steps:
 
 ## Guidelines:
 
-The guidelines outlined [here](./GuildelinesConv.MD) must be strictly adhered to for consistent and highly reliable conversion.
+The guidelines outlined [here](./GuidelinesConv.MD) must be strictly adhered to for consistent and highly reliable conversion.
 
 ## Metadata Conversion Support and Limitations:
 
