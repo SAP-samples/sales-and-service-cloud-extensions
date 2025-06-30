@@ -246,11 +246,11 @@
               "enumOptions": [
                 {
                   "code": "ACTIVE",
-                  "summary": "Active"
+                  "description": "Active"
                 },
                 {
                   "code": "INACTIVE",
-                  "summary": "Inactive"
+                  "description": "Inactive"
                 }
               ]
 },
