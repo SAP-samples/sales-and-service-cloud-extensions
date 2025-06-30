@@ -110,5 +110,8 @@ In Sales And Service Cloud, metadata attributes are defined using datatypes (ali
 |           | TIME              | Time only.                                                                   |
 |           | DURATION          | Duration type.                                                               |
 
+### Cap Schema to Metadata json Conversion
+For CAP based service, we provids option to generate metadata. Details are mentioned [here](../files/Convertor.MD)
+
 
 
