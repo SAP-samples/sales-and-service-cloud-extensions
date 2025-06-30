@@ -140,4 +140,3 @@ Example: In the "Job portal" sample application, please refer to the Submit / St
 
 ![Case ExtensionField ](../Images/SBA4.png "Case fields")
  
-
