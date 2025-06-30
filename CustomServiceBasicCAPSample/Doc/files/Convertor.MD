@@ -26,11 +26,11 @@ The conversion involves below steps:
 
 ## Guidelines:
 
-The guidelines outlined [here](../files/GuildelinesConv.MD) must be strictly adhered to for consistent and highly reliable conversion.
+The guidelines outlined [here](../GuildelinesConv.MD) must be strictly adhered to for consistent and highly reliable conversion.
 
 ## Metadata Conversion Support and Limitations:
 
-Support and limitations for this conversion is outlined [here](../files/LimitationConv.md)
+Support and limitations for this conversion is outlined [here](../LimitationConv.md)
 
 
 ## Manual steps before uploading metadata to Sales and Service Cloud
