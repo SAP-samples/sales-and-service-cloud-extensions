@@ -6,10 +6,15 @@ Please follow the steps mentioned below to create custom service and generate UI
 
    ![customService](../Images/NewCS.png)
     
- - Just enter the Domain Path - Base url where service is deployed.
-       ![customService](../Images/NewCS1.png)
- - Upload the metadata from previous step. Once uploaded UI will look like :
+ -  Enter the Domain Path - Base url where service is deployed.
+       ![customService](../Images/NewCSView.png)
+
+    Please note : Download menu button provides options to download sample, template and current metadata respectively. Using "CAP File Conversion", metadata for a CAP service could be generated. For details, please refer [here](../Metadata.MD#cap-schema-to-metadata-json-conversion)
+    
+ - Upload the metadata mentioned in previous step. Once uploaded UI will look like :
       ![customService](../Images/NewCS2.png)
+
+   
  - Once service is created, next step is to create Ui App. For that, click on "Design App" from actions column in custom services OWL.
     ![customService](../Images/DA1.png)
  - From UiApp UI, click on "+" to create. It will open creat view UI
