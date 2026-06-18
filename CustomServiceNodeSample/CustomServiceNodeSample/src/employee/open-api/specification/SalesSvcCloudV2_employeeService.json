@@ -1,0 +1,3181 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Employee Service",
+        "version": "1.0.0",
+        "description": "Employee master data capabilities offer a holistic view of internal employees (a business partner person with valid employee type 'isInternalEmployee'). It allows you to maintain all relevant data for your internal employees such as basic data (name, workplace address, communication data), sales responsibility data, working hours information, and so on."
+    },
+    "servers": [
+        {
+            "url": "https://{hostname}",
+            "description": "Example of server url is https://my1234567.crm.cloud.sap",
+            "variables": {
+                "hostname": {
+                    "default": ""
+                }
+            }
+        },
+        {
+            "url": "https://sandbox.api.sap.com/servicecloudv2"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "basicAuthentication": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        },
+        "schemas": {
+            "error": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "code": {
+                                "type": "string"
+                            },
+                            "details": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        },
+                                        "target": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "message": {
+                                "type": "string"
+                            },
+                            "target": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "Employeequeryresponse": {
+                "title": "Employee query response",
+                "type": "object",
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "value": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "employeeDisplayId",
+                                "familyName"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "displayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 10,
+                                    "minLength": 1,
+                                    "title": "Business Partner ID"
+                                },
+                                "employeeDisplayId": {
+                                    "type": "string",
+                                    "maxLength": 20,
+                                    "minLength": 1,
+                                    "title": "Employee ID"
+                                },
+                                "isInternalEmployee": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                },
+                                "formattedName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Name"
+                                },
+                                "lifeCycleStatus": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 14,
+                                    "minLength": 1,
+                                    "title": "Status"
+                                },
+                                "lifeCycleStatusDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Status"
+                                },
+                                "formOfAddress": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 4,
+                                    "minLength": 1,
+                                    "title": "Title"
+                                },
+                                "formOfAddressDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Title"
+                                },
+                                "academicTitle": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 4,
+                                    "minLength": 1,
+                                    "title": "Academic Title"
+                                },
+                                "academicTitleDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Academic Title"
+                                },
+                                "givenName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "title": "First Name"
+                                },
+                                "middleName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "title": "Middle Name"
+                                },
+                                "familyName": {
+                                    "type": "string",
+                                    "maxLength": 40,
+                                    "minLength": 1,
+                                    "title": "Last Name"
+                                },
+                                "additionalFamilyName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "title": "Additional Last Name"
+                                },
+                                "initialsName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 10,
+                                    "minLength": 1,
+                                    "title": "Initials"
+                                },
+                                "nickName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "minLength": 1,
+                                    "title": "Nickname"
+                                },
+                                "gender": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 1,
+                                    "minLength": 1,
+                                    "title": "Gender"
+                                },
+                                "genderDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Gender"
+                                },
+                                "maritalStatus": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 1,
+                                    "minLength": 1,
+                                    "title": "Marital Status"
+                                },
+                                "maritalStatusDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Marital Status"
+                                },
+                                "nonVerbalCommunicationLanguage": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 5,
+                                    "minLength": 2,
+                                    "title": "Language"
+                                },
+                                "nonVerbalCommunicationLanguageDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Language"
+                                },
+                                "birthDate": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "nationalityCountry": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 3,
+                                    "minLength": 2,
+                                    "title": "Nationality"
+                                },
+                                "nationalityCountryDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Nationality"
+                                },
+                                "defaultExternalBusinessPartnerId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 100,
+                                    "minLength": 1,
+                                    "title": "Default External Business Partner ID"
+                                },
+                                "defaultExternalEmployeeId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 100,
+                                    "minLength": 1,
+                                    "title": "Default External Employee ID"
+                                },
+                                "organizationalUnitId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Organizational Unit Technical ID"
+                                },
+                                "organizationalUnitDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Organizational Unit ID"
+                                },
+                                "organizationalUnitName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "minLength": 1,
+                                    "title": "Organizational Unit Name"
+                                },
+                                "managerId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Manager Technical ID"
+                                },
+                                "managerEmployeeDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 20,
+                                    "minLength": 1,
+                                    "title": "Manager ID"
+                                },
+                                "managerFormattedName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Manager Name"
+                                },
+                                "workplaceAddress": {
+                                    "type": "object",
+                                    "properties": {
+                                        "streetName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 80,
+                                            "title": "Street"
+                                        },
+                                        "houseId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "House Number"
+                                        },
+                                        "cityName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "City"
+                                        },
+                                        "postalCode": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "Postal Code"
+                                        },
+                                        "country": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 3,
+                                            "minLength": 2,
+                                            "title": "Country/Region"
+                                        },
+                                        "countryDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Country/Region"
+                                        },
+                                        "region": {
+                                            "type": "object",
+                                            "properties": {
+                                                "country": {
+                                                    "type": "string",
+                                                    "nullable": true,
+                                                    "maxLength": 3,
+                                                    "minLength": 2,
+                                                    "title": "Country/Region"
+                                                },
+                                                "region": {
+                                                    "type": "string",
+                                                    "nullable": true,
+                                                    "maxLength": 6,
+                                                    "minLength": 1,
+                                                    "title": "State"
+                                                }
+                                            }
+                                        },
+                                        "regionDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "State"
+                                        },
+                                        "countyName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "County"
+                                        },
+                                        "districtName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "District"
+                                        },
+                                        "latitudeMeasure": {
+                                            "type": "number",
+                                            "nullable": true
+                                        },
+                                        "longitudeMeasure": {
+                                            "type": "number",
+                                            "nullable": true
+                                        },
+                                        "buildingId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "Building"
+                                        },
+                                        "floorId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "Floor"
+                                        },
+                                        "roomId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "Room"
+                                        },
+                                        "phoneFormattedNumber": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Phone"
+                                        },
+                                        "phoneNormalisedNumber": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Normalized Phone"
+                                        },
+                                        "mobileFormattedNumber": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Mobile"
+                                        },
+                                        "mobileNormalisedNumber": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Normalized Mobile"
+                                        },
+                                        "eMail": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "email",
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Email"
+                                        },
+                                        "streetPrefixName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Address Line 1"
+                                        },
+                                        "additionalStreetPrefixName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Address Line 2"
+                                        },
+                                        "streetSuffixName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Address Line 4"
+                                        },
+                                        "additionalStreetSuffixName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "minLength": 1,
+                                            "title": "Address Line 5"
+                                        },
+                                        "postOfficeBoxId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "minLength": 1,
+                                            "title": "P.O. Box"
+                                        },
+                                        "isPostOfficeBoxAddress": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                        },
+                                        "formattedPostalAddressDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Anubhav"
+                                        },
+                                        "additionalCityName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "Different City"
+                                        },
+                                        "additionalHouseId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "title": "Additional House Number"
+                                        },
+                                        "careOfName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "C/O"
+                                        }
+                                    }
+                                },
+                                "isBusinessPurposeCompleted": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                },
+                                "adminData": {
+                                    "type": "object",
+                                    "properties": {
+                                        "createdOn": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
+                                        },
+                                        "createdBy": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Created By"
+                                        },
+                                        "createdByName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Created By Name"
+                                        },
+                                        "updatedOn": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
+                                        },
+                                        "updatedBy": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Changed By"
+                                        },
+                                        "updatedByName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Changed By Name"
+                                        }
+                                    }
+                                },
+                                "employeeTypes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "isInternalEmployee": {
+                                                "type": "boolean",
+                                                "nullable": true
+                                            },
+                                            "validFrom": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "nullable": true
+                                            },
+                                            "validTo": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                },
+                                "workingHours": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 13,
+                                                "minLength": 1,
+                                                "title": "Type"
+                                            },
+                                            "typeDescription": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 255,
+                                                "minLength": 1,
+                                                "title": "Type"
+                                            },
+                                            "validFrom": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "nullable": true
+                                            },
+                                            "validTo": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "nullable": true
+                                            },
+                                            "timeZone": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 10,
+                                                "minLength": 1,
+                                                "title": "Time Zone"
+                                            },
+                                            "timeZoneDescription": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 255,
+                                                "minLength": 1,
+                                                "title": "Time Zone"
+                                            },
+                                            "workingDayCalendar": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 6,
+                                                "minLength": 1,
+                                                "title": "Working Day Calendar"
+                                            },
+                                            "workingDayCalendarDescription": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 255,
+                                                "minLength": 1,
+                                                "title": "Working Day Calendar"
+                                            },
+                                            "operatingPeriods": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "format": "uuid",
+                                                            "title": "Technical ID"
+                                                        },
+                                                        "weekday": {
+                                                            "type": "string",
+                                                            "nullable": true,
+                                                            "maxLength": 9,
+                                                            "minLength": 1,
+                                                            "title": "Weekday"
+                                                        },
+                                                        "startTime": {
+                                                            "type": "string",
+                                                            "format": "time",
+                                                            "nullable": true
+                                                        },
+                                                        "endTime": {
+                                                            "type": "string",
+                                                            "format": "time",
+                                                            "nullable": true
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "employeeSalesResponsibilities": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "salesOrganizationId": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Sales Organization Technical ID"
+                                            },
+                                            "salesOrganizationDisplayId": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 50,
+                                                "minLength": 1,
+                                                "title": "Sales Organization ID"
+                                            },
+                                            "salesOrganizationName": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 40,
+                                                "title": "Sales Organization Name"
+                                            },
+                                            "distributionChannel": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 2,
+                                                "minLength": 1,
+                                                "title": "Distribution Channel"
+                                            },
+                                            "distributionChannelDescription": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 50,
+                                                "minLength": 1,
+                                                "title": "Distribution Channel"
+                                            },
+                                            "division": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 2,
+                                                "minLength": 1,
+                                                "title": "Division"
+                                            },
+                                            "divisionDescription": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 50,
+                                                "minLength": 1,
+                                                "title": "Division"
+                                            },
+                                            "isDefault": {
+                                                "type": "boolean",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                },
+                                "attachments": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "Title"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "Type"
+                                            },
+                                            "category": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "Category"
+                                            },
+                                            "fileSize": {
+                                                "type": "number",
+                                                "nullable": true
+                                            },
+                                            "fileName": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "File Name"
+                                            },
+                                            "contentType": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "Content Type"
+                                            },
+                                            "url": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "URL"
+                                            }
+                                        }
+                                    }
+                                },
+                                "externalIds": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "externalId": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 100,
+                                                "title": "External ID"
+                                            },
+                                            "communicationSystemId": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Business System Technical ID"
+                                            },
+                                            "communicationSystemDisplayId": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "title": "Business System ID"
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 15,
+                                                "title": "ID Type"
+                                            },
+                                            "isDefault": {
+                                                "type": "boolean",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Employeefile": {
+                "title": "Employee file",
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "object",
+                        "required": [
+                            "employeeDisplayId",
+                            "familyName"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "nullable": true,
+                                "format": "uuid",
+                                "title": "Technical ID"
+                            },
+                            "displayId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "minLength": 1,
+                                "title": "Business Partner ID"
+                            },
+                            "employeeDisplayId": {
+                                "type": "string",
+                                "maxLength": 20,
+                                "minLength": 1,
+                                "title": "Employee ID"
+                            },
+                            "isInternalEmployee": {
+                                "type": "boolean",
+                                "nullable": true
+                            },
+                            "formattedName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Name"
+                            },
+                            "lifeCycleStatus": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 14,
+                                "minLength": 1,
+                                "title": "Status"
+                            },
+                            "lifeCycleStatusDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Status"
+                            },
+                            "formOfAddress": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 4,
+                                "minLength": 1,
+                                "title": "Title"
+                            },
+                            "formOfAddressDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Title"
+                            },
+                            "academicTitle": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 4,
+                                "minLength": 1,
+                                "title": "Academic Title"
+                            },
+                            "academicTitleDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Academic Title"
+                            },
+                            "givenName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "First Name"
+                            },
+                            "middleName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "Middle Name"
+                            },
+                            "familyName": {
+                                "type": "string",
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Last Name"
+                            },
+                            "additionalFamilyName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "Additional Last Name"
+                            },
+                            "initialsName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "minLength": 1,
+                                "title": "Initials"
+                            },
+                            "nickName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Nickname"
+                            },
+                            "gender": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 1,
+                                "minLength": 1,
+                                "title": "Gender"
+                            },
+                            "genderDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Gender"
+                            },
+                            "maritalStatus": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 1,
+                                "minLength": 1,
+                                "title": "Marital Status"
+                            },
+                            "maritalStatusDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Marital Status"
+                            },
+                            "nonVerbalCommunicationLanguage": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 5,
+                                "minLength": 2,
+                                "title": "Language"
+                            },
+                            "nonVerbalCommunicationLanguageDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Language"
+                            },
+                            "birthDate": {
+                                "type": "string",
+                                "format": "date",
+                                "nullable": true
+                            },
+                            "nationalityCountry": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 3,
+                                "minLength": 2,
+                                "title": "Nationality"
+                            },
+                            "nationalityCountryDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Nationality"
+                            },
+                            "defaultExternalBusinessPartnerId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 100,
+                                "minLength": 1,
+                                "title": "Default External Business Partner ID"
+                            },
+                            "defaultExternalEmployeeId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 100,
+                                "minLength": 1,
+                                "title": "Default External Employee ID"
+                            },
+                            "organizationalUnitId": {
+                                "type": "string",
+                                "nullable": true,
+                                "format": "uuid",
+                                "title": "Organizational Unit Technical ID"
+                            },
+                            "organizationalUnitDisplayId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 50,
+                                "minLength": 1,
+                                "title": "Organizational Unit ID"
+                            },
+                            "organizationalUnitName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Organizational Unit Name"
+                            },
+                            "managerId": {
+                                "type": "string",
+                                "nullable": true,
+                                "format": "uuid",
+                                "title": "Manager Technical ID"
+                            },
+                            "managerEmployeeDisplayId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 20,
+                                "minLength": 1,
+                                "title": "Manager ID"
+                            },
+                            "managerFormattedName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Manager Name"
+                            },
+                            "workplaceAddress": {
+                                "type": "object",
+                                "properties": {
+                                    "streetName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 80,
+                                        "title": "Street"
+                                    },
+                                    "houseId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "House Number"
+                                    },
+                                    "cityName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "title": "City"
+                                    },
+                                    "postalCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "Postal Code"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 3,
+                                        "minLength": 2,
+                                        "title": "Country/Region"
+                                    },
+                                    "countryDescription": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 255,
+                                        "minLength": 1,
+                                        "title": "Country/Region"
+                                    },
+                                    "region": {
+                                        "type": "object",
+                                        "properties": {
+                                            "country": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 3,
+                                                "minLength": 2,
+                                                "title": "Country/Region"
+                                            },
+                                            "region": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 6,
+                                                "minLength": 1,
+                                                "title": "State"
+                                            }
+                                        }
+                                    },
+                                    "regionDescription": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 255,
+                                        "minLength": 1,
+                                        "title": "State"
+                                    },
+                                    "countyName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "title": "County"
+                                    },
+                                    "districtName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "title": "District"
+                                    },
+                                    "latitudeMeasure": {
+                                        "type": "number",
+                                        "nullable": true
+                                    },
+                                    "longitudeMeasure": {
+                                        "type": "number",
+                                        "nullable": true
+                                    },
+                                    "buildingId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "Building"
+                                    },
+                                    "floorId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "Floor"
+                                    },
+                                    "roomId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "Room"
+                                    },
+                                    "phoneFormattedNumber": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Phone"
+                                    },
+                                    "phoneNormalisedNumber": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Normalized Phone"
+                                    },
+                                    "mobileFormattedNumber": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Mobile"
+                                    },
+                                    "mobileNormalisedNumber": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Normalized Mobile"
+                                    },
+                                    "eMail": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "format": "email",
+                                        "maxLength": 255,
+                                        "minLength": 1,
+                                        "title": "Email"
+                                    },
+                                    "streetPrefixName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Address Line 1"
+                                    },
+                                    "additionalStreetPrefixName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Address Line 2"
+                                    },
+                                    "streetSuffixName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Address Line 4"
+                                    },
+                                    "additionalStreetSuffixName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "minLength": 1,
+                                        "title": "Address Line 5"
+                                    },
+                                    "postOfficeBoxId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "minLength": 1,
+                                        "title": "P.O. Box"
+                                    },
+                                    "isPostOfficeBoxAddress": {
+                                        "type": "boolean",
+                                        "nullable": true
+                                    },
+                                    "formattedPostalAddressDescription": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 255,
+                                        "minLength": 1,
+                                        "title": "Anubhav"
+                                    },
+                                    "additionalCityName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "title": "Different City"
+                                    },
+                                    "additionalHouseId": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 10,
+                                        "title": "Additional House Number"
+                                    },
+                                    "careOfName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 40,
+                                        "title": "C/O"
+                                    }
+                                }
+                            },
+                            "isBusinessPurposeCompleted": {
+                                "type": "boolean",
+                                "nullable": true
+                            },
+                            "adminData": {
+                                "type": "object",
+                                "properties": {
+                                    "createdOn": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "createdBy": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "format": "uuid",
+                                        "title": "Created By"
+                                    },
+                                    "createdByName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "title": "Created By Name"
+                                    },
+                                    "updatedOn": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "updatedBy": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "format": "uuid",
+                                        "title": "Changed By"
+                                    },
+                                    "updatedByName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "title": "Changed By Name"
+                                    }
+                                }
+                            },
+                            "employeeTypes": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Technical ID"
+                                        },
+                                        "isInternalEmployee": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                        },
+                                        "validFrom": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "nullable": true
+                                        },
+                                        "validTo": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "nullable": true
+                                        }
+                                    }
+                                }
+                            },
+                            "workingHours": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Technical ID"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 13,
+                                            "minLength": 1,
+                                            "title": "Type"
+                                        },
+                                        "typeDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Type"
+                                        },
+                                        "validFrom": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "nullable": true
+                                        },
+                                        "validTo": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "nullable": true
+                                        },
+                                        "timeZone": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 10,
+                                            "minLength": 1,
+                                            "title": "Time Zone"
+                                        },
+                                        "timeZoneDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Time Zone"
+                                        },
+                                        "workingDayCalendar": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 6,
+                                            "minLength": 1,
+                                            "title": "Working Day Calendar"
+                                        },
+                                        "workingDayCalendarDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 255,
+                                            "minLength": 1,
+                                            "title": "Working Day Calendar"
+                                        },
+                                        "operatingPeriods": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "format": "uuid",
+                                                        "title": "Technical ID"
+                                                    },
+                                                    "weekday": {
+                                                        "type": "string",
+                                                        "nullable": true,
+                                                        "maxLength": 9,
+                                                        "minLength": 1,
+                                                        "title": "Weekday"
+                                                    },
+                                                    "startTime": {
+                                                        "type": "string",
+                                                        "format": "time",
+                                                        "nullable": true
+                                                    },
+                                                    "endTime": {
+                                                        "type": "string",
+                                                        "format": "time",
+                                                        "nullable": true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "employeeSalesResponsibilities": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Technical ID"
+                                        },
+                                        "salesOrganizationId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Sales Organization Technical ID"
+                                        },
+                                        "salesOrganizationDisplayId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 50,
+                                            "minLength": 1,
+                                            "title": "Sales Organization ID"
+                                        },
+                                        "salesOrganizationName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 40,
+                                            "title": "Sales Organization Name"
+                                        },
+                                        "distributionChannel": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 2,
+                                            "minLength": 1,
+                                            "title": "Distribution Channel"
+                                        },
+                                        "distributionChannelDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 50,
+                                            "minLength": 1,
+                                            "title": "Distribution Channel"
+                                        },
+                                        "division": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 2,
+                                            "minLength": 1,
+                                            "title": "Division"
+                                        },
+                                        "divisionDescription": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 50,
+                                            "minLength": 1,
+                                            "title": "Division"
+                                        },
+                                        "isDefault": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                        }
+                                    }
+                                }
+                            },
+                            "attachments": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Technical ID"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Title"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Type"
+                                        },
+                                        "category": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Category"
+                                        },
+                                        "fileSize": {
+                                            "type": "number",
+                                            "nullable": true
+                                        },
+                                        "fileName": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "File Name"
+                                        },
+                                        "contentType": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Content Type"
+                                        },
+                                        "url": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "URL"
+                                        }
+                                    }
+                                }
+                            },
+                            "externalIds": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Technical ID"
+                                        },
+                                        "externalId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 100,
+                                            "title": "External ID"
+                                        },
+                                        "communicationSystemId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "format": "uuid",
+                                            "title": "Business System Technical ID"
+                                        },
+                                        "communicationSystemDisplayId": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "title": "Business System ID"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "nullable": true,
+                                            "maxLength": 15,
+                                            "title": "ID Type"
+                                        },
+                                        "isDefault": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Employeecreaterequest": {
+                "title": "Employee create request",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uuid",
+                        "title": "Technical ID"
+                    },
+                    "displayId": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 10,
+                        "minLength": 1,
+                        "title": "Business Partner ID"
+                    },
+                    "employeeDisplayId": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1,
+                        "title": "Employee ID"
+                    },
+                    "formOfAddress": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 4,
+                        "minLength": 1,
+                        "title": "Title"
+                    },
+                    "academicTitle": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 4,
+                        "minLength": 1,
+                        "title": "Academic Title"
+                    },
+                    "givenName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "First Name"
+                    },
+                    "middleName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "Middle Name"
+                    },
+                    "familyName": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Last Name"
+                    },
+                    "additionalFamilyName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "Additional Last Name"
+                    },
+                    "initialsName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 10,
+                        "minLength": 1,
+                        "title": "Initials"
+                    },
+                    "nickName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Nickname"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 1,
+                        "minLength": 1,
+                        "title": "Gender"
+                    },
+                    "maritalStatus": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 1,
+                        "minLength": 1,
+                        "title": "Marital Status"
+                    },
+                    "nonVerbalCommunicationLanguage": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 5,
+                        "minLength": 2,
+                        "title": "Language"
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "nationalityCountry": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 3,
+                        "minLength": 2,
+                        "title": "Nationality"
+                    },
+                    "workplaceAddress": {
+                        "type": "object",
+                        "properties": {
+                            "streetName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 80,
+                                "title": "Street"
+                            },
+                            "houseId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "House Number"
+                            },
+                            "cityName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "City"
+                            },
+                            "postalCode": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Postal Code"
+                            },
+                            "country": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 3,
+                                "minLength": 2,
+                                "title": "Country/Region"
+                            },
+                            "countryDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Country/Region"
+                            },
+                            "region": {
+                                "type": "object",
+                                "properties": {
+                                    "country": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 3,
+                                        "minLength": 2,
+                                        "title": "Country/Region"
+                                    },
+                                    "region": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 6,
+                                        "minLength": 1,
+                                        "title": "State"
+                                    }
+                                }
+                            },
+                            "regionDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "State"
+                            },
+                            "countyName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "County"
+                            },
+                            "districtName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "District"
+                            },
+                            "latitudeMeasure": {
+                                "type": "number",
+                                "nullable": true
+                            },
+                            "longitudeMeasure": {
+                                "type": "number",
+                                "nullable": true
+                            },
+                            "buildingId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Building"
+                            },
+                            "floorId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Floor"
+                            },
+                            "roomId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Room"
+                            },
+                            "phoneFormattedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Phone"
+                            },
+                            "phoneNormalisedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Normalized Phone"
+                            },
+                            "mobileFormattedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Mobile"
+                            },
+                            "mobileNormalisedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Normalized Mobile"
+                            },
+                            "eMail": {
+                                "type": "string",
+                                "nullable": true,
+                                "format": "email",
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Email"
+                            },
+                            "streetPrefixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 1"
+                            },
+                            "additionalStreetPrefixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 2"
+                            },
+                            "streetSuffixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 4"
+                            },
+                            "additionalStreetSuffixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 5"
+                            },
+                            "postOfficeBoxId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "minLength": 1,
+                                "title": "P.O. Box"
+                            },
+                            "isPostOfficeBoxAddress": {
+                                "type": "boolean",
+                                "nullable": true
+                            },
+                            "formattedPostalAddressDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Anubhav"
+                            },
+                            "additionalCityName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "Different City"
+                            },
+                            "additionalHouseId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Additional House Number"
+                            },
+                            "careOfName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "C/O"
+                            }
+                        }
+                    },
+                    "employeeTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "isInternalEmployee": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                },
+                                "validFrom": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "validTo": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    },
+                    "workingHours": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 13,
+                                    "minLength": 1,
+                                    "title": "Type"
+                                },
+                                "typeDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Type"
+                                },
+                                "validFrom": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "validTo": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "timeZone": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 10,
+                                    "minLength": 1,
+                                    "title": "Time Zone"
+                                },
+                                "timeZoneDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Time Zone"
+                                },
+                                "workingDayCalendar": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 6,
+                                    "minLength": 1,
+                                    "title": "Working Day Calendar"
+                                },
+                                "workingDayCalendarDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Working Day Calendar"
+                                },
+                                "operatingPeriods": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "weekday": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 9,
+                                                "minLength": 1,
+                                                "title": "Weekday"
+                                            },
+                                            "startTime": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "nullable": true
+                                            },
+                                            "endTime": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "employeeSalesResponsibilities": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "salesOrganizationId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Sales Organization Technical ID"
+                                },
+                                "salesOrganizationDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Sales Organization ID"
+                                },
+                                "salesOrganizationName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "title": "Sales Organization Name"
+                                },
+                                "distributionChannel": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 2,
+                                    "minLength": 1,
+                                    "title": "Distribution Channel"
+                                },
+                                "distributionChannelDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Distribution Channel"
+                                },
+                                "division": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 2,
+                                    "minLength": 1,
+                                    "title": "Division"
+                                },
+                                "divisionDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Division"
+                                },
+                                "isDefault": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    },
+                    "externalIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "externalId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 100,
+                                    "title": "External ID"
+                                },
+                                "communicationSystemId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Business System Technical ID"
+                                },
+                                "communicationSystemDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Business System ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 15,
+                                    "title": "ID Type"
+                                },
+                                "isDefault": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "employeeDisplayId",
+                    "familyName"
+                ]
+            },
+            "Employeepatchupdaterequest": {
+                "title": "Employee patchupdate request",
+                "type": "object",
+                "properties": {
+                    "formOfAddress": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 4,
+                        "minLength": 1,
+                        "title": "Title"
+                    },
+                    "academicTitle": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 4,
+                        "minLength": 1,
+                        "title": "Academic Title"
+                    },
+                    "givenName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "First Name"
+                    },
+                    "middleName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "Middle Name"
+                    },
+                    "familyName": {
+                        "type": "string",
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Last Name"
+                    },
+                    "additionalFamilyName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "title": "Additional Last Name"
+                    },
+                    "initialsName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 10,
+                        "minLength": 1,
+                        "title": "Initials"
+                    },
+                    "nickName": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 40,
+                        "minLength": 1,
+                        "title": "Nickname"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 1,
+                        "minLength": 1,
+                        "title": "Gender"
+                    },
+                    "maritalStatus": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 1,
+                        "minLength": 1,
+                        "title": "Marital Status"
+                    },
+                    "nonVerbalCommunicationLanguage": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 5,
+                        "minLength": 2,
+                        "title": "Language"
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "nationalityCountry": {
+                        "type": "string",
+                        "nullable": true,
+                        "maxLength": 3,
+                        "minLength": 2,
+                        "title": "Nationality"
+                    },
+                    "workplaceAddress": {
+                        "type": "object",
+                        "properties": {
+                            "streetName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 80,
+                                "title": "Street"
+                            },
+                            "houseId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "House Number"
+                            },
+                            "cityName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "City"
+                            },
+                            "postalCode": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Postal Code"
+                            },
+                            "country": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 3,
+                                "minLength": 2,
+                                "title": "Country/Region"
+                            },
+                            "countryDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Country/Region"
+                            },
+                            "region": {
+                                "type": "object",
+                                "properties": {
+                                    "country": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 3,
+                                        "minLength": 2,
+                                        "title": "Country/Region"
+                                    },
+                                    "region": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "maxLength": 6,
+                                        "minLength": 1,
+                                        "title": "State"
+                                    }
+                                }
+                            },
+                            "regionDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "State"
+                            },
+                            "countyName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "County"
+                            },
+                            "districtName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "District"
+                            },
+                            "latitudeMeasure": {
+                                "type": "number",
+                                "nullable": true
+                            },
+                            "longitudeMeasure": {
+                                "type": "number",
+                                "nullable": true
+                            },
+                            "buildingId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Building"
+                            },
+                            "floorId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Floor"
+                            },
+                            "roomId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Room"
+                            },
+                            "phoneFormattedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Phone"
+                            },
+                            "phoneNormalisedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Normalized Phone"
+                            },
+                            "mobileFormattedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Mobile"
+                            },
+                            "mobileNormalisedNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Normalized Mobile"
+                            },
+                            "eMail": {
+                                "type": "string",
+                                "nullable": true,
+                                "format": "email",
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Email"
+                            },
+                            "streetPrefixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 1"
+                            },
+                            "additionalStreetPrefixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 2"
+                            },
+                            "streetSuffixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 4"
+                            },
+                            "additionalStreetSuffixName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "minLength": 1,
+                                "title": "Address Line 5"
+                            },
+                            "postOfficeBoxId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "minLength": 1,
+                                "title": "P.O. Box"
+                            },
+                            "isPostOfficeBoxAddress": {
+                                "type": "boolean",
+                                "nullable": true
+                            },
+                            "formattedPostalAddressDescription": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 255,
+                                "minLength": 1,
+                                "title": "Anubhav"
+                            },
+                            "additionalCityName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "Different City"
+                            },
+                            "additionalHouseId": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 10,
+                                "title": "Additional House Number"
+                            },
+                            "careOfName": {
+                                "type": "string",
+                                "nullable": true,
+                                "maxLength": 40,
+                                "title": "C/O"
+                            }
+                        }
+                    },
+                    "employeeTypes": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "isInternalEmployee": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                },
+                                "validFrom": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "validTo": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    },
+                    "workingHours": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 13,
+                                    "minLength": 1,
+                                    "title": "Type"
+                                },
+                                "typeDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Type"
+                                },
+                                "validFrom": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "validTo": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "nullable": true
+                                },
+                                "timeZone": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 10,
+                                    "minLength": 1,
+                                    "title": "Time Zone"
+                                },
+                                "timeZoneDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Time Zone"
+                                },
+                                "workingDayCalendar": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 6,
+                                    "minLength": 1,
+                                    "title": "Working Day Calendar"
+                                },
+                                "workingDayCalendarDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 255,
+                                    "minLength": 1,
+                                    "title": "Working Day Calendar"
+                                },
+                                "operatingPeriods": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "format": "uuid",
+                                                "title": "Technical ID"
+                                            },
+                                            "weekday": {
+                                                "type": "string",
+                                                "nullable": true,
+                                                "maxLength": 9,
+                                                "minLength": 1,
+                                                "title": "Weekday"
+                                            },
+                                            "startTime": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "nullable": true
+                                            },
+                                            "endTime": {
+                                                "type": "string",
+                                                "format": "time",
+                                                "nullable": true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "employeeSalesResponsibilities": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "salesOrganizationId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Sales Organization Technical ID"
+                                },
+                                "salesOrganizationDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Sales Organization ID"
+                                },
+                                "salesOrganizationName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 40,
+                                    "title": "Sales Organization Name"
+                                },
+                                "distributionChannel": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 2,
+                                    "minLength": 1,
+                                    "title": "Distribution Channel"
+                                },
+                                "distributionChannelDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Distribution Channel"
+                                },
+                                "division": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 2,
+                                    "minLength": 1,
+                                    "title": "Division"
+                                },
+                                "divisionDescription": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "title": "Division"
+                                },
+                                "isDefault": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    },
+                    "attachments": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Title"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Type"
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Category"
+                                },
+                                "fileSize": {
+                                    "type": "number",
+                                    "nullable": true
+                                },
+                                "fileName": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "File Name"
+                                },
+                                "contentType": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Content Type"
+                                },
+                                "url": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "URL"
+                                }
+                            }
+                        }
+                    },
+                    "externalIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Technical ID"
+                                },
+                                "externalId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 100,
+                                    "title": "External ID"
+                                },
+                                "communicationSystemId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "format": "uuid",
+                                    "title": "Business System Technical ID"
+                                },
+                                "communicationSystemDisplayId": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "title": "Business System ID"
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "nullable": true,
+                                    "maxLength": 15,
+                                    "title": "ID Type"
+                                },
+                                "isDefault": {
+                                    "type": "boolean",
+                                    "nullable": true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        {
+            "basicAuthentication": []
+        }
+    ],
+    "paths": {
+        "/sap/c4c/api/v1/employee-service/employees": {
+            "get": {
+                "operationId": "queryemployeeservice_employee",
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Query employees in the system.",
+                "description": "Specify query parameters to return desired employee records from the system.",
+                "parameters": [
+                    {
+                        "name": "$skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "examples": {
+                            "one": {
+                                "value": "10",
+                                "summary": "Skip 10"
+                            }
+                        },
+                        "description": "Skip the first n employees."
+                    },
+                    {
+                        "name": "$top",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "examples": {
+                            "one": {
+                                "value": "10",
+                                "summary": "Top 10"
+                            }
+                        },
+                        "description": "Show only the first n employees."
+                    },
+                    {
+                        "name": "$search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "one": {
+                                "value": "MC2471"
+                            }
+                        },
+                        "description": "Search for a string within employees."
+                    },
+                    {
+                        "name": "$filter",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filter employees by attribute."
+                    },
+                    {
+                        "name": "$orderby",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "one": {
+                                "value": "employeeDisplayId",
+                                "summary": "Employee display ID in ascending order"
+                            },
+                            "two": {
+                                "value": "formattedName",
+                                "summary": "Formatted name in ascending order"
+                            }
+                        },
+                        "description": "Order employees by attribute."
+                    },
+                    {
+                        "name": "$select",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Select attributes to be returned."
+                    },
+                    {
+                        "name": "$exclude",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Exclude attributes from response."
+                    },
+                    {
+                        "name": "$count",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "examples": {
+                            "one": {
+                                "value": "true",
+                                "summary": "Count is true."
+                            },
+                            "two": {
+                                "value": "false",
+                                "summary": "Count is false."
+                            }
+                        },
+                        "description": "Indicates the count of employees to be returned."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employees retrieved from the system",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employeequeryresponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request.\n\nThe server cannot process the request due to a client error. For example, an invalid request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized.\n\nThis error is caused when the request has not been applied because there are no valid authentication credentials for the target resource."
+                    },
+                    "403": {
+                        "description": "User is not authorized to query employees in the system. Check user's authorization under Settings - Users and Control - Business Roles"
+                    },
+                    "404": {
+                        "description": "Employee not found."
+                    },
+                    "500": {
+                        "description": "Internal Server Error.\n\nFailed to query employees.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    },
+                    "501": {
+                        "description": "The server does not support the functionality required to fulfill the request."
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createemployeeservice_employee",
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Create a new employee.",
+                "description": "Send employee information to the system to create a new employee.",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Employeecreaterequest"
+                            },
+                            "examples": {
+                                "one": {
+                                    "value": {
+                                        "employeeDisplayId": "NEEDGEN_{{$randomAbbreviation}}",
+                                        "formOfAddress": "0002",
+                                        "givenName": "Mia",
+                                        "familyName": "Carbrera OpenAPI",
+                                        "gender": "1",
+                                        "employeeTypes": [
+                                            {
+                                                "isInternalEmployee": true,
+                                                "validFrom": "0001-01-01",
+                                                "validTo": "9999-12-31"
+                                            }
+                                        ]
+                                    },
+                                    "summary": "Create of a basic internal employee by providing a unique employee display ID."
+                                },
+                                "two": {
+                                    "value": {
+                                        "employeeDisplayId": "OAPI_2471",
+                                        "isInternalEmployee": true,
+                                        "formOfAddress": "0002",
+                                        "givenName": "Kate",
+                                        "familyName": "Jacob OpenAPI",
+                                        "gender": "1",
+                                        "employeeTypes": [
+                                            {
+                                                "isInternalEmployee": true,
+                                                "validFrom": "0001-01-01",
+                                                "validTo": "9999-12-31"
+                                            }
+                                        ],
+                                        "employeeSalesResponsibilities": [
+                                            {
+                                                "distributionChannel": "2",
+                                                "isDefault": false,
+                                                "salesOrganizationDisplayId": "MC42100"
+                                            }
+                                        ],
+                                        "workplaceAddress": {
+                                            "streetName": "3rd Ave",
+                                            "houseId": "1303",
+                                            "cityName": "New York",
+                                            "postalCode": "10021",
+                                            "country": "US",
+                                            "region": {
+                                                "region": "NY"
+                                            },
+                                            "eMail": "kate.jacob@akron.com"
+                                        }
+                                    },
+                                    "summary": "Create an internal employee with workplace address and employee sales responsibility."
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "A new employee is created in the system.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employeefile"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Employee is not created in the system. The request sent to the system is invalid.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated to create a new employee in the system."
+                    },
+                    "403": {
+                        "description": "User is not authorized to create an employee in the system. Check user's authorization under Settings - Users and Control - Business Roles"
+                    },
+                    "404": {
+                        "description": "Employee not found."
+                    },
+                    "500": {
+                        "description": "Failed to create an employee due to an internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sap/c4c/api/v1/employee-service/employees/{id}": {
+            "get": {
+                "operationId": "reademployeeservice_employee",
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Read employee information",
+                "description": "Read a specific employee using the employee ID.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Employee ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employee with the requested ID is found in the system.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Employeefile"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request. Failed to read the employee information.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated to read the employee information in the system."
+                    },
+                    "403": {
+                        "description": "User is not authorized to read employee information in the system. Check user's authorization under Settings - Users and Control - Business Roles"
+                    },
+                    "404": {
+                        "description": "Employee with the request ID is not found in the system."
+                    },
+                    "500": {
+                        "description": "Failed to read the employee due to an internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "partialupdateemployeeservice_employee",
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Update or modify employee information.",
+                "description": "Update employee attributes in the system.",
+                "parameters": [
+                    {
+                        "name": "If-Match",
+                        "in": "header",
+                        "required": true,
+                        "description": "Used for conflict management when a consumer tries to update a resource. This parameter checks if the state of the resource known to the client (etag) matches the state on the server and if true, allows the update to continue.",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Employee ID"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/merge-patch+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Employeepatchupdaterequest"
+                            },
+                            "examples": {
+                                "one": {
+                                    "value": {
+                                        "familyName": "Carbrera OpenAPI - PATCH"
+                                    },
+                                    "summary": "Update of employee name"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Employee updated"
+                    },
+                    "400": {
+                        "description": "Invalid request. Failed to update the employee.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated to update the employee in the system."
+                    },
+                    "403": {
+                        "description": "User is not authorized to update the employee in the system. Check user's authorization under Settings - Users and Control - Business Roles"
+                    },
+                    "404": {
+                        "description": "Employee not found."
+                    },
+                    "412": {
+                        "description": "Failed to update the employee. The employee was updated in a parallel session. Try again with a new if-match http header value."
+                    },
+                    "428": {
+                        "description": "Failed to update the employee. The mandatory http header if-match was not sent in http request header."
+                    },
+                    "500": {
+                        "description": "Failed to update the employee due to an internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "x-sap-shortText": "Manage entities from the employee service.",
+    "x-sap-extensible": {
+        "supported": "automatic",
+        "description": "You can create extension fields in the employee API by following the steps mentioned in https://help.sap.com/docs/CX_NG_SVC/2c87cece32844c91836e535aef8f9642/d3bdfac0c6b141c0bac27408c3ed159f.html?locale=en-US. The newly created extensions will be available in the API request and response body."
+    }
+}

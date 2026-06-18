@@ -1,0 +1,48 @@
+{
+  "xsappname": "work-order-node-service",
+  "tenant-mode": "dedicated",
+  "oauth2-configuration": {
+    "redirect-uris": [
+      "http://localhost:5000/",
+      "http://localhost:4100/",
+      "http://localhost:4200/",
+      "https://*.hana.ondemand.com/**"
+    ]
+  },
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.ReadWriteCustomService",
+      "description": "used for read and write"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Token_Exchange",
+      "description": "UAA",
+      "scope-references": [
+        "uaa.user"
+      ]
+    },
+    {
+      "name": "ReadWriteCustomService",
+      "description": "used for read and write",
+      "scope-references": [
+        "$XSAPPNAME.ReadWriteCustomService"
+      ]
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "read_write_customservice_rolecollection",
+      "description": "read_write_customservice_rolecollection desc",
+      "role-template-references": [
+        "$XSAPPNAME.ReadWriteCustomService"
+      ]
+    }
+  ],
+  "attributes": []
+}
