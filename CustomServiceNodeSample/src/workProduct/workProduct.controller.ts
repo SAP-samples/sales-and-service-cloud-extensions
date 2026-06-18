@@ -56,7 +56,7 @@ export class WorkProductNestedController {
     @Param('workOrderId') workOrderId: string,
     @Param('workProductId') workProductId: string,
   ) {
-    return this.workProductService.findOne(workProductId);
+    return this.workProductService.findOne(workProductId, workOrderId);
   }
 
   @Post()
@@ -81,7 +81,7 @@ export class WorkProductNestedController {
     @Param('workProductId') workProductId: string,
     @Body() workProductDto: WorkProductDTO,
   ) {
-    return this.workProductService.update(workProductId, workProductDto);
+    return this.workProductService.update(workProductId, workProductDto, workOrderId);
   }
 
   @Delete('/:workProductId')
@@ -90,6 +90,6 @@ export class WorkProductNestedController {
     @Param('workOrderId') workOrderId: string,
     @Param('workProductId') workProductId: string,
   ) {
-    return this.workProductService.delete(workProductId);
+    return this.workProductService.delete(workProductId, workOrderId);
   }
 }

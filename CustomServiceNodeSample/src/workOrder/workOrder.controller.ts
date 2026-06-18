@@ -21,11 +21,14 @@ import { WorkOrder } from '../entities/workOrder.entity';
 import { WorkOrderDto } from '../dto/workOrder.dto';
 import { UpdateWorkOrderDto } from '../dto/updateWorkOrder.dto';
 import { EtagInterceptor } from '../common/interceptor/etag.interceptor';
+import { ReplicateDataDto as DataExportRequestDto } from '../analytics/dto/replicate-data.dto';
+import { AnalyticsReplicationService } from '../analytics/analytics-replication.service';
 
 @Controller('/work-order-service/workOrders')
 export class WorkOrderController {
   constructor(
     private readonly workOrderService: WorkOrderService,
+    private readonly analyticsReplicationService: AnalyticsReplicationService,
   ) {}
 
   @Post()
@@ -87,4 +90,30 @@ export class WorkOrderController {
   async deleteWorkOrder(@Param('workOrderId') workOrderId: string) {
     return this.workOrderService.deleteWorkOrder(workOrderId);
   }
+
+  /**
+   * Analytics data export endpoint
+   * Triggered by UI to start data export process
+   *
+   * POST /work-order-service/workOrders/dataExportRequest
+   * Request Body: { dataRequestId, serviceFullName, entityFullName }
+   * Success: 204 No Content
+   * Errors: 400 Bad Request, 500 Internal Server Error
+   */
+  @Post('/dataExportRequest')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async dataExportRequest(@Body() dataExportRequestDto: DataExportRequestDto): Promise<void> {
+    const { dataRequestId, serviceFullName, entityFullName } = dataExportRequestDto;
+
+    // Start data export asynchronously (fire and forget)
+    this.analyticsReplicationService
+      .startDataExport(dataRequestId, serviceFullName, entityFullName)
+      .catch((error) => {
+        // Errors are already logged in the service, just catch to prevent unhandled rejection
+      });
+
+    // Return 204 No Content immediately
+    return;
+  }
 }
+

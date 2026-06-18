@@ -2,16 +2,15 @@
     "service": {
         "name": "workOrder",
         "title": "workOrder",
-        "description": "This service is for Work Order management including work products and schedule lines",
-        "authorizationRelevant": true,
-        "fullName": "customer.ssc.service.workOrderService"
+        "description": "Do Not Delete - This service is for Work Order management including work products and schedule lines",
+        "authorizationRelevant": true
     },
     "entities": [
         {
             "name": "workOrder",
             "label": "Work Order",
             "entityType": "BUSINESS",
-            "objectTypeCode": "CUS6789",
+            "objectTypeCode": "CUS614",
             "root": true,
             "attributes": [
                 {
@@ -25,8 +24,7 @@
                     "filterable": true,
                     "searchable": true,
                     "keyType": "PRIMARY",
-                    "labelTextId": "workOrder.id",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "orderName",
@@ -38,8 +36,7 @@
                     "updatable": true,
                     "filterable": true,
                     "searchable": true,
-                    "labelTextId": "workOrder.orderName",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "displayId",
@@ -52,8 +49,7 @@
                     "filterable": true,
                     "searchable": true,
                     "displayId": true,
-                    "labelTextId": "workOrder.displayId",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "status",
@@ -66,18 +62,17 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "valueList": [
+                    "enumOptions": [
                         {
-                            "value": "ACTIVE",
+                            "code": "ACTIVE",
                             "description": "Active"
                         },
                         {
-                            "value": "INACTIVE",
+                            "code": "INACTIVE",
                             "description": "Inactive"
                         }
                     ],
-                    "labelTextId": "workOrder.status",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "startDate",
@@ -89,8 +84,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workOrder.startDate",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "endDate",
@@ -102,8 +96,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workOrder.endDate",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "estimatedRevenue",
@@ -128,8 +121,7 @@
                             "searchable": false,
                             "label": "Amount",
                             "dataFormat": "DOUBLE",
-                            "labelTextId": "workOrder.estimatedRevenue_content",
-                            "searchWeightage": 1
+                            "analyticsRelevant": true
                         },
                         {
                             "name": "currencyCode",
@@ -148,34 +140,39 @@
                                 "targetEntity": "sap.crm.i18nservice.entity.currency",
                                 "keyGroup": "currency",
                                 "targetService": "sap.crm.i18nservice",
-                                "sourceEntity": "customer.ssc.workorderservice.entity.workOrder",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
                                 "associationType": "ASSOCIATION",
                                 "sourceAttribute": "estimatedRevenue.currencyCode"
                             },
-                            "labelTextId": "workOrder.estimatedRevenue_currencyCode",
-                            "searchWeightage": 1,
-                            "searchAssociationWeightage": {
-                                "fallbackWeightage": 1
-                            }
+                            "analyticsRelevant": true
                         }
                     ],
                     "structReference": "sap.ssc.common.struct.amount",
-                    "labelTextId": "workOrder.estimatedRevenue",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "numberOfSubscriptions",
                     "label": "Number of Subscriptions",
-                    "dataType": "NUMBER",
-                    "dataFormat": "INTEGER",
+                    "dataType": "INTEGER",
                     "nullable": true,
                     "creatable": true,
                     "updatable": true,
                     "filterable": true,
-                    "searchable": false,
+                    "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workOrder.numberOfSubscriptions",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "dataType": "NUMBER",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "projectLead",
@@ -203,15 +200,14 @@
                             "keyType": "FOREIGN",
                             "objectReference": {
                                 "targetAttribute": "id",
-                                "targetEntity": "sap.crm.employeeservice.entity.employee",
+                                "targetEntity": "sap.crm.md.employeeservice.entity.employee",
                                 "keyGroup": "projectLead",
-                                "targetService": "sap.crm.service.employeeService",
-                                "sourceEntity": "customer.ssc.workorderservice.entity.workOrder",
+                                "targetService": "sap.crm.md.service.employeeService",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
                                 "associationType": "ASSOCIATION",
                                 "sourceAttribute": "projectLead.id"
                             },
-                            "labelTextId": "workOrder.projectLead_id",
-                            "searchWeightage": 1
+                            "analyticsRelevant": true
                         },
                         {
                             "name": "displayId",
@@ -229,10 +225,9 @@
                                 "associationType": "REFERENCE",
                                 "targetAttribute": "displayId",
                                 "keyGroup": "projectLead",
-                                "sourceEntity": "customer.ssc.workorderservice.entity.workOrder"
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
                             },
-                            "labelTextId": "workOrder.projectLead_displayId",
-                            "searchWeightage": 1
+                            "analyticsRelevant": true
                         },
                         {
                             "name": "formattedName",
@@ -248,14 +243,88 @@
                                 "associationType": "REFERENCE",
                                 "targetAttribute": "formattedName",
                                 "keyGroup": "projectLead",
-                                "sourceEntity": "customer.ssc.workorderservice.entity.workOrder"
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
                             },
-                            "labelTextId": "workOrder.projectLead_formattedName",
-                            "searchWeightage": 1
+                            "analyticsRelevant": true
                         }
                     ],
-                    "labelTextId": "workOrder.projectLead",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "account",
+                    "dataType": "OBJECT",
+                    "creatable": true,
+                    "updatable": true,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": false,
+                    "searchable": false,
+                    "label": "Account",
+                    "objectDefinition": [
+                        {
+                            "name": "id",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": false,
+                            "filterable": false,
+                            "searchable": false,
+                            "label": "Account ID",
+                            "dataFormat": "UUID",
+                            "descriptionAttribute": "displayId",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "targetAttribute": "id",
+                                "targetEntity": "sap.crm.md.accountservice.entity.account",
+                                "keyGroup": "account",
+                                "targetService": "sap.crm.md.service.accountService",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
+                                "associationType": "ASSOCIATION",
+                                "sourceAttribute": "account.id"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "displayId",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "displayId": true,
+                            "label": "Account Display ID",
+                            "dataFormat": "ALPHANUMERIC",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "displayId",
+                                "keyGroup": "account",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "formattedName",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "label": "Account Name",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "formattedName",
+                                "keyGroup": "account",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        }
+                    ],
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "Customer",
@@ -266,8 +335,18 @@
                     "updatable": true,
                     "filterable": true,
                     "searchable": true,
-                    "labelTextId": "workOrder.Customer",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "caseDisplayId",
+                    "label": "Case Display ID",
+                    "dataType": "STRING",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "workProducts",
@@ -281,20 +360,31 @@
                     "label": "Work Products",
                     "itemDataType": "OBJECT",
                     "objectDefinition": [],
-                    "entityRefrence": "workProducts",
-                    "labelTextId": "workOrder.workProducts",
-                    "searchWeightage": 1
+                    "entityReference": "customer.ssc.workOrderservice.entity.workProducts",
+                    "analyticsRelevant": true
                 }
             ],
             "creatable": true,
             "updatable": true,
-            "fullName": "customer.ssc.workorderservice.entity.workOrder"
+            "analyticsRelevant": true,
+            "globalSearchEnabled": true,
+            "anchors": [
+                {
+                    "id": "d86e380c-5df0-4100-bbbf-ccf6203190d6",
+                    "type": "AttributesAnchor",
+                    "ref": "$.attributes"
+                },
+                {
+                    "id": "8268c26c-0c0e-46dc-854e-0530f10b36c4",
+                    "type": "CustomLogicsAnchor"
+                }
+            ]
         },
         {
             "name": "workProducts",
-            "label": "Work Products",
+            "label": "Work Products E2E",
+            "analyticsRelevant": true,
             "entityType": "BUSINESS",
-            "root": false,
             "attributes": [
                 {
                     "name": "id",
@@ -308,12 +398,12 @@
                     "label": "Technical ID",
                     "dataFormat": "UUID",
                     "keyType": "PRIMARY",
-                    "labelTextId": "workProducts.id",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "workProductId",
                     "label": "Work Product ID",
+                    "displayId": true,
                     "dataType": "STRING",
                     "nullable": true,
                     "creatable": true,
@@ -321,8 +411,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workProducts.workProductId",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "workProductName",
@@ -335,8 +424,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workProducts.workProductName",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "customizationDetails",
@@ -348,64 +436,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workProducts.customizationDetails",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "quantity",
-                    "label": "Quantity",
-                    "dataType": "NUMBER",
-                    "dataFormat": "INTEGER",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": false,
-                    "sortable": true,
-                    "labelTextId": "workProducts.quantity",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "productCategory",
-                    "label": "Product Category",
-                    "dataType": "STRING",
-                    "dataFormat": "CODE",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": true,
-                    "sortable": true,
-                    "labelTextId": "workProducts.productCategory",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "completionPercentage",
-                    "label": "Completion Percentage",
-                    "dataType": "NUMBER",
-                    "dataFormat": "INTEGER",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": false,
-                    "sortable": true,
-                    "labelTextId": "workProducts.completionPercentage",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "productTypeCode",
-                    "label": "Product Type Code",
-                    "dataType": "STRING",
-                    "dataFormat": "CODE",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": true,
-                    "sortable": true,
-                    "labelTextId": "workProducts.productTypeCode",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "status",
@@ -418,8 +449,17 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "workProducts.status",
-                    "searchWeightage": 1
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        }
+                    ],
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "estimatedRevenue",
@@ -444,8 +484,7 @@
                             "searchable": false,
                             "label": "Amount",
                             "dataFormat": "DOUBLE",
-                            "labelTextId": "workProducts.estimatedRevenue_content",
-                            "searchWeightage": 1
+                            "analyticsRelevant": true
                         },
                         {
                             "name": "currencyCode",
@@ -464,38 +503,15 @@
                                 "targetEntity": "sap.crm.i18nservice.entity.currency",
                                 "keyGroup": "currency",
                                 "targetService": "sap.crm.i18nservice",
-                                "sourceEntity": "customer.ssc.workorderservice.entity.workProducts",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workProducts",
                                 "associationType": "ASSOCIATION",
                                 "sourceAttribute": "estimatedRevenue.currencyCode"
                             },
-                            "labelTextId": "workProducts.estimatedRevenue_currencyCode",
-                            "searchWeightage": 1,
-                            "searchAssociationWeightage": {
-                                "fallbackWeightage": 1
-                            }
+                            "analyticsRelevant": true
                         }
                     ],
                     "structReference": "sap.ssc.common.struct.amount",
-                    "labelTextId": "workProducts.estimatedRevenue",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "workOrderId",
-                    "dataType": "STRING",
-                    "creatable": true,
-                    "updatable": true,
-                    "nullable": true,
-                    "sortable": true,
-                    "filterable": true,
-                    "searchable": false,
-                    "label": "Work Order ID",
-                    "dataFormat": "UUID",
-                    "keyType": "FOREIGN",
-                    "labelTextId": "workProducts.workOrderId",
-                    "searchWeightage": 1,
-                    "searchAssociationWeightage": {
-                        "fallbackWeightage": 1
-                    }
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "scheduleLines",
@@ -509,20 +525,18 @@
                     "label": "Schedule Lines",
                     "itemDataType": "OBJECT",
                     "objectDefinition": [],
-                    "entityRefrence": "scheduleLines",
-                    "labelTextId": "workProducts.scheduleLines",
-                    "searchWeightage": 1
+                    "entityReference": "customer.ssc.workOrderservice.entity.scheduleLines",
+                    "analyticsRelevant": true
                 }
             ],
             "creatable": true,
-            "updatable": true,
-            "fullName": "customer.ssc.workorderservice.entity.workProducts"
+            "updatable": true
         },
         {
             "name": "scheduleLines",
-            "label": "Schedule Lines",
+            "label": "Schedule Lines E2E",
+            "analyticsRelevant": true,
             "entityType": "BUSINESS",
-            "root": false,
             "attributes": [
                 {
                     "name": "id",
@@ -536,37 +550,7 @@
                     "label": "Schedule Line ID",
                     "dataFormat": "UUID",
                     "keyType": "PRIMARY",
-                    "labelTextId": "scheduleLines.id",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "displayId",
-                    "label": "Display ID",
-                    "dataType": "STRING",
-                    "dataFormat": "ALPHANUMERIC",
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": true,
-                    "displayId": true,
-                    "sortable": true,
-                    "labelTextId": "scheduleLines.displayId",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "scheduleLineName",
-                    "label": "Schedule Line Name",
-                    "dataType": "STRING",
-                    "description": true,
-                    "nullable": true,
-                    "creatable": true,
-                    "updatable": true,
-                    "filterable": true,
-                    "searchable": true,
-                    "sortable": true,
-                    "labelTextId": "scheduleLines.scheduleLineName",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "date",
@@ -578,8 +562,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.date",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "requestedQuantity",
@@ -592,8 +575,7 @@
                     "filterable": true,
                     "searchable": false,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.requestedQuantity",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "confirmedQuantity",
@@ -606,8 +588,7 @@
                     "filterable": true,
                     "searchable": false,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.confirmedQuantity",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "requestedEndDate",
@@ -619,8 +600,7 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.requestedEndDate",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "status",
@@ -633,26 +613,17 @@
                     "filterable": true,
                     "searchable": true,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.status",
-                    "searchWeightage": 1
-                },
-                {
-                    "name": "workProductId",
-                    "dataType": "STRING",
-                    "creatable": true,
-                    "updatable": true,
-                    "nullable": false,
-                    "sortable": true,
-                    "filterable": true,
-                    "searchable": false,
-                    "label": "Work Product ID",
-                    "dataFormat": "UUID",
-                    "keyType": "FOREIGN",
-                    "labelTextId": "scheduleLines.workProductId",
-                    "searchWeightage": 1,
-                    "searchAssociationWeightage": {
-                        "fallbackWeightage": 1
-                    }
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        }
+                    ],
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "createdAt",
@@ -664,8 +635,7 @@
                     "filterable": true,
                     "searchable": false,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.createdAt",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 },
                 {
                     "name": "updatedAt",
@@ -677,33 +647,33 @@
                     "filterable": true,
                     "searchable": false,
                     "sortable": true,
-                    "labelTextId": "scheduleLines.updatedAt",
-                    "searchWeightage": 1
+                    "analyticsRelevant": true
                 }
             ],
             "creatable": true,
-            "updatable": true,
-            "fullName": "customer.ssc.workorderservice.entity.scheduleLines"
+            "updatable": true
         }
     ],
     "events": [
         {
             "name": "workOrderCreate",
             "entityReference": "workOrder",
-            "trigger": "CREATE",
-            "fullName": "customer.ssc.workorderservice.event.workOrderCreate"
+            "trigger": "CREATE"
         },
         {
             "name": "workOrderUpdate",
             "entityReference": "workOrder",
-            "trigger": "UPDATE",
-            "fullName": "customer.ssc.workorderservice.event.workOrderUpdate"
+            "trigger": "UPDATE"
         },
         {
             "name": "workOrderDelete",
             "entityReference": "workOrder",
-            "trigger": "DELETE",
-            "fullName": "customer.ssc.workorderservice.event.workOrderDelete"
+            "trigger": "DELETE"
+        },
+        {
+            "name": "workOrderCurrentImageData",
+            "entityReference": "workOrder",
+            "trigger": "DATA_EXPORT_REQUEST"
         }
     ],
     "apis": [
@@ -713,6 +683,7 @@
             "title": "Work Order API",
             "apiPath": "/work-order-service/workOrders",
             "entityReference": "workOrder",
+            "apiStyle": "REST", 
             "operations": [
                 {
                     "id": "readWorkOrder",
@@ -867,9 +838,38 @@
                             "responseCode": "500"
                         }
                     ]
+                },
+                {
+                    "id": "replicateWorkOrder",
+                    "path": "/replicateData",
+                    "method": "POST",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "201 Created",
+                            "responseCode": "201"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
                 }
-            ],
-            "fullName": "customer.ssc.workorderservice.api.workOrderApi"
+            ]
         },
         {
             "name": "workProductsApi",
@@ -877,6 +877,7 @@
             "title": "Work Products API",
             "apiPath": "/work-order-service/workOrders/{id}/workProducts",
             "entityReference": "workProducts",
+            "apiStyle": "REST", 
             "operations": [
                 {
                     "id": "readWorkProduct",
@@ -1062,8 +1063,7 @@
                         }
                     ]
                 }
-            ],
-            "fullName": "customer.ssc.workorderservice.api.workProductsApi"
+            ]
         },
         {
             "name": "scheduleLinesApi",
@@ -1071,6 +1071,7 @@
             "title": "Schedule Lines API",
             "apiPath": "/work-order-service/workOrders/{id}/workProducts/{workProductId}/scheduleLines",
             "entityReference": "scheduleLines",
+            "apiStyle": "REST", 
             "operations": [
                 {
                     "id": "readScheduleLine",
@@ -1256,8 +1257,7 @@
                         }
                     ]
                 }
-            ],
-            "fullName": "customer.ssc.workorderservice.api.scheduleLinesApi"
+            ]
         }
     ]
 }

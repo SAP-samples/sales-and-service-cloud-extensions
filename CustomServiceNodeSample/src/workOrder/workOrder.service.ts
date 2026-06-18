@@ -18,8 +18,11 @@ import { UpdateWorkOrderDto } from '../dto/updateWorkOrder.dto';
 import { Brackets } from 'typeorm';
 import { EmployeeService } from '../employee/employee.service';
 import { Employee } from '../interface/Employee.interface';
+import { AccountService } from '../account/account.service';
+import { Account } from '../interface/Account.interface';
 import { PaginationUtils } from '../common/utils/pagination.utils';
 import { WorkProductService } from '../workProduct/workProduct.service';
+import { AnalyticsReplicationService } from '../analytics/analytics-replication.service';
 
 
 @Injectable({ scope: Scope.REQUEST })
@@ -34,7 +37,9 @@ export class WorkOrderService {
     private workProductRepository: Repository<WorkProduct>,
 
     private employeeService: EmployeeService,
+    private accountService: AccountService,
     private workProductService: WorkProductService,
+    private analyticsReplicationService: AnalyticsReplicationService,
   ) {}
 
   async createWorkOrder(workOrderDto: WorkOrderDto): Promise<any> {
@@ -51,9 +56,12 @@ export class WorkOrderService {
             content: workOrderDto.content || workOrderDto.estimatedRevenue?.content,
             orderName: workOrderDto.orderName,
             numberOfSubscriptions: workOrderDto.numberOfSubscriptions,
-            projectLeadId: workOrderDto.projectLeadId,
+            priority: workOrderDto.priority,
+            projectLeadId: workOrderDto.projectLead?.id,
+            accountId: workOrderDto.account?.id,
             Customer: workOrderDto.Customer,
             displayId: workOrderDto.displayId,
+            caseDisplayId: workOrderDto.caseDisplayId,
           });
 
           const savedWorkOrder = await transactionalEntityManager.save(
@@ -68,6 +76,7 @@ export class WorkOrderService {
               Object.assign(workProduct, {
                 id: workProductDto.id,
                 workProductId: workProductDto.workProductId,
+                workProductName: workProductDto.workProductName,
                 customizationDetails: workProductDto.customizationDetails,
                 currencyCode: workProductDto.currencyCode || workProductDto.estimatedRevenue?.currencyCode,
                 content: workProductDto.content || workProductDto.estimatedRevenue?.content,
@@ -111,6 +120,13 @@ export class WorkOrderService {
       },
     );
 
+    // Fire-and-forget analytics (won't block or fail business logic)
+    this.sendCreateAnalytics(result.completeWorkOrder).catch((error) => {
+      this.logger.error(
+        `Analytics tracking failed for created work order ${result.value[0].id}: ${error.message}`,
+      );
+    });
+
     this.logger.log(
       `Work order created successfully. ID: ${result.value[0].id}`,
     );
@@ -118,8 +134,26 @@ export class WorkOrderService {
     return { value: result.value };
   }
 
-  private async transformWorkOrderResponse(workOrder: WorkOrder, includeNested: boolean = false): Promise<any> {
-    const { currencyCode, content, workProducts, projectLeadId, ...rest } = workOrder;
+  private async sendCreateAnalytics(workOrder: any): Promise<void> {
+    const entityFullName = 'customer.ssc.workorderservice.entity.workOrder';
+    const serviceFullName = 'customer.ssc.service.workOrderService';
+
+    try {
+      const analyticsData = await this.analyticsReplicationService.transformWorkOrderForCudAnalytics(workOrder);
+
+      await this.analyticsReplicationService.sendCudDataEvent({
+        entityFullName,
+        serviceFullName,
+        currentImage: analyticsData,
+        operation: 'Create',
+      });
+    } catch (error) {
+      // Log and send ABORTED, but don't throw
+      this.logger.error(`Analytics CREATE event failed: ${error.message}`);
+      throw error; // Re-throw for the catch block in caller
+    }
+  }  private async transformWorkOrderResponse(workOrder: WorkOrder, includeNested: boolean = false): Promise<any> {
+    const { currencyCode, content, workProducts, projectLeadId, accountId, ...rest } = workOrder;
 
     let projectLead: Employee | null = null;
     if (projectLeadId) {
@@ -130,12 +164,26 @@ export class WorkOrderService {
       }
     }
 
+    let account: Account | null = null;
+    if (accountId) {
+      try {
+        account = await this.accountService.getAccountById(accountId);
+      } catch (error) {
+        Logger.warn(`Failed to fetch account ${accountId}: ${error.message}`);
+      }
+    }
+
     return {
       ...rest,
       projectLead: projectLead ? {
         id: projectLead.id,
         formattedName: projectLead.formattedName,
         displayId: projectLead.displayId,
+      } : null,
+      account: account ? {
+        id: account.id,
+        formattedName: account.formattedName,
+        displayId: account.displayId,
       } : null,
       estimatedRevenue:
         currencyCode && content
@@ -161,9 +209,11 @@ export class WorkOrderService {
     search?: string,
   ): Promise<any> {
     Logger.log('GET WorkOrders has been called');
+    Logger.log(`Filter received: "${filter}"`);
     
     // Apply pagination validation
     const pagination = PaginationUtils.validatePagination(top, skip);
+    Logger.log(`Pagination: top=${pagination.top}, skip=${pagination.skip}`);
     
     let query = this.workOrderRepository
       .createQueryBuilder('workOrder');
@@ -172,18 +222,35 @@ export class WorkOrderService {
     query.take(pagination.top);   // Always apply limit
     
     if (filter) {
+      filter = await this.resolveExternalFilters(filter);
       this.applyFilters(query, filter);
     }
     if (search) {
-      this.searchFilter(query, search);
+      const [employeeIds, accountIds] = await Promise.all([
+        this.employeeService.searchEmployeesByDisplayId(search),
+        this.accountService.searchAccountsByDisplayId(search),
+      ]);
+      this.searchFilter(
+        query,
+        search,
+        employeeIds.map(e => e.id),
+        accountIds.map(a => a.id),
+      );
     }
     if (orderBy) {
       this.applyOrderBy(query, orderBy);
+    } else {
+      // Default sort by createdAt descending (newest first)
+      query.orderBy('workOrder.createdAt', 'DESC');
     }
     const value = await query.getMany();
+    Logger.log(`Query returned ${value.length} work orders from database`);
+    
     const transformedValue = await Promise.all(
       value.map((val) => this.transformWorkOrderResponse(val))
     );
+    Logger.log(`Transformed ${transformedValue.length} work orders successfully`);
+    
     // Always return in { value: [...] } format per guidelines
     const response: any = {
       value: transformedValue,
@@ -204,55 +271,188 @@ export class WorkOrderService {
     return response;
   }
 
+  private async resolveExternalFilters(filter: string): Promise<string> {
+    const parts = filter.split(' and ');
+    const resolved = await Promise.all(parts.map(async (part) => {
+      if (part.includes('projectLead.displayId') || part.includes('projectLead/displayId')) {
+        const value = part.split(' eq ')[1]?.trim().replace(/^['"]|['"]$/g, '');
+        if (value) {
+          const employee = await this.employeeService.getEmployeeByDisplayId(value);
+          if (employee) return `projectLeadId eq '${employee.id}'`;
+          return `projectLeadId eq 'NOT_FOUND'`;
+        }
+      }
+      if (part.includes('account.displayId') || part.includes('account/displayId')) {
+        const value = part.split(' eq ')[1]?.trim().replace(/^['"]|['"]$/g, '');
+        if (value) {
+          const account = await this.accountService.getAccountByDisplayId(value);
+          if (account) return `accountId eq '${account.id}'`;
+          return `accountId eq 'NOT_FOUND'`;
+        }
+      }
+      return part;
+    }));
+    return resolved.join(' and ');
+  }
+
   private applyFilters(query: any, filter: string): void {
     const parts = filter.split(' and ');
+    Logger.log(`Filter parts: ${JSON.stringify(parts)}`);
 
     for (const part of parts) {
-      const [field, value] = part.split(' eq ');
+      // Strip outer parentheses from each part
+      const cleanPart = part.trim().replace(/^\(+/, '').replace(/\)+$/, '');
+
+      let field: string | undefined;
+      let value: string | undefined;
+      let operator: 'eq' | 'sw' | 'ge' | 'gt' | 'le' | 'lt' = 'eq';
+
+      if (cleanPart.includes(' sw ')) {
+        [field, value] = cleanPart.split(' sw ');
+        operator = 'sw';
+      } else if (cleanPart.includes(' ge ')) {
+        [field, value] = cleanPart.split(' ge ');
+        operator = 'ge';
+      } else if (cleanPart.includes(' gt ')) {
+        [field, value] = cleanPart.split(' gt ');
+        operator = 'gt';
+      } else if (cleanPart.includes(' le ')) {
+        [field, value] = cleanPart.split(' le ');
+        operator = 'le';
+      } else if (cleanPart.includes(' lt ')) {
+        [field, value] = cleanPart.split(' lt ');
+        operator = 'lt';
+      } else if (cleanPart.includes(' eq ')) {
+        [field, value] = cleanPart.split(' eq ');
+        operator = 'eq';
+      }
+
+      Logger.log(`Filter parsed -> field: "${field}", operator: "${operator}", value: "${value}"`);
+
       if (field && value) {
         const cleanField = field.trim();
-        const cleanValue = value
-          .trim()
-          .replace(/^['"]|['"]$/g, '')
-          .toLowerCase();
+        const rawValue = value.trim().replace(/^['"]|['"]$/g, '');
+        const cleanValue = rawValue.toLowerCase();
 
         switch (cleanField) {
           case 'status':
-            query.andWhere('LOWER(workOrder.status) = :status', {
-              status: cleanValue,
-            });
+            if (operator === 'sw') {
+              query.andWhere('LOWER(workOrder.status) LIKE :status', { status: `${cleanValue}%` });
+            } else if (operator === 'eq') {
+              query.andWhere('LOWER(workOrder.status) = :status', { status: cleanValue });
+            } else {
+              throw new BadRequestException(`'${operator}' operator is not supported for field: status`, `filter=${filter}`);
+            }
             break;
+
+          case 'displayId':
+            if (operator === 'sw') {
+              query.andWhere('workOrder.displayId LIKE :displayId', { displayId: `${rawValue}%` });
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.displayId = :displayId', { displayId: rawValue });
+            } else {
+              query.andWhere(`workOrder.displayId ${this.getSqlOperator(operator)} :displayId`, { displayId: rawValue });
+            }
+            break;
+
           case 'startDate':
-            query.andWhere('workOrder.startDate = :startDate', {
-              startDate: this.formatDate(cleanValue),
-            });
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for date field: startDate`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.startDate = :startDate', { startDate: this.formatDate(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.startDate ${this.getSqlOperator(operator)} :startDate`, { startDate: this.formatDate(cleanValue) });
+            }
             break;
+
           case 'endDate':
-            query.andWhere('workOrder.endDate = :endDate', {
-              endDate: this.formatDate(cleanValue),
-            });
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for date field: endDate`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.endDate = :endDate', { endDate: this.formatDate(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.endDate ${this.getSqlOperator(operator)} :endDate`, { endDate: this.formatDate(cleanValue) });
+            }
             break;
+
+          case 'createdAt':
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for date field: createdAt`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.createdAt = :createdAt', { createdAt: this.formatDate(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.createdAt ${this.getSqlOperator(operator)} :createdAt`, { createdAt: this.formatDate(cleanValue) });
+            }
+            break;
+
+          case 'updatedAt':
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for date field: updatedAt`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.updatedAt = :updatedAt', { updatedAt: this.formatDate(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.updatedAt ${this.getSqlOperator(operator)} :updatedAt`, { updatedAt: this.formatDate(cleanValue) });
+            }
+            break;
+
           case 'orderName':
-            query.andWhere('LOWER(workOrder.orderName) = :orderName', {
-              orderName: cleanValue,
-            });
+            if (operator === 'sw') {
+              query.andWhere('LOWER(workOrder.orderName) LIKE :orderName', { orderName: `${cleanValue}%` });
+            } else if (operator === 'eq') {
+              query.andWhere('LOWER(workOrder.orderName) = :orderName', { orderName: cleanValue });
+            } else {
+              query.andWhere(`workOrder.orderName ${this.getSqlOperator(operator)} :orderName`, { orderName: rawValue });
+            }
             break;
+
           case 'estimatedRevenue/currencyCode':
-            query.andWhere('LOWER(workOrder.currencyCode) = :currencyCode', {
-              currencyCode: cleanValue,
-            });
+            if (operator === 'sw') {
+              query.andWhere('LOWER(workOrder.currencyCode) LIKE :currencyCode', { currencyCode: `${cleanValue}%` });
+            } else if (operator === 'eq') {
+              query.andWhere('LOWER(workOrder.currencyCode) = :currencyCode', { currencyCode: cleanValue });
+            } else {
+              throw new BadRequestException(`'${operator}' operator is not supported for field: estimatedRevenue/currencyCode`, `filter=${filter}`);
+            }
             break;
+
           case 'estimatedRevenue/content':
-            query.andWhere('LOWER(workOrder.content) = :content', {
-              content: cleanValue,
-            });
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for numeric field: estimatedRevenue/content`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.content = :content', { content: parseFloat(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.content ${this.getSqlOperator(operator)} :content`, { content: parseFloat(cleanValue) });
+            }
             break;
+
           case 'numberOfSubscriptions':
-            query.andWhere(
-              'workOrder.numberOfSubscriptions = :numberOfSubscriptions',
-              { numberOfSubscriptions: parseInt(cleanValue) },
-            );
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for numeric field: numberOfSubscriptions`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.numberOfSubscriptions = :numberOfSubscriptions', { numberOfSubscriptions: parseInt(cleanValue, 10) });
+            } else {
+              query.andWhere(`workOrder.numberOfSubscriptions ${this.getSqlOperator(operator)} :numberOfSubscriptions`, { numberOfSubscriptions: parseInt(cleanValue, 10) });
+            }
             break;
+
+          case 'priority':
+            if (operator === 'sw') {
+              throw new BadRequestException(`'sw' operator is not supported for numeric field: priority`, `filter=${filter}`);
+            } else if (operator === 'eq') {
+              query.andWhere('workOrder.priority = :priority', { priority: parseFloat(cleanValue) });
+            } else {
+              query.andWhere(`workOrder.priority ${this.getSqlOperator(operator)} :priority`, { priority: parseFloat(cleanValue) });
+            }
+            break;
+
+          case 'projectLeadId':
+            query.andWhere('workOrder.projectLeadId = :projectLeadId', { projectLeadId: cleanValue });
+            break;
+
+          case 'accountId':
+            query.andWhere('workOrder.accountId = :accountId', { accountId: cleanValue });
+            break;
+
           default:
             throw new BadRequestException(
               `Unsupported filter field: ${cleanField}`,
@@ -260,6 +460,15 @@ export class WorkOrderService {
             );
         }
       }
+    }
+  }
+
+  private getSqlOperator(operator: 'ge' | 'gt' | 'le' | 'lt'): string {
+    switch (operator) {
+      case 'ge': return '>=';
+      case 'gt': return '>';
+      case 'le': return '<=';
+      case 'lt': return '<';
     }
   }
 
@@ -274,7 +483,7 @@ export class WorkOrderService {
     return date.toISOString();
   }
 
-  private searchFilter(query: any, search: string): void {
+  private searchFilter(query: any, search: string, employeeIds: string[] = [], accountIds: string[] = []): void {
     const searchValue = search
       .trim()
       .replace(/^['"]|['"]$/g, '')
@@ -306,9 +515,28 @@ export class WorkOrderService {
           .orWhere('LOWER(workOrder.content) LIKE LOWER(:search)', {
             search: `%${searchValue}%`,
           })
-          .orWhere('CAST(workOrder.numberOfSubscriptions AS VARCHAR) LIKE :search', {
+          .orWhere('CAST(workOrder.numberOfSubscriptions AS NVARCHAR) LIKE :search', {
+            search: `%${searchValue}%`,
+          })
+          .orWhere('CAST(workOrder.priority AS NVARCHAR) LIKE :search', {
             search: `%${searchValue}%`,
           });
+
+        if (employeeIds.length > 0) {
+          qb.orWhere('workOrder.projectLeadId IN (:...employeeIds)', { employeeIds });
+        }
+        // also match directly on projectLeadId UUID
+        qb.orWhere('LOWER(workOrder.projectLeadId) LIKE LOWER(:search)', {
+          search: `%${searchValue}%`,
+        });
+
+        if (accountIds.length > 0) {
+          qb.orWhere('workOrder.accountId IN (:...accountIds)', { accountIds });
+        }
+        // also match directly on accountId UUID
+        qb.orWhere('LOWER(workOrder.accountId) LIKE LOWER(:search)', {
+          search: `%${searchValue}%`,
+        });
       }),
     );
   }
@@ -326,6 +554,7 @@ export class WorkOrderService {
       'endDate': 'workOrder.endDate',
       'orderName': 'workOrder.orderName',
       'numberOfSubscriptions': 'workOrder.numberOfSubscriptions',
+      'priority': 'workOrder.priority',
       'Customer': 'workOrder.Customer',
       'displayId': 'workOrder.displayId',
       'createdAt': 'workOrder.createdAt',
@@ -343,6 +572,7 @@ export class WorkOrderService {
       );
     }
 
+    // Apply ordering with NULLS LAST to put null values at the end
     query.orderBy(dbField, direction, 'NULLS LAST');
   }
 
@@ -363,11 +593,13 @@ export class WorkOrderService {
   }
 
   async deleteWorkOrder(workOrderId: string) {
-    const workOrder = await this.workOrderRepository.findOne({
+    // Fetch the work order with relations BEFORE deletion for analytics
+    const workOrderBeforeDelete = await this.workOrderRepository.findOne({
       where: { id: workOrderId },
+      relations: ['workProducts', 'workProducts.scheduleLines'],
     });
 
-    if (!workOrder) {
+    if (!workOrderBeforeDelete) {
       this.logger.warn(`Work Order with ID ${workOrderId} not found for deletion`);
       return {
         value: [{
@@ -377,10 +609,18 @@ export class WorkOrderService {
       };
     }
 
+    // Perform deletion
     await this.workProductRepository.delete({
       workOrder: { id: workOrderId },
     });
     const result = await this.workOrderRepository.delete({ id: workOrderId });
+
+    // Fire-and-forget analytics (won't block or fail business logic)
+    this.sendDeleteAnalytics(workOrderId, workOrderBeforeDelete).catch((error) => {
+      this.logger.error(
+        `Analytics tracking failed for deleted work order ${workOrderId}: ${error.message}`,
+      );
+    });
 
     this.logger.log(
       `Work order deleted successfully. ID: ${workOrderId}`,
@@ -395,24 +635,57 @@ export class WorkOrderService {
     };
   }
 
+  private async sendDeleteAnalytics(workOrderId: string, beforeWorkOrder: any): Promise<void> {
+    const entityFullName = 'customer.ssc.workorderservice.entity.workOrder';
+    const serviceFullName = 'customer.ssc.service.workOrderService';
+
+    try {
+      const beforeImage = await this.analyticsReplicationService.transformWorkOrderForCudAnalytics(beforeWorkOrder);
+
+      await this.analyticsReplicationService.sendCudDataEvent({
+        entityFullName,
+        serviceFullName,
+        beforeImage,
+        operation: 'Delete',
+      });
+    } catch (error) {
+      this.logger.error(`Analytics DELETE event failed: ${error.message}`);
+      throw error;
+    }
+  }
+
   async updateWorkOrder(
     workOrderId: string,
     updateWorkOrderDto: UpdateWorkOrderDto,
   ): Promise<any> {
-    const workOrder = await this.workOrderRepository.findOneBy({
-      id: workOrderId,
+    // Fetch the work order with relations BEFORE update for analytics
+    const workOrderBeforeUpdate = await this.workOrderRepository.findOne({
+      where: { id: workOrderId },
+      relations: ['workProducts', 'workProducts.scheduleLines'],
     });
 
-    if (!workOrder) {
+    if (!workOrderBeforeUpdate) {
       throw new NotFoundException(
         `Work Order with ID ${workOrderId} not found`,
         `workOrderId=${workOrderId}`
       );
     }
 
-    if (updateWorkOrderDto.status) {
-      workOrder.status = updateWorkOrderDto.status;
-    }
+    // Fetch the work order entity for update
+      const workOrder = await this.workOrderRepository.findOneBy({
+        id: workOrderId,
+      });
+
+      if (!workOrder) {
+        throw new NotFoundException(
+          `Work Order with ID ${workOrderId} not found`,
+          `workOrderId=${workOrderId}`
+        );
+      }
+
+      if (updateWorkOrderDto.status) {
+        workOrder.status = updateWorkOrderDto.status;
+      }
       if (updateWorkOrderDto.startDate) {
         workOrder.startDate = updateWorkOrderDto.startDate;
       }
@@ -427,16 +700,48 @@ export class WorkOrderService {
           updateWorkOrderDto.estimatedRevenue.currencyCode;
         workOrder.content = updateWorkOrderDto.estimatedRevenue.content;
       }
-      if (updateWorkOrderDto.numberOfSubscriptions) {
+      if (updateWorkOrderDto.numberOfSubscriptions !== undefined) {
         workOrder.numberOfSubscriptions =
           updateWorkOrderDto.numberOfSubscriptions;
       }
-      
-      if (updateWorkOrderDto.projectLeadId !== undefined) {
-        workOrder.projectLeadId = updateWorkOrderDto.projectLeadId;
+      if (updateWorkOrderDto.priority !== undefined) {
+        workOrder.priority = updateWorkOrderDto.priority;
+      }
+
+      // Handle project lead update
+      if (updateWorkOrderDto.projectLead?.id !== undefined) {
+        workOrder.projectLeadId = updateWorkOrderDto.projectLead.id;
+      }
+
+      // Handle account update
+      if (updateWorkOrderDto.account?.id !== undefined) {
+        workOrder.accountId = updateWorkOrderDto.account.id;
+      }
+
+      // Handle case display ID update
+      if (updateWorkOrderDto.caseDisplayId !== undefined) {
+        workOrder.caseDisplayId = updateWorkOrderDto.caseDisplayId;
+      }
+
+      // Handle display ID update
+      if (updateWorkOrderDto.displayId !== undefined) {
+        workOrder.displayId = updateWorkOrderDto.displayId;
       }
 
       const savedWorkOrder = await this.workOrderRepository.save(workOrder);
+
+    // Fetch the complete updated work order with relations
+    const workOrderAfterUpdate = await this.workOrderRepository.findOne({
+      where: { id: workOrderId },
+      relations: ['workProducts', 'workProducts.scheduleLines'],
+    });
+
+    // Fire-and-forget analytics (won't block or fail business logic)
+    this.sendUpdateAnalytics(workOrderBeforeUpdate, workOrderAfterUpdate).catch((error) => {
+      this.logger.error(
+        `Analytics tracking failed for updated work order ${workOrderId}: ${error.message}`,
+      );
+    });
 
     this.logger.log(
       `Work order updated successfully. ID: ${workOrderId}`,
@@ -444,5 +749,26 @@ export class WorkOrderService {
 
     const transformedWorkOrder = await this.transformWorkOrderResponse(savedWorkOrder, false);
     return { value: [transformedWorkOrder] };
+  }
+
+  private async sendUpdateAnalytics(beforeWorkOrder: any, afterWorkOrder: any): Promise<void> {
+    const entityFullName = 'customer.ssc.workorderservice.entity.workOrder';
+    const serviceFullName = 'customer.ssc.service.workOrderService';
+
+    try {
+      const beforeImage = await this.analyticsReplicationService.transformWorkOrderForCudAnalytics(beforeWorkOrder);
+      const currentImage = await this.analyticsReplicationService.transformWorkOrderForCudAnalytics(afterWorkOrder);
+
+      await this.analyticsReplicationService.sendCudDataEvent({
+        entityFullName,
+        serviceFullName,
+        beforeImage,
+        currentImage,
+        operation: 'Update',
+      });
+    } catch (error) {
+      this.logger.error(`Analytics UPDATE event failed: ${error.message}`);
+      throw error;
+    }
   }
 }

@@ -50,18 +50,18 @@ describe('WorkProductNestedController', () => {
   });
 
   describe('getWorkProduct', () => {
-    it('should return one work product', async () => {
+    it('should return one work product with workOrderId validation', async () => {
       service.findOne.mockResolvedValue({ value: mockWorkProduct });
 
       const result = await controller.getWorkProduct('wo-123', 'wp-123');
 
-      expect(service.findOne).toHaveBeenCalledWith('wp-123');
+      expect(service.findOne).toHaveBeenCalledWith('wp-123', 'wo-123');
       expect(result.value.id).toBe('wp-123');
     });
   });
 
   describe('createWorkProduct', () => {
-    it('should create a work product', async () => {
+    it('should create a work product and set Location header', async () => {
       const mockRes = { header: jest.fn() } as any;
       service.create.mockResolvedValue({ value: [mockWorkProduct] });
 
@@ -73,22 +73,22 @@ describe('WorkProductNestedController', () => {
   });
 
   describe('updateWorkProduct', () => {
-    it('should update a work product', async () => {
+    it('should update a work product with workOrderId validation', async () => {
       service.update.mockResolvedValue({ value: mockWorkProduct });
 
-      const result = await controller.updateWorkProduct('wo-123', 'wp-123', {} as any);
+      await controller.updateWorkProduct('wo-123', 'wp-123', {} as any);
 
-      expect(service.update).toHaveBeenCalledWith('wp-123', {});
+      expect(service.update).toHaveBeenCalledWith('wp-123', {}, 'wo-123');
     });
   });
 
   describe('deleteWorkProduct', () => {
-    it('should delete a work product', async () => {
+    it('should delete a work product with workOrderId validation', async () => {
       service.delete.mockResolvedValue({ value: [{ id: 'wp-123', status: 'deleted' }] });
 
       const result = await controller.deleteWorkProduct('wo-123', 'wp-123');
 
-      expect(service.delete).toHaveBeenCalledWith('wp-123');
+      expect(service.delete).toHaveBeenCalledWith('wp-123', 'wo-123');
       expect(result.value[0].status).toBe('deleted');
     });
   });

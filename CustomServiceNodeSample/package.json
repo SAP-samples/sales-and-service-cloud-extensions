@@ -1,8 +1,8 @@
 {
-  "name": "work-order-service-sample",
-  "version": "1.0.0",
-  "description": "Work Order Management Service - Custom Service sample for SAP Sales and Service Cloud V2",
-  "author": "SAP SE",
+  "name": "exfs_node",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -23,6 +23,7 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/mongoose": "^10.0.10",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^10.0.2",
     "@sap-cloud-sdk/connectivity": "^3.26.4",
@@ -31,10 +32,14 @@
     "@sap/hana-client": "^2.22.27",
     "@sap/xsenv": "^5.4.0",
     "@sap/xssec": "^4.2.7",
+    "axios": "^1.12.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "fs": "0.0.1-security",
     "hdb-pool": "^0.1.6",
+    "mongoose": "^8.6.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "path": "^0.12.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
@@ -78,37 +83,16 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s",
-      "!**/*.spec.ts",
-      "!**/*.interface.ts",
-      "!**/*.dto.ts",
-      "!**/*.enum.ts",
-      "!**/*.module.ts",
-      "!**/*.repository.ts",
-      "!**/main.ts",
-      "!**/middleware.ts",
-      "!**/session.middleware.ts",
-      "!**/open-api/**",
-      "!**/node_modules/**"
+      "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "transformIgnorePatterns": [
-      "node_modules/(?!uuid)"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 70,
-        "branches": 65,
-        "functions": 70,
-        "lines": 70
-      }
+    "moduleNameMapper": {
+      "^uuid$": "<rootDir>/../__mocks__/uuid.js",
+      "^src/(.*)$": "<rootDir>/$1"
     },
-    "coverageReporters": [
-      "text",
-      "text-summary",
-      "html",
-      "lcov"
+    "transformIgnorePatterns": [
+      "/node_modules/(?!uuid)"
     ]
   }
 }

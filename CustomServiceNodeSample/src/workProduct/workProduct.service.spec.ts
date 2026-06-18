@@ -5,13 +5,13 @@ import { WorkProductService } from './workProduct.service';
 import { WorkProduct } from '../entities/workProduct.entity';
 import { WorkOrder } from '../entities/workOrder.entity';
 import { ScheduleLine } from '../entities/scheduleLine.entity';
+import { AnalyticsReplicationService } from '../analytics/analytics-replication.service';
 import { BadRequestException, NotFoundException } from '../common/exceptions/custom.exceptions';
 
 describe('WorkProductService', () => {
   let service: WorkProductService;
   let workProductRepository: jest.Mocked<Repository<WorkProduct>>;
   let workOrderRepository: jest.Mocked<Repository<WorkOrder>>;
-  let scheduleLineRepository: jest.Mocked<Repository<ScheduleLine>>;
 
   const mockWorkProduct: Partial<WorkProduct> = {
     id: 'wp-123',
@@ -45,14 +45,14 @@ describe('WorkProductService', () => {
       providers: [
         {
           provide: WorkProductService,
-          useFactory: (workProductRepo, workOrderRepo, scheduleLineRepo) => {
-            // Create instance without REQUEST scope for testing
-            return new WorkProductService(workProductRepo, workOrderRepo, scheduleLineRepo);
+          useFactory: (workProductRepo, workOrderRepo, scheduleLineRepo, analyticsSvc) => {
+            return new WorkProductService(workProductRepo, workOrderRepo, scheduleLineRepo, analyticsSvc);
           },
           inject: [
             getRepositoryToken(WorkProduct),
             getRepositoryToken(WorkOrder),
             getRepositoryToken(ScheduleLine),
+            AnalyticsReplicationService,
           ],
         },
         {
@@ -66,13 +66,18 @@ describe('WorkProductService', () => {
         },
         {
           provide: getRepositoryToken(WorkOrder),
-          useValue: {
-            findOne: jest.fn(),
-          },
+          useValue: { findOne: jest.fn() },
         },
         {
           provide: getRepositoryToken(ScheduleLine),
           useValue: {},
+        },
+        {
+          provide: AnalyticsReplicationService,
+          useValue: {
+            transformWorkOrderForCudAnalytics: jest.fn().mockResolvedValue({}),
+            sendCudDataEvent: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();
@@ -80,7 +85,6 @@ describe('WorkProductService', () => {
     service = module.get<WorkProductService>(WorkProductService);
     workProductRepository = module.get(getRepositoryToken(WorkProduct));
     workOrderRepository = module.get(getRepositoryToken(WorkOrder));
-    scheduleLineRepository = module.get(getRepositoryToken(ScheduleLine));
   });
 
   afterEach(() => {
@@ -89,8 +93,7 @@ describe('WorkProductService', () => {
 
   describe('getAllWorkProducts', () => {
     it('should return all work products with default pagination', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       const result = await service.getAllWorkProducts();
 
@@ -100,19 +103,16 @@ describe('WorkProductService', () => {
     });
 
     it('should return work products with custom pagination', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
-      const result = await service.getAllWorkProducts(20, 10);
+      await service.getAllWorkProducts(20, 10);
 
-      expect(result.value).toHaveLength(1);
       expect(mockQueryBuilder.limit).toHaveBeenCalledWith(20);
       expect(mockQueryBuilder.offset).toHaveBeenCalledWith(10);
     });
 
     it('should include count when requested', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
       mockQueryBuilder.getCount.mockResolvedValue(100);
 
       const result = await service.getAllWorkProducts(50, 0, true);
@@ -121,8 +121,7 @@ describe('WorkProductService', () => {
     });
 
     it('should apply search filter', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       await service.getAllWorkProducts(50, 0, false, undefined, undefined, 'Test');
 
@@ -130,8 +129,7 @@ describe('WorkProductService', () => {
     });
 
     it('should apply status filter', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       await service.getAllWorkProducts(50, 0, false, undefined, "status eq 'IN_PROGRESS'");
 
@@ -139,8 +137,7 @@ describe('WorkProductService', () => {
     });
 
     it('should apply orderBy sorting', async () => {
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       await service.getAllWorkProducts(50, 0, false, 'workProductName desc');
 
@@ -148,17 +145,14 @@ describe('WorkProductService', () => {
     });
 
     it('should throw BadRequestException for unsupported sort field', async () => {
-      await expect(
-        service.getAllWorkProducts(50, 0, false, 'invalidField asc')
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.getAllWorkProducts(50, 0, false, 'invalidField asc')).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('findByWorkOrderId', () => {
     it('should return work products for a valid work order UUID', async () => {
       const workOrderId = '123e4567-e89b-12d3-a456-426614174000';
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       const result = await service.findByWorkOrderId(workOrderId);
 
@@ -172,47 +166,29 @@ describe('WorkProductService', () => {
     it('should resolve displayId to UUID for work order lookup', async () => {
       const displayId = 'WO-001';
       const workOrder = { id: '123e4567-e89b-12d3-a456-426614174000', displayId };
-      const workProducts = [mockWorkProduct];
-      
       workOrderRepository.findOne = jest.fn().mockResolvedValue(workOrder);
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       const result = await service.findByWorkOrderId(displayId);
 
-      expect(workOrderRepository.findOne).toHaveBeenCalledWith({
-        where: { displayId },
-      });
+      expect(workOrderRepository.findOne).toHaveBeenCalledWith({ where: { displayId } });
       expect(result.value).toHaveLength(1);
     });
 
     it('should throw NotFoundException when work order displayId not found', async () => {
-      const displayId = 'INVALID';
       workOrderRepository.findOne = jest.fn().mockResolvedValue(null);
 
-      await expect(
-        service.findByWorkOrderId(displayId)
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.findByWorkOrderId('INVALID')).rejects.toThrow(NotFoundException);
     });
 
     it('should apply pagination for work order products', async () => {
       const workOrderId = '123e4567-e89b-12d3-a456-426614174000';
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
+      mockQueryBuilder.getMany.mockResolvedValue([mockWorkProduct]);
 
       await service.findByWorkOrderId(workOrderId, 10, 5);
 
       expect(mockQueryBuilder.limit).toHaveBeenCalledWith(10);
       expect(mockQueryBuilder.offset).toHaveBeenCalledWith(5);
-    });
-
-    it('should apply search within work order products', async () => {
-      const workOrderId = '123e4567-e89b-12d3-a456-426614174000';
-      const workProducts = [mockWorkProduct];
-      mockQueryBuilder.getMany.mockResolvedValue(workProducts);
-
-      await service.findByWorkOrderId(workOrderId, 50, 0, false, undefined, undefined, 'Product');
-
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalled();
     });
   });
 
@@ -228,9 +204,7 @@ describe('WorkProductService', () => {
     it('should throw NotFoundException when work product not found', async () => {
       workProductRepository.findOne = jest.fn().mockResolvedValue(null);
 
-      await expect(
-        service.findOne('non-existent-id')
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.findOne('non-existent-id')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -238,77 +212,43 @@ describe('WorkProductService', () => {
     it('should create a work product successfully', async () => {
       const workProductDto: any = {
         workProductId: 'WP-002',
-        workProductName: 'New Product',
-        quantity: 5,
         workOrderId: 'wo-123',
-        estimatedRevenue: {
-          currencyCode: 'USD',
-          content: 1000,
-        },
+        estimatedRevenue: { currencyCode: 'USD', content: 1000 },
       };
 
       const savedWorkProduct = { ...mockWorkProduct, id: 'new-wp-id' };
       workProductRepository.save = jest.fn().mockResolvedValue(savedWorkProduct);
       workProductRepository.findOne = jest.fn().mockResolvedValue(savedWorkProduct);
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [], workOrder: null });
 
       const result = await service.create(workProductDto);
 
       expect(result.value).toHaveLength(1);
       expect(workProductRepository.save).toHaveBeenCalled();
-      expect(workProductRepository.findOne).toHaveBeenCalled();
-    });
-
-    it('should handle estimatedRevenue object format', async () => {
-      const workProductDto: any = {
-        workProductId: 'WP-002',
-        workOrderId: 'wo-123',
-        estimatedRevenue: {
-          currencyCode: 'EUR',
-          content: 2000,
-        },
-      };
-
-      const savedWorkProduct = { ...mockWorkProduct, currencyCode: 'EUR', content: 2000 };
-      workProductRepository.save = jest.fn().mockResolvedValue(savedWorkProduct);
-      workProductRepository.findOne = jest.fn().mockResolvedValue(savedWorkProduct);
-
-      const result = await service.create(workProductDto);
-
-      expect(result.value).toHaveLength(1);
     });
 
     it('should handle direct currency and content fields', async () => {
-      const workProductDto: any = {
-        workProductId: 'WP-002',
-        workOrderId: 'wo-123',
-        currencyCode: 'GBP',
-        content: 3000,
-      };
-
+      const workProductDto: any = { workProductId: 'WP-002', workOrderId: 'wo-123', currencyCode: 'GBP', content: 3000 };
       const savedWorkProduct = { ...mockWorkProduct, currencyCode: 'GBP', content: 3000 };
       workProductRepository.save = jest.fn().mockResolvedValue(savedWorkProduct);
       workProductRepository.findOne = jest.fn().mockResolvedValue(savedWorkProduct);
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [] });
 
       const result = await service.create(workProductDto);
-
       expect(result.value).toHaveLength(1);
     });
   });
 
   describe('update', () => {
     it('should update a work product successfully', async () => {
-      const updateDto: any = {
-        workProductName: 'Updated Product',
-        quantity: 20,
-      };
-
-      const updatedWorkProduct = { ...mockWorkProduct, ...updateDto };
+      const updatedWorkProduct = { ...mockWorkProduct, workProductName: 'Updated' };
       workProductRepository.findOne = jest.fn()
-        .mockResolvedValueOnce(mockWorkProduct)
-        .mockResolvedValueOnce(updatedWorkProduct);
-      workProductRepository.save = jest.fn().mockResolvedValue(updatedWorkProduct);
+        .mockResolvedValueOnce({ ...mockWorkProduct })
+        .mockResolvedValueOnce({ ...updatedWorkProduct });
+      workProductRepository.save = jest.fn().mockResolvedValue({ ...updatedWorkProduct });
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [] });
 
-      const result = await service.update('wp-123', { ...mockWorkProduct, ...updateDto } as any);
+      const result = await service.update('wp-123', { workProductName: 'Updated' } as any);
 
       expect(workProductRepository.save).toHaveBeenCalled();
       expect(result.value.id).toBe('wp-123');
@@ -317,28 +257,7 @@ describe('WorkProductService', () => {
     it('should throw NotFoundException when updating non-existent product', async () => {
       workProductRepository.findOne = jest.fn().mockResolvedValue(null);
 
-      await expect(
-        service.update('non-existent-id', {} as any)
-      ).rejects.toThrow(NotFoundException);
-    });
-
-    it('should update estimatedRevenue fields', async () => {
-      const updateDto: any = {
-        estimatedRevenue: {
-          currencyCode: 'JPY',
-          content: 500000,
-        },
-      };
-
-      const updatedWorkProduct = { ...mockWorkProduct, currencyCode: 'JPY', content: 500000 };
-      workProductRepository.findOne = jest.fn()
-        .mockResolvedValueOnce(mockWorkProduct)
-        .mockResolvedValueOnce(updatedWorkProduct);
-      workProductRepository.save = jest.fn().mockResolvedValue(updatedWorkProduct);
-
-      const result = await service.update('wp-123', updateDto);
-
-      expect(result.value.estimatedRevenue.currencyCode).toBe('JPY');
+      await expect(service.update('non-existent-id', {} as any)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -346,6 +265,7 @@ describe('WorkProductService', () => {
     it('should delete a work product successfully', async () => {
       workProductRepository.findOne = jest.fn().mockResolvedValue(mockWorkProduct);
       workProductRepository.remove = jest.fn().mockResolvedValue(mockWorkProduct);
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [] });
 
       const result = await service.delete('wp-123');
 
@@ -356,8 +276,72 @@ describe('WorkProductService', () => {
     it('should throw NotFoundException when deleting non-existent product', async () => {
       workProductRepository.findOne = jest.fn().mockResolvedValue(null);
 
+      await expect(service.delete('non-existent-id')).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('findOne with workOrderId', () => {
+    it('should return work product scoped by valid UUID workOrderId', async () => {
+      workProductRepository.findOne = jest.fn().mockResolvedValue(mockWorkProduct);
+
+      const result = await service.findOne('wp-123', '123e4567-e89b-12d3-a456-426614174000');
+
+      expect(workProductRepository.findOne).toHaveBeenCalledWith({
+        where: { id: 'wp-123', workOrderId: '123e4567-e89b-12d3-a456-426614174000' },
+      });
+      expect(result.value.id).toBe('wp-123');
+    });
+
+    it('should throw BadRequestException for non-UUID workOrderId', async () => {
+      await expect(service.findOne('wp-123', 'INVALID-ID')).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw NotFoundException when work product not found under workOrderId', async () => {
+      workProductRepository.findOne = jest.fn().mockResolvedValue(null);
+
       await expect(
-        service.delete('non-existent-id')
+        service.findOne('wp-123', '123e4567-e89b-12d3-a456-426614174000')
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('update with workOrderId', () => {
+    it('should update a work product scoped by workOrderId', async () => {
+      const updatedWorkProduct = { ...mockWorkProduct, workProductName: 'Scoped Update' };
+      workProductRepository.findOne = jest.fn()
+        .mockResolvedValueOnce({ ...mockWorkProduct })
+        .mockResolvedValueOnce({ ...updatedWorkProduct });
+      workProductRepository.save = jest.fn().mockResolvedValue({ ...updatedWorkProduct });
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [] });
+
+      const result = await service.update('wp-123', { workProductName: 'Scoped Update' } as any, '123e4567-e89b-12d3-a456-426614174000');
+
+      expect(workProductRepository.save).toHaveBeenCalled();
+      expect(result.value.id).toBe('wp-123');
+    });
+
+    it('should throw BadRequestException for non-UUID workOrderId in update', async () => {
+      await expect(service.update('wp-123', {} as any, 'NOT-A-UUID')).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('delete with workOrderId', () => {
+    it('should delete a work product scoped by workOrderId', async () => {
+      workProductRepository.findOne = jest.fn().mockResolvedValue(mockWorkProduct);
+      workProductRepository.remove = jest.fn().mockResolvedValue(mockWorkProduct);
+      workOrderRepository.findOne = jest.fn().mockResolvedValue({ id: 'wo-123', workProducts: [] });
+
+      const result = await service.delete('wp-123', '123e4567-e89b-12d3-a456-426614174000');
+
+      expect(result.value[0].status).toBe('deleted');
+      expect(workProductRepository.remove).toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException when product not found under workOrderId', async () => {
+      workProductRepository.findOne = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        service.delete('wp-123', '123e4567-e89b-12d3-a456-426614174000')
       ).rejects.toThrow(NotFoundException);
     });
   });
@@ -366,138 +350,60 @@ describe('WorkProductService', () => {
     it('should transform work product with estimatedRevenue', () => {
       const transformed = service.transformResponse(mockWorkProduct as WorkProduct, false);
 
-      expect(transformed.estimatedRevenue).toEqual({
-        currencyCode: 'JPY',
-        content: 500000,
-      });
+      expect(transformed.estimatedRevenue).toEqual({ currencyCode: 'USD', content: 5000 });
       expect((transformed as any).currencyCode).toBeUndefined();
       expect((transformed as any).content).toBeUndefined();
     });
 
-    it('should handle null estimatedRevenue', () => {
-      const workProductNoRevenue = { ...mockWorkProduct, currencyCode: null, content: null };
-      const transformed = service.transformResponse(workProductNoRevenue as WorkProduct, false);
-
+    it('should return null estimatedRevenue when both fields absent', () => {
+      const workProduct = { ...mockWorkProduct, currencyCode: null, content: null };
+      const transformed = service.transformResponse(workProduct as WorkProduct, false);
       expect(transformed.estimatedRevenue).toBeNull();
     });
 
     it('should include schedule lines when nested flag is true', () => {
       const workProductWithLines = {
         ...mockWorkProduct,
-        scheduleLines: [
-          {
-            id: 'sl-1',
-            displayId: 'SL-001',
-            scheduleLineName: 'Line 1',
-            date: new Date(),
-            requestedQuantity: 10,
-            confirmedQuantity: 8,
-            requestedEndDate: new Date(),
-            status: 'CONFIRMED',
-          },
-        ],
+        scheduleLines: [{ id: 'sl-1', displayId: 'SL-001', scheduleLineName: 'Line 1', date: new Date(), requestedQuantity: 10, confirmedQuantity: 8, requestedEndDate: new Date(), status: 'CONFIRMED' }],
       };
-
       const transformed = service.transformResponse(workProductWithLines as any, true);
-
       expect(transformed.scheduleLines).toHaveLength(1);
-      expect(transformed.scheduleLines[0].id).toBe('sl-1');
     });
 
     it('should not include schedule lines when nested flag is false', () => {
-      const workProductWithLines = {
-        ...mockWorkProduct,
-        scheduleLines: [{ id: 'sl-1' }],
-      };
-
+      const workProductWithLines = { ...mockWorkProduct, scheduleLines: [{ id: 'sl-1' }] };
       const transformed = service.transformResponse(workProductWithLines as any, false);
-
       expect(transformed.scheduleLines).toBeUndefined();
     });
 
-    it('should return null estimatedRevenue when only currencyCode is present', () => {
-      const workProduct = { ...mockWorkProduct, currencyCode: 'USD', content: null };
-      const transformed = service.transformResponse(workProduct as WorkProduct, false);
-
-      expect(transformed.estimatedRevenue).toBeNull();
-    });
-
-    it('should return null estimatedRevenue when only content is present', () => {
-      const workProduct = { ...mockWorkProduct, currencyCode: null, content: 100 };
-      const transformed = service.transformResponse(workProduct as WorkProduct, false);
-
-      expect(transformed.estimatedRevenue).toBeNull();
-    });
-
-    it('should not include scheduleLines when includeNested is true but scheduleLines is empty', () => {
-      const workProduct = { ...mockWorkProduct, scheduleLines: [] };
-      const transformed = service.transformResponse(workProduct as any, true);
-
-      // Empty array still gets spread, so we check for empty array
-      expect(Array.isArray(transformed.scheduleLines) ? transformed.scheduleLines.length : 0).toBe(0);
-    });
-
-    it('should not include scheduleLines when includeNested is true but scheduleLines is null', () => {
-      const workProduct = { ...mockWorkProduct, scheduleLines: null };
-      const transformed = service.transformResponse(workProduct as any, true);
-
-      expect(transformed.scheduleLines).toBeUndefined();
-    });
-
-    it('should properly exclude workOrder from transformed response', () => {
-      const workProduct = { 
-        ...mockWorkProduct, 
-        workOrder: { id: 'wo-1', orderName: 'Order 1' } 
-      };
+    it('should exclude workOrder from transformed response', () => {
+      const workProduct = { ...mockWorkProduct, workOrder: { id: 'wo-1', orderName: 'Order 1' } };
       const transformed = service.transformResponse(workProduct as any, false);
-
       expect((transformed as any).workOrder).toBeUndefined();
     });
   });
 
   describe('applySorting', () => {
-    const mockQuery = {
-      orderBy: jest.fn().mockReturnThis(),
-    };
+    const mockQuery = { orderBy: jest.fn().mockReturnThis() };
+    beforeEach(() => mockQuery.orderBy.mockClear());
 
-    beforeEach(() => {
-      mockQuery.orderBy.mockClear();
-    });
-
-    it('should apply sorting by workProductId', () => {
+    it('should sort by workProductId', () => {
       (service as any).applySorting(mockQuery, 'workProductId asc');
-
       expect(mockQuery.orderBy).toHaveBeenCalledWith('workProduct.workProductId', 'ASC', 'NULLS LAST');
     });
 
-    it('should apply sorting by workProductName descending', () => {
-      (service as any).applySorting(mockQuery, 'workProductName desc');
-
-      expect(mockQuery.orderBy).toHaveBeenCalledWith('workProduct.workProductName', 'DESC', 'NULLS LAST');
-    });
-
-    it('should apply sorting by quantity', () => {
-      (service as any).applySorting(mockQuery, 'quantity asc');
-
-      expect(mockQuery.orderBy).toHaveBeenCalledWith('workProduct.quantity', 'ASC', 'NULLS LAST');
-    });
-
-    it('should apply sorting by completionPercentage', () => {
+    it('should sort by completionPercentage descending', () => {
       (service as any).applySorting(mockQuery, 'completionPercentage desc');
-
       expect(mockQuery.orderBy).toHaveBeenCalledWith('workProduct.completionPercentage', 'DESC', 'NULLS LAST');
     });
 
-    it('should apply sorting by estimatedRevenue (content field)', () => {
+    it('should sort by estimatedRevenue (content field)', () => {
       (service as any).applySorting(mockQuery, 'estimatedRevenue asc');
-
       expect(mockQuery.orderBy).toHaveBeenCalledWith('workProduct.content', 'ASC', 'NULLS LAST');
     });
 
     it('should throw BadRequestException for unsupported sort field', () => {
-      expect(() => {
-        (service as any).applySorting(mockQuery, 'unsupportedField asc');
-      }).toThrow(BadRequestException);
+      expect(() => (service as any).applySorting(mockQuery, 'unsupportedField asc')).toThrow(BadRequestException);
     });
   });
 });

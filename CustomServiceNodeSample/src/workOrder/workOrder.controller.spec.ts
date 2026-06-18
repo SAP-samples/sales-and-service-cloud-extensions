@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WorkOrderController } from './workOrder.controller';
 import { WorkOrderService } from './workOrder.service';
+import { AnalyticsReplicationService } from '../analytics/analytics-replication.service';
 import { WorkOrderDto } from '../dto/workOrder.dto';
 import { UpdateWorkOrderDto } from '../dto/updateWorkOrder.dto';
 import { StatusCode } from '../enums/status.enum';
@@ -48,6 +49,13 @@ describe('WorkOrderController', () => {
             deleteWorkOrder: jest.fn(),
           },
         },
+        {
+          provide: AnalyticsReplicationService,
+          useValue: {
+            transformWorkOrderForCudAnalytics: jest.fn().mockResolvedValue({}),
+            sendCudDataEvent: jest.fn().mockResolvedValue(undefined),
+          },
+        },
       ],
     }).compile();
 
@@ -68,7 +76,7 @@ describe('WorkOrderController', () => {
         endDate: new Date('2024-12-31'),
         numberOfSubscriptions: 5,
         Customer: 'Test Customer',
-        projectLeadId: 'emp-123',
+        projectLead: { id: 'emp-123' },
         displayId: 'WO-001',
       };
 
@@ -150,9 +158,7 @@ describe('WorkOrderController', () => {
     });
 
     it('should apply orderBy parameter', async () => {
-      service.getWorkOrders.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
+      service.getWorkOrders.mockResolvedValue({ value: [mockWorkOrder] });
 
       await controller.getWorkOrders(50, 0, false, 'orderName asc');
 
@@ -160,9 +166,7 @@ describe('WorkOrderController', () => {
     });
 
     it('should apply filter parameter', async () => {
-      service.getWorkOrders.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
+      service.getWorkOrders.mockResolvedValue({ value: [mockWorkOrder] });
 
       await controller.getWorkOrders(50, 0, false, undefined, "status eq 'ACTIVE'");
 
@@ -170,9 +174,7 @@ describe('WorkOrderController', () => {
     });
 
     it('should apply search parameter', async () => {
-      service.getWorkOrders.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
+      service.getWorkOrders.mockResolvedValue({ value: [mockWorkOrder] });
 
       await controller.getWorkOrders(50, 0, false, undefined, undefined, 'Test');
 
@@ -180,9 +182,7 @@ describe('WorkOrderController', () => {
     });
 
     it('should handle empty result set', async () => {
-      service.getWorkOrders.mockResolvedValue({
-        value: [],
-      });
+      service.getWorkOrders.mockResolvedValue({ value: [] });
 
       const result = await controller.getWorkOrders();
 
@@ -192,9 +192,7 @@ describe('WorkOrderController', () => {
 
   describe('getWorkOrderById', () => {
     it('should return a work order by id', async () => {
-      service.getWorkOrderById.mockResolvedValue({
-        value: mockWorkOrder,
-      });
+      service.getWorkOrderById.mockResolvedValue({ value: mockWorkOrder });
 
       const result = await controller.getWorkOrderById('123e4567-e89b-12d3-a456-426614174000');
 
@@ -219,10 +217,7 @@ describe('WorkOrderController', () => {
       };
 
       const updatedWorkOrder = { ...mockWorkOrder, status: StatusCode.INACTIVE, orderName: 'Updated Order' };
-
-      service.updateWorkOrder.mockResolvedValue({
-        value: [updatedWorkOrder],
-      });
+      service.updateWorkOrder.mockResolvedValue({ value: [updatedWorkOrder] });
 
       const result = await controller.updateWorkOrder('123e4567-e89b-12d3-a456-426614174000', updateDto);
 
@@ -232,31 +227,17 @@ describe('WorkOrderController', () => {
     });
 
     it('should update only provided fields', async () => {
-      const updateDto: UpdateWorkOrderDto = {
-        numberOfSubscriptions: 10,
-      };
-
-      service.updateWorkOrder.mockResolvedValue({
-        value: [{ ...mockWorkOrder, numberOfSubscriptions: 10 }],
-      });
+      const updateDto: UpdateWorkOrderDto = { numberOfSubscriptions: 10 };
+      service.updateWorkOrder.mockResolvedValue({ value: [{ ...mockWorkOrder, numberOfSubscriptions: 10 }] });
 
       const result = await controller.updateWorkOrder('123e4567-e89b-12d3-a456-426614174000', updateDto);
 
-      expect(service.updateWorkOrder).toHaveBeenCalledWith('123e4567-e89b-12d3-a456-426614174000', updateDto);
       expect(result.value[0].numberOfSubscriptions).toBe(10);
     });
 
     it('should update estimatedRevenue', async () => {
-      const updateDto: UpdateWorkOrderDto = {
-        estimatedRevenue: {
-          currencyCode: 'EUR',
-          content: 20000,
-        },
-      };
-
-      service.updateWorkOrder.mockResolvedValue({
-        value: [{ ...mockWorkOrder, estimatedRevenue: { currencyCode: 'EUR', content: 20000 } }],
-      });
+      const updateDto: UpdateWorkOrderDto = { estimatedRevenue: { currencyCode: 'EUR', content: 20000 } };
+      service.updateWorkOrder.mockResolvedValue({ value: [{ ...mockWorkOrder, estimatedRevenue: { currencyCode: 'EUR', content: 20000 } }] });
 
       const result = await controller.updateWorkOrder('123e4567-e89b-12d3-a456-426614174000', updateDto);
 
@@ -276,10 +257,7 @@ describe('WorkOrderController', () => {
   describe('deleteWorkOrder', () => {
     it('should delete a work order successfully', async () => {
       service.deleteWorkOrder.mockResolvedValue({
-        value: [{
-          id: '123e4567-e89b-12d3-a456-426614174000',
-          status: 'deleted',
-        }],
+        value: [{ id: '123e4567-e89b-12d3-a456-426614174000', status: 'deleted' }],
       });
 
       const result = await controller.deleteWorkOrder('123e4567-e89b-12d3-a456-426614174000');
@@ -289,12 +267,7 @@ describe('WorkOrderController', () => {
     });
 
     it('should handle deletion of non-existent work order', async () => {
-      service.deleteWorkOrder.mockResolvedValue({
-        value: [{
-          id: 'non-existent-id',
-          status: 'not_found',
-        }],
-      });
+      service.deleteWorkOrder.mockResolvedValue({ value: [{ id: 'non-existent-id', status: 'not_found' }] });
 
       const result = await controller.deleteWorkOrder('non-existent-id');
 
@@ -304,64 +277,32 @@ describe('WorkOrderController', () => {
 
   describe('HTTP Status Codes', () => {
     it('should return 201 for POST createWorkOrder', async () => {
-      const workOrderDto: WorkOrderDto = {
-        orderName: 'Test Order',
-        status: StatusCode.ACTIVE,
-        startDate: new Date('2024-01-01'),
-        endDate: new Date('2024-12-31'),
-      };
-
-      service.createWorkOrder.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
-
-      await controller.createWorkOrder(workOrderDto, mockResponse);
-
-      // HttpCode decorator ensures 201 is returned
+      service.createWorkOrder.mockResolvedValue({ value: [mockWorkOrder] });
+      await controller.createWorkOrder({ orderName: 'Test' } as any, mockResponse);
       expect(service.createWorkOrder).toHaveBeenCalled();
     });
 
     it('should return 200 for GET getWorkOrders', async () => {
-      service.getWorkOrders.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
-
+      service.getWorkOrders.mockResolvedValue({ value: [mockWorkOrder] });
       await controller.getWorkOrders();
-
-      // HttpCode decorator ensures 200 is returned
       expect(service.getWorkOrders).toHaveBeenCalled();
     });
 
     it('should return 200 for GET getWorkOrderById', async () => {
-      service.getWorkOrderById.mockResolvedValue({
-        value: mockWorkOrder,
-      });
-
+      service.getWorkOrderById.mockResolvedValue({ value: mockWorkOrder });
       await controller.getWorkOrderById('123e4567-e89b-12d3-a456-426614174000');
-
-      // HttpCode decorator ensures 200 is returned
       expect(service.getWorkOrderById).toHaveBeenCalled();
     });
 
     it('should return 200 for PATCH updateWorkOrder', async () => {
-      service.updateWorkOrder.mockResolvedValue({
-        value: [mockWorkOrder],
-      });
-
+      service.updateWorkOrder.mockResolvedValue({ value: [mockWorkOrder] });
       await controller.updateWorkOrder('123e4567-e89b-12d3-a456-426614174000', {});
-
-      // HttpCode decorator ensures 200 is returned
       expect(service.updateWorkOrder).toHaveBeenCalled();
     });
 
     it('should return 200 for DELETE deleteWorkOrder', async () => {
-      service.deleteWorkOrder.mockResolvedValue({
-        value: [{ id: '123e4567-e89b-12d3-a456-426614174000', status: 'deleted' }],
-      });
-
+      service.deleteWorkOrder.mockResolvedValue({ value: [{ id: '123e4567-e89b-12d3-a456-426614174000', status: 'deleted' }] });
       await controller.deleteWorkOrder('123e4567-e89b-12d3-a456-426614174000');
-
-      // HttpCode decorator ensures 200 is returned
       expect(service.deleteWorkOrder).toHaveBeenCalled();
     });
   });

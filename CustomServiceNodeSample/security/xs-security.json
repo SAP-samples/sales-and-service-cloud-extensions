@@ -1,5 +1,5 @@
 {
-  "xsappname": "work-order-node-srv",
+  "xsappname": "work-order-node-service",
   "tenant-mode": "dedicated",
   "oauth2-configuration": {
     "redirect-uris": [

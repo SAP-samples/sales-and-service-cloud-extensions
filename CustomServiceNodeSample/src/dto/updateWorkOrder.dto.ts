@@ -52,6 +52,24 @@ export class UpdateWorkOrderDto {
   numberOfSubscriptions?: number;
 
   @IsOptional()
-  @IsUUID()
-  projectLeadId?: string;
+  @IsNumber()
+  priority?: number;
+
+  @IsOptional()
+  projectLead?: { id: string };
+
+  @IsOptional()
+  account?: { id: string };
+
+  @IsOptional()
+  @IsString()
+  caseDisplayId?: string;
+
+  @IsOptional()
+  @IsString()
+  displayId?: string;
+
+  @IsOptional()
+  @IsString()
+  Customer?: string;
 }

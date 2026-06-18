@@ -47,29 +47,37 @@ describe('ScheduleLineNestedController', () => {
   });
 
   describe('getAllScheduleLines', () => {
-    it('should return schedule lines', async () => {
+    it('should return schedule lines with pagination params', async () => {
       service.findAll.mockResolvedValue({ value: [mockScheduleLine] });
 
-      const result = await controller.getAllScheduleLines('wo-123', 'wp-123', undefined);
+      const result = await controller.getAllScheduleLines('wo-123', 'wp-123', undefined, undefined, undefined, undefined);
 
-      expect(service.findAll).toHaveBeenCalledWith('wp-123', undefined);
+      expect(service.findAll).toHaveBeenCalledWith('wp-123', undefined, undefined, undefined, undefined);
       expect(result.value).toHaveLength(1);
+    });
+
+    it('should pass top/skip/count/orderby to service', async () => {
+      service.findAll.mockResolvedValue({ value: [mockScheduleLine], count: 1 });
+
+      await controller.getAllScheduleLines('wo-123', 'wp-123', 10, 5, true, 'date desc');
+
+      expect(service.findAll).toHaveBeenCalledWith('wp-123', 10, 5, true, 'date desc');
     });
   });
 
   describe('getScheduleLine', () => {
-    it('should return one schedule line', async () => {
+    it('should return one schedule line with workProductId validation', async () => {
       service.findOne.mockResolvedValue({ value: mockScheduleLine });
 
       const result = await controller.getScheduleLine('wo-123', 'wp-123', 'sl-123');
 
-      expect(service.findOne).toHaveBeenCalledWith('sl-123');
+      expect(service.findOne).toHaveBeenCalledWith('sl-123', 'wp-123');
       expect(result.value.id).toBe('sl-123');
     });
   });
 
   describe('createScheduleLine', () => {
-    it('should create a schedule line', async () => {
+    it('should create a schedule line and set Location header', async () => {
       const mockRes = { header: jest.fn() } as any;
       service.create.mockResolvedValue({ value: [mockScheduleLine] });
 
@@ -81,22 +89,22 @@ describe('ScheduleLineNestedController', () => {
   });
 
   describe('updateScheduleLine', () => {
-    it('should update a schedule line', async () => {
+    it('should update a schedule line with workProductId validation', async () => {
       service.update.mockResolvedValue({ value: mockScheduleLine });
 
-      const result = await controller.updateScheduleLine('wo-123', 'wp-123', 'sl-123', {});
+      await controller.updateScheduleLine('wo-123', 'wp-123', 'sl-123', {});
 
-      expect(service.update).toHaveBeenCalledWith('sl-123', {});
+      expect(service.update).toHaveBeenCalledWith('sl-123', {}, 'wp-123');
     });
   });
 
   describe('deleteScheduleLine', () => {
-    it('should delete a schedule line', async () => {
+    it('should delete a schedule line with workProductId validation', async () => {
       service.delete.mockResolvedValue({ value: [{ id: 'sl-123', status: 'deleted' }] });
 
       const result = await controller.deleteScheduleLine('wo-123', 'wp-123', 'sl-123');
 
-      expect(service.delete).toHaveBeenCalledWith('sl-123');
+      expect(service.delete).toHaveBeenCalledWith('sl-123', 'wp-123');
       expect(result.value[0].status).toBe('deleted');
     });
   });

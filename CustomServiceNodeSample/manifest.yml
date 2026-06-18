@@ -19,8 +19,17 @@ applications:
       - <your-hana-db-instance>      # BTP HANA service instance name
       - <your-xsuaa-instance>         # BTP XSUAA service instance name
       - <your-destination-instance>   # BTP Destination service instance name
+    env:
+      # Analytics Integration (optional)
+      # Maps each SSC tenant hostname to its analytics source ID and BTP destination
+      # Remove or leave empty if not using analytics
+      # Format: { "<ssc-tenant-hostname>": { "sourceId": "<analytics-source-id>", "destination": "<btp-destination-name>" } }
+      TENANT_CONFIG_MAP: >
+        {
+          "<your-ssc-tenant-hostname>": { "sourceId": "<your-analytics-source-id>", "destination": "<your-analytics-destination>" }
+        }
     timeout: 300
-  
+
   # Application Router for authentication
   - name: work-order-approuter
     # Replace with your actual approuter route

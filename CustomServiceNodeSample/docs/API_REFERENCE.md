@@ -5,15 +5,10 @@
 - **Production**: `https://<your-approuter-name>.cfapps.<region>.hana.ondemand.com`
 
 ## Authentication
-
-All endpoints require JWT Bearer token in production environments:
+All endpoints require JWT Bearer token:
 ```
 Authorization: Bearer <JWT_TOKEN>
 ```
-
-**Production**: JWT token is required in the Authorization header. Requests without a valid token will receive a `401 Unauthorized` response.
-
-**Development**: For local testing, the application can be configured to work without JWT tokens using mock sessions (see `env.example` for configuration).
 
 ---
 
@@ -28,17 +23,17 @@ Authorization: Bearer <JWT_TOKEN>
 
 ### Work Products (Nested)
 - `POST /work-order-service/workOrders/{workOrderId}/workProducts` - Create work product
-- `GET /work-order-service/workOrders/{workOrderId}/workProducts` - List work products
-- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}` - Get work product by ID
-- `PATCH /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}` - Update work product
-- `DELETE /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}` - Delete work product
+- `GET /work-order-service/workOrders/{workOrderId}/workProducts` - List work products (supports $top, $skip, $count, $orderby)
+- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{id}` - Get work product by ID
+- `PATCH /work-order-service/workOrders/{workOrderId}/workProducts/{id}` - Update work product
+- `DELETE /work-order-service/workOrders/{workOrderId}/workProducts/{id}` - Delete work product
 
 ### Schedule Lines (Nested)
 - `POST /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines` - Create schedule line
-- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines` - List schedule lines (supports $orderby)
-- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{scheduleLineId}` - Get schedule line by ID
-- `PATCH /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{scheduleLineId}` - Update schedule line
-- `DELETE /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{scheduleLineId}` - Delete schedule line
+- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines` - List schedule lines (supports $top, $skip, $count, $orderby)
+- `GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{id}` - Get schedule line by ID
+- `PATCH /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{id}` - Update schedule line
+- `DELETE /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines/{id}` - Delete schedule line
 
 ---
 
@@ -210,8 +205,31 @@ Response: `200 OK`
 GET /work-order-service/workOrders?$top=20&$skip=0&$count=true&$orderby=startDate desc&$filter=status eq 'ACTIVE'&$search=ACME
 ```
 
-### Schedule Lines
-- `$orderby` - Sort schedule lines
+### Work Products (Nested)
+- `$top` - Limit results (default: 50, max: 1000)
+- `$skip` - Skip results for pagination
+- `$count` - Include total count (true/false)
+- `$orderby` - Sort (e.g., `workProductId asc`, `status desc`)
+
+**Sortable fields**: `workProductId`, `status`, `quantity`, `completionPercentage`, `productCategory`, `productTypeCode`, `createdAt`, `updatedAt`
+
+**Example:**
+```
+GET /work-order-service/workOrders/{workOrderId}/workProducts?$top=10&$skip=0&$count=true&$orderby=completionPercentage desc
+```
+
+### Schedule Lines (Nested)
+- `$top` - Limit results (default: 50, max: 1000)
+- `$skip` - Skip results for pagination
+- `$count` - Include total count (true/false)
+- `$orderby` - Sort (e.g., `date asc`, `requestedQuantity desc`)
+
+**Sortable fields**: `date`, `requestedQuantity`, `confirmedQuantity`, `requestedEndDate`, `status`, `displayId`, `createdAt`, `updatedAt`
+
+**Example:**
+```
+GET /work-order-service/workOrders/{workOrderId}/workProducts/{workProductId}/scheduleLines?$top=20&$skip=0&$count=true&$orderby=date desc
+```
 
 ---
 
@@ -264,7 +282,7 @@ All responses follow this structure:
 ```json
 {
   "value": [ ... ],
-  "count": 123 
+  "count": 123  // Only when $count=true
 }
 ```
 
@@ -275,3 +293,34 @@ Standard HTTP status codes:
 - `401 Unauthorized` - Missing/invalid JWT
 - `404 Not Found` - Resource not found
 - `500 Internal Server Error` - Server error
+
+---
+
+## Analytics (Optional)
+
+> Analytics endpoints are only available when `SSC_TENANT_SOURCE_ID` and `SSC_ANALYTICS_DESTINATION` are configured. See [Analytics Integration](../README.md#analytics-integration-optional) in the README.
+
+### Trigger Data Export
+`POST /work-order-service/workOrders/dataExportRequest`
+
+Initiates a full bulk export of all Work Order data to the analytics pipeline. The export runs asynchronously — the endpoint returns immediately while events are fired in the background.
+
+**Request Body:**
+```json
+{
+  "dataRequestId": "<unique-request-id-uuid>",
+  "serviceFullName": "customer.ssc.service.workOrderService",
+  "entityFullName": "customer.ssc.workorderservice.entity.workOrder"
+}
+```
+
+**Response:** `204 No Content`
+
+**Event sequence fired:**
+1. `PLAN` event — announces total record count
+2. `DATA` event — one per Work Order record with full payload
+3. `SUMMARY` event — reports final status (`SUCCESS` or `ABORTED`)
+
+All events use type `customer.ssc.workorderservice.event.workOrderCurrentImageData`.
+
+For full event payload specifications see [ANALYTICS_EVENT_PAYLOADS.md](./ANALYTICS_EVENT_PAYLOADS.md).

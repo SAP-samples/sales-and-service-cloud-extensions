@@ -35,9 +35,11 @@ export class ScheduleLine {
   @Column({ type: 'varchar', length: 50, nullable: true })
   status: string;
 
+  // Foreign key to Work Product
   @Column({ type: 'uuid', nullable: false })
   workProductId: string;
 
+  // Relationship to Work Product (Many schedule lines belong to one work product)
   @ManyToOne(() => WorkProduct, (workProduct) => workProduct.scheduleLines, {
     onDelete: 'CASCADE',
   })
