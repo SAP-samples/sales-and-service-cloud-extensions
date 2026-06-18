@@ -1,0 +1,60 @@
+{
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "source": "^/(.*)$",
+      "destination": "work-order-destination",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
+    },
+    {
+      "source": "^/app/(.*)$",
+      "target": "$1",
+      "localDir": ".",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    },
+    {
+      "source": "^/appconfig/",
+      "localDir": ".",
+      "cacheControl": "no-cache, no-store, must-revalidate"
+    }
+  ],
+  "cors": [
+    {
+      "uriPattern": "(.*)",
+      "allowedMethods": [
+        "GET",
+        "POST",
+        "OPTIONS",
+        "PATCH",
+        "DELETE"
+      ],
+      "allowedOrigin": [
+        {
+          "host": "<your-ssc-tenant>.crm.cloud.sap",
+          "protocol": "https"
+        },
+        {
+          "host": "localhost",
+          "protocol": "http",
+          "port": 4200
+        }
+      ],
+      "allowedHeaders": [
+        "Accept",
+        "Authorization",
+        "Content-Type",
+        "X-CSRF-Token",
+        "x-csrf-token",
+        "Access-Control-Allow-Credentials",
+        "sap-c4c-rawagent",
+        "If-Match"
+      ],
+      "exposeHeaders": [
+        "Etag",
+        "X-Csrf-Token"
+      ],
+      "allowedCredentials": true
+    }
+  ]
+}

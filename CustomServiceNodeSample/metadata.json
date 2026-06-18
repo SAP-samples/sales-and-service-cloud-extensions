@@ -1,0 +1,1263 @@
+{
+    "service": {
+        "name": "workOrder",
+        "title": "workOrder",
+        "description": "Do Not Delete - This service is for Work Order management including work products and schedule lines",
+        "authorizationRelevant": true
+    },
+    "entities": [
+        {
+            "name": "workOrder",
+            "label": "Work Order",
+            "entityType": "BUSINESS",
+            "objectTypeCode": "CUS614",
+            "root": true,
+            "attributes": [
+                {
+                    "name": "id",
+                    "label": "Work Order ID",
+                    "dataType": "STRING",
+                    "dataFormat": "UUID",
+                    "nullable": false,
+                    "creatable": false,
+                    "updatable": false,
+                    "filterable": true,
+                    "searchable": true,
+                    "keyType": "PRIMARY",
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "orderName",
+                    "label": "Order Name",
+                    "dataType": "STRING",
+                    "description": true,
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "displayId",
+                    "label": "Display ID",
+                    "dataType": "STRING",
+                    "dataFormat": "ALPHANUMERIC",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "displayId": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "dataType": "STRING",
+                    "dataFormat": "CODE",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        }
+                    ],
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "startDate",
+                    "label": "Start Date",
+                    "dataType": "DATETIME",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "endDate",
+                    "label": "End Date",
+                    "dataType": "DATETIME",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "estimatedRevenue",
+                    "label": "Estimated Revenue",
+                    "dataType": "OBJECT",
+                    "dataFormat": "AMOUNT",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "objectDefinition": [
+                        {
+                            "name": "content",
+                            "dataType": "NUMBER",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": false,
+                            "label": "Amount",
+                            "dataFormat": "DOUBLE",
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "currencyCode",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": false,
+                            "label": "Currency",
+                            "dataFormat": "CODE",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "targetAttribute": "code",
+                                "targetEntity": "sap.crm.i18nservice.entity.currency",
+                                "keyGroup": "currency",
+                                "targetService": "sap.crm.i18nservice",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
+                                "associationType": "ASSOCIATION",
+                                "sourceAttribute": "estimatedRevenue.currencyCode"
+                            },
+                            "analyticsRelevant": true
+                        }
+                    ],
+                    "structReference": "sap.ssc.common.struct.amount",
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "numberOfSubscriptions",
+                    "label": "Number of Subscriptions",
+                    "dataType": "INTEGER",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "priority",
+                    "label": "Priority",
+                    "dataType": "NUMBER",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "projectLead",
+                    "dataType": "OBJECT",
+                    "creatable": true,
+                    "updatable": true,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": false,
+                    "searchable": false,
+                    "label": "Project Lead",
+                    "objectDefinition": [
+                        {
+                            "name": "id",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": false,
+                            "filterable": false,
+                            "searchable": false,
+                            "label": "Project Lead ID",
+                            "dataFormat": "UUID",
+                            "descriptionAttribute": "displayId",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "targetAttribute": "id",
+                                "targetEntity": "sap.crm.md.employeeservice.entity.employee",
+                                "keyGroup": "projectLead",
+                                "targetService": "sap.crm.md.service.employeeService",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
+                                "associationType": "ASSOCIATION",
+                                "sourceAttribute": "projectLead.id"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "displayId",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "displayId": true,
+                            "label": "Employee Display ID",
+                            "dataFormat": "ALPHANUMERIC",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "displayId",
+                                "keyGroup": "projectLead",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "formattedName",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "label": "Employee Name",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "formattedName",
+                                "keyGroup": "projectLead",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        }
+                    ],
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "account",
+                    "dataType": "OBJECT",
+                    "creatable": true,
+                    "updatable": true,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": false,
+                    "searchable": false,
+                    "label": "Account",
+                    "objectDefinition": [
+                        {
+                            "name": "id",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": false,
+                            "filterable": false,
+                            "searchable": false,
+                            "label": "Account ID",
+                            "dataFormat": "UUID",
+                            "descriptionAttribute": "displayId",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "targetAttribute": "id",
+                                "targetEntity": "sap.crm.md.accountservice.entity.account",
+                                "keyGroup": "account",
+                                "targetService": "sap.crm.md.service.accountService",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder",
+                                "associationType": "ASSOCIATION",
+                                "sourceAttribute": "account.id"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "displayId",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "displayId": true,
+                            "label": "Account Display ID",
+                            "dataFormat": "ALPHANUMERIC",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "displayId",
+                                "keyGroup": "account",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "formattedName",
+                            "dataType": "STRING",
+                            "creatable": false,
+                            "updatable": false,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": true,
+                            "label": "Account Name",
+                            "objectReference": {
+                                "associationType": "REFERENCE",
+                                "targetAttribute": "formattedName",
+                                "keyGroup": "account",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workOrder"
+                            },
+                            "analyticsRelevant": true
+                        }
+                    ],
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "Customer",
+                    "label": "Customer",
+                    "dataType": "STRING",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "caseDisplayId",
+                    "label": "Case Display ID",
+                    "dataType": "STRING",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "workProducts",
+                    "dataType": "ARRAY",
+                    "creatable": true,
+                    "updatable": true,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": true,
+                    "searchable": true,
+                    "label": "Work Products",
+                    "itemDataType": "OBJECT",
+                    "objectDefinition": [],
+                    "entityReference": "customer.ssc.workOrderservice.entity.workProducts",
+                    "analyticsRelevant": true
+                }
+            ],
+            "creatable": true,
+            "updatable": true,
+            "analyticsRelevant": true,
+            "globalSearchEnabled": true,
+            "anchors": [
+                {
+                    "id": "d86e380c-5df0-4100-bbbf-ccf6203190d6",
+                    "type": "AttributesAnchor",
+                    "ref": "$.attributes"
+                },
+                {
+                    "id": "8268c26c-0c0e-46dc-854e-0530f10b36c4",
+                    "type": "CustomLogicsAnchor"
+                }
+            ]
+        },
+        {
+            "name": "workProducts",
+            "label": "Work Products E2E",
+            "analyticsRelevant": true,
+            "entityType": "BUSINESS",
+            "attributes": [
+                {
+                    "name": "id",
+                    "dataType": "STRING",
+                    "creatable": false,
+                    "updatable": false,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": true,
+                    "searchable": true,
+                    "label": "Technical ID",
+                    "dataFormat": "UUID",
+                    "keyType": "PRIMARY",
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "workProductId",
+                    "label": "Work Product ID",
+                    "displayId": true,
+                    "dataType": "STRING",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "workProductName",
+                    "label": "Work Product Name",
+                    "dataType": "STRING",
+                    "description": true,
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "customizationDetails",
+                    "label": "Customization Details",
+                    "dataType": "STRING",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "dataType": "STRING",
+                    "dataFormat": "CODE",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        }
+                    ],
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "estimatedRevenue",
+                    "label": "Estimated Revenue",
+                    "dataType": "OBJECT",
+                    "dataFormat": "AMOUNT",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "objectDefinition": [
+                        {
+                            "name": "content",
+                            "dataType": "NUMBER",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": false,
+                            "label": "Amount",
+                            "dataFormat": "DOUBLE",
+                            "analyticsRelevant": true
+                        },
+                        {
+                            "name": "currencyCode",
+                            "dataType": "STRING",
+                            "creatable": true,
+                            "updatable": true,
+                            "nullable": true,
+                            "sortable": true,
+                            "filterable": true,
+                            "searchable": false,
+                            "label": "Currency",
+                            "dataFormat": "CODE",
+                            "keyType": "FOREIGN",
+                            "objectReference": {
+                                "targetAttribute": "code",
+                                "targetEntity": "sap.crm.i18nservice.entity.currency",
+                                "keyGroup": "currency",
+                                "targetService": "sap.crm.i18nservice",
+                                "sourceEntity": "customer.ssc.workOrderservice.entity.workProducts",
+                                "associationType": "ASSOCIATION",
+                                "sourceAttribute": "estimatedRevenue.currencyCode"
+                            },
+                            "analyticsRelevant": true
+                        }
+                    ],
+                    "structReference": "sap.ssc.common.struct.amount",
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "scheduleLines",
+                    "dataType": "ARRAY",
+                    "creatable": true,
+                    "updatable": true,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": false,
+                    "searchable": false,
+                    "label": "Schedule Lines",
+                    "itemDataType": "OBJECT",
+                    "objectDefinition": [],
+                    "entityReference": "customer.ssc.workOrderservice.entity.scheduleLines",
+                    "analyticsRelevant": true
+                }
+            ],
+            "creatable": true,
+            "updatable": true
+        },
+        {
+            "name": "scheduleLines",
+            "label": "Schedule Lines E2E",
+            "analyticsRelevant": true,
+            "entityType": "BUSINESS",
+            "attributes": [
+                {
+                    "name": "id",
+                    "dataType": "STRING",
+                    "creatable": false,
+                    "updatable": false,
+                    "nullable": true,
+                    "sortable": false,
+                    "filterable": true,
+                    "searchable": false,
+                    "label": "Schedule Line ID",
+                    "dataFormat": "UUID",
+                    "keyType": "PRIMARY",
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "date",
+                    "label": "Date",
+                    "dataType": "DATETIME",
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "requestedQuantity",
+                    "label": "Requested Quantity",
+                    "dataType": "NUMBER",
+                    "dataFormat": "FLOAT",
+                    "nullable": false,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": false,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "confirmedQuantity",
+                    "label": "Confirmed Quantity",
+                    "dataType": "NUMBER",
+                    "dataFormat": "DOUBLE",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": false,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "requestedEndDate",
+                    "label": "Requested End Date",
+                    "dataType": "DATETIME",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "status",
+                    "label": "Status",
+                    "dataType": "STRING",
+                    "dataFormat": "CODE",
+                    "nullable": true,
+                    "creatable": true,
+                    "updatable": true,
+                    "filterable": true,
+                    "searchable": true,
+                    "sortable": true,
+                    "enumOptions": [
+                        {
+                            "code": "ACTIVE",
+                            "description": "Active"
+                        },
+                        {
+                            "code": "INACTIVE",
+                            "description": "Inactive"
+                        }
+                    ],
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "createdAt",
+                    "label": "Created At",
+                    "dataType": "DATETIME",
+                    "nullable": false,
+                    "creatable": false,
+                    "updatable": false,
+                    "filterable": true,
+                    "searchable": false,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                },
+                {
+                    "name": "updatedAt",
+                    "label": "Updated At",
+                    "dataType": "DATETIME",
+                    "nullable": false,
+                    "creatable": false,
+                    "updatable": false,
+                    "filterable": true,
+                    "searchable": false,
+                    "sortable": true,
+                    "analyticsRelevant": true
+                }
+            ],
+            "creatable": true,
+            "updatable": true
+        }
+    ],
+    "events": [
+        {
+            "name": "workOrderCreate",
+            "entityReference": "workOrder",
+            "trigger": "CREATE"
+        },
+        {
+            "name": "workOrderUpdate",
+            "entityReference": "workOrder",
+            "trigger": "UPDATE"
+        },
+        {
+            "name": "workOrderDelete",
+            "entityReference": "workOrder",
+            "trigger": "DELETE"
+        },
+        {
+            "name": "workOrderCurrentImageData",
+            "entityReference": "workOrder",
+            "trigger": "DATA_EXPORT_REQUEST"
+        }
+    ],
+    "apis": [
+        {
+            "name": "workOrderApi",
+            "description": "API for managing work orders",
+            "title": "Work Order API",
+            "apiPath": "/work-order-service/workOrders",
+            "entityReference": "workOrder",
+            "apiStyle": "REST", 
+            "operations": [
+                {
+                    "id": "readWorkOrder",
+                    "path": "/",
+                    "method": "QUERY",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "readWorkOrder",
+                    "path": "/{id}",
+                    "method": "READ",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "id",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "createWorkOrder",
+                    "path": "/{id}",
+                    "method": "PATCH",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "id",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "deleteWorkOrder",
+                    "path": "/{id}",
+                    "method": "DELETE",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "id",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "replicateWorkOrder",
+                    "path": "/replicateData",
+                    "method": "POST",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "201 Created",
+                            "responseCode": "201"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "workProductsApi",
+            "description": "API for managing work products",
+            "title": "Work Products API",
+            "apiPath": "/work-order-service/workOrders/{id}/workProducts",
+            "entityReference": "workProducts",
+            "apiStyle": "REST", 
+            "operations": [
+                {
+                    "id": "readWorkProduct",
+                    "path": "/",
+                    "method": "QUERY",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "readWorkProduct",
+                    "path": "/{workProductId}",
+                    "method": "READ",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "workProductId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "createWorkProduct",
+                    "path": "/",
+                    "method": "POST",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "201 Created",
+                            "responseCode": "201"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "updateWorkProduct",
+                    "path": "/{workProductId}",
+                    "method": "PATCH",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "workProductId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "deleteWorkProduct",
+                    "path": "/{workProductId}",
+                    "method": "DELETE",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "workProductId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "scheduleLinesApi",
+            "description": "API for managing schedule lines",
+            "title": "Schedule Lines API",
+            "apiPath": "/work-order-service/workOrders/{id}/workProducts/{workProductId}/scheduleLines",
+            "entityReference": "scheduleLines",
+            "apiStyle": "REST", 
+            "operations": [
+                {
+                    "id": "readScheduleLine",
+                    "path": "/",
+                    "method": "QUERY",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "readScheduleLine",
+                    "path": "/{scheduleLineId}",
+                    "method": "READ",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "scheduleLineId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "createScheduleLine",
+                    "path": "/",
+                    "method": "POST",
+                    "request": {
+                        "pathVariables": []
+                    },
+                    "responses": [
+                        {
+                            "description": "201 Created",
+                            "responseCode": "201"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "updateScheduleLine",
+                    "path": "/{scheduleLineId}",
+                    "method": "PATCH",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "scheduleLineId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                },
+                {
+                    "id": "deleteScheduleLine",
+                    "path": "/{scheduleLineId}",
+                    "method": "DELETE",
+                    "request": {
+                        "pathVariables": [
+                            {
+                                "name": "scheduleLineId",
+                                "dataType": "STRING",
+                                "dataFormat": "UUID"
+                            }
+                        ]
+                    },
+                    "responses": [
+                        {
+                            "description": "200 OK",
+                            "responseCode": "200"
+                        },
+                        {
+                            "description": "400 BAD_REQUEST",
+                            "responseCode": "400"
+                        },
+                        {
+                            "description": "401 UNAUTHORIZED",
+                            "responseCode": "401"
+                        },
+                        {
+                            "description": "403 FORBIDDEN",
+                            "responseCode": "403"
+                        },
+                        {
+                            "description": "404 NOT_FOUND",
+                            "responseCode": "404"
+                        },
+                        {
+                            "description": "500 INTERNAL_SERVER_ERROR",
+                            "responseCode": "500"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
