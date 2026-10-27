@@ -31,7 +31,7 @@
       ],
       "allowedOrigin": [
         {
-          "host": "<your-ssc-tenant>.cxm-salescloud.com",
+          "host": "<your-ssc-tenant>.crm.cloud.sap",
           "protocol": "https"
         },
         {
@@ -46,7 +46,6 @@
         "Content-Type",
         "X-CSRF-Token",
         "x-csrf-token",
-        "Accept",
         "Access-Control-Allow-Credentials",
         "sap-c4c-rawagent",
         "If-Match"

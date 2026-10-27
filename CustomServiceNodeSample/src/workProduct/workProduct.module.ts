@@ -5,13 +5,25 @@ import { WorkOrder } from '../entities/workOrder.entity';
 import { ScheduleLine } from '../entities/scheduleLine.entity';
 import { WorkProductNestedController } from './workProduct.controller';
 import { WorkProductService } from './workProduct.service';
+import { EventServiceClient } from '../events/event-service.client';
+import { WorkOrderCudEventService } from '../events/workOrder-cud-event.service';
+import { WorkOrderEventTransformer } from '../events/workOrder-event.transformer';
+import { EmployeeModule } from '../employee/employee.module';
+import { AccountModule } from '../account/account.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([WorkProduct, WorkOrder, ScheduleLine]),
+    EmployeeModule,
+    AccountModule,
   ],
   controllers: [WorkProductNestedController],
-  providers: [WorkProductService],
+  providers: [
+    WorkProductService,
+    EventServiceClient,
+    WorkOrderCudEventService,
+    WorkOrderEventTransformer,
+  ],
   exports: [WorkProductService],
 })
 export class WorkProductModule {}
