@@ -1,3 +1,4 @@
+// src/common/middleware/set-headers.middleware.ts
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 

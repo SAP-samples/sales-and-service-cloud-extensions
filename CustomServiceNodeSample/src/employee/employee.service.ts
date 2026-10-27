@@ -66,6 +66,61 @@ export class EmployeeService {
     }
   }
 
+  async getEmployeeByDisplayId(displayId: string): Promise<Employee | null> {
+    try {
+      if (!this.userToken) return null;
+
+      const responseData = await EmployeeApi.queryemployeeserviceEmployee({
+        $filter: `displayId eq '${displayId}'`
+      }).execute({
+        destinationName: this.sscDestination,
+        jwt: this.userToken,
+      });
+
+      if (responseData.value && responseData.value.length > 0) {
+        const employee = responseData.value[0];
+        return {
+          id: employee.id,
+          formattedName: employee.formattedName,
+          displayId: employee.displayId || employee.employeeDisplayId,
+        };
+      }
+      return null;
+    } catch (error) {
+      this.logger.error(`Error fetching employee by displayId ${displayId}: ${error.message}`);
+      return null;
+    }
+  }
+
+  async searchEmployeesByDisplayId(search: string): Promise<Employee[]> {
+    try {
+      if (!this.userToken) return [];
+
+      this.logger.log(`Searching employees by displayId containing: ${search}`);
+
+      const responseData = await EmployeeApi.queryemployeeserviceEmployee({
+        $filter: `displayId eq '${search}'`
+      }).execute({
+        destinationName: this.sscDestination,
+        jwt: this.userToken,
+      });
+
+      this.logger.log(`Employee search returned ${responseData.value?.length ?? 0} results`);
+
+      if (responseData.value) {
+        return responseData.value.map(employee => ({
+          id: employee.id,
+          formattedName: employee.formattedName,
+          displayId: employee.displayId || employee.employeeDisplayId,
+        }));
+      }
+      return [];
+    } catch (error) {
+      this.logger.error(`Error searching employees by displayId ${search}: ${error.message}`);
+      return [];
+    }
+  }
+
   async getAllEmployees(): Promise<Employee[]> {
     try {
       this.logger.log('Fetching all employees');

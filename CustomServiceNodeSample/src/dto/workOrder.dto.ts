@@ -46,6 +46,10 @@ export class WorkOrderDto {
   numberOfSubscriptions?: number;
 
   @IsOptional()
+  @IsNumber()
+  priority?: number;
+
+  @IsOptional()
   @IsString()
   currencyCode?: string;
 
@@ -53,8 +57,10 @@ export class WorkOrderDto {
   content?: number;
 
   @IsOptional()
-  @IsUUID()
-  projectLeadId?: string;
+  projectLead?: { id: string };
+
+  @IsOptional()
+  account?: { id: string };
 
   @IsOptional()
   @IsString()
@@ -63,6 +69,10 @@ export class WorkOrderDto {
   @IsOptional()
   @IsString()
   displayId?: string;
+
+  @IsOptional()
+  @IsString()
+  caseDisplayId?: string;
 
   @IsOptional()
   @IsArray()

@@ -42,17 +42,26 @@ export class WorkOrder {
   @Column({ nullable: true })
   orderName?: string;
 
-  @Column({ nullable: true, type: 'int' })
+  @Column({ type: 'integer', nullable: true })
   numberOfSubscriptions?: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  priority?: number;
 
   @Column({ nullable: true, type: 'uuid' })
   projectLeadId?: string;
+
+  @Column({ nullable: true, type: 'uuid' })
+  accountId?: string;
 
   @Column({ nullable: true })
   Customer?: string;
 
   @Column({ nullable: true })
   displayId?: string;
+
+  @Column({ nullable: true })
+  caseDisplayId?: string;
 
   @CreateDateColumn()
   createdAt: Date;

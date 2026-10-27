@@ -13,7 +13,7 @@ export class PaginationUtils {
    */
   static validatePagination(top?: number, skip?: number): { top: number; skip: number } {
     // Set default limit if not provided
-    if (!top || top <= 0) {
+    if (top === undefined || top === null || top <= 0) {
       top = this.DEFAULT_LIMIT;
     }
     

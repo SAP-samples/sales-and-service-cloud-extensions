@@ -22,6 +22,7 @@
 - [API Usage Examples](#api-usage-examples)
 - [Architecture & Technical Design](#architecture--technical-design)
 - [Testing](#testing)
+- [Events & Analytics Integration](#events--analytics-integration-optional)
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -33,7 +34,7 @@
 **Why Use Custom Services?**
 - **Extend Beyond Standard**: Add custom business objects and logic not available in SSC V2 out-of-the-box
 - **Auto-Generated UIs**: SSC V2 automatically creates List views, Detail views, Quick Create, and Quick View screens for your entities
-- **Native Integration**: Leverage built-in SSC V2 features like autoflow, timeline, and search without custom development
+- **Native Integration**: Leverage built-in SSC V2 features like autoflow, timeline, search, and analytics without custom development
 - **Flexible Architecture**: Deploy on any platform while maintaining tight integration with SSC V2
 - **Consistent UX**: End users get the same look-and-feel as standard SSC V2 applications
 
@@ -46,7 +47,7 @@ This repository provides a **Work Order Management Service** - a complete refere
 - ✅ How to build a custom service following SSC V2 metadata and API guidelines
 - ✅ Integration with SAP BTP services (HANA, XSUAA, Destination Service)
 - ✅ Real-world use case: managing complex work orders with products and schedule lines
-- ✅ Integration with SSC V2 Employee APIs using SAP Cloud SDK
+- ✅ Integration with SSC V2 Employee and Account APIs using SAP Cloud SDK
 - ✅ Production-ready code structure with NestJS, TypeScript, and TypeORM
 
 **Technology Stack**: NestJS (Node.js framework) with TypeScript, deployed on SAP BTP Cloud Foundry with SAP HANA database.
@@ -72,6 +73,7 @@ This sample demonstrates how a Custom Service solves the above problem by provid
 - **Multi-Product Support**: Associate multiple work products with each work order for complex service scenarios
 - **Detailed Scheduling**: Manage schedule lines with requested vs. confirmed quantities and delivery dates
 - **Employee Integration**: Real-time employee data from SSC V2 (project leads) via API integration
+- **Account Integration**: Real-time account data from SSC V2 via API integration
 - **Hierarchical Revenue Tracking**: Track estimated revenue at both work order and individual product levels
 
 ### Entity Structure
@@ -82,7 +84,7 @@ The service is built around three main entities with hierarchical relationships:
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Work Order                              │
 │  • Order Name, Customer, Status, Display ID                     │
-│  • Start/End Dates, Project Lead                                │
+│  • Start/End Dates, Project Lead, Account            │
 │  • Currency Code, Content (Revenue), Subscriptions              │
 └────────────────────┬────────────────────────────────────────────┘
                      │ 1 : N relationship
@@ -187,6 +189,7 @@ The service is built around three main entities with hierarchical relationships:
 - 🔍 **Query Parameters Support**: `$top`, `$skip`, `$count`, `$filter`, `$search` for list operations (OData-like querying)
 - ✅ **Data Validation** using class-validator decorators
 - 📝 **Audit Trail** with created/updated timestamps
+- 📈 **CloudEvents Integration**: Generic CUD events (Create/Update/Delete) on every WorkOrder mutation, plus analytics data export support via the PLAN/DATA/SUMMARY flow (see [Events & Analytics Integration](#events--analytics-integration-optional))
 
 ### SAP BTP Integration Components
 
@@ -315,7 +318,7 @@ These steps deploy the Work Order Service to SAP BTP Cloud Foundry.
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd WorkOrderNodeService
+cd CustomServiceNodeSample
 
 # Install dependencies
 npm install
@@ -331,10 +334,7 @@ npm run build
 
 **3.1 Login to Cloud Foundry**
 ```bash
-```bash
-# Login to Cloud Foundry (replace with your API endpoint)
 cf login -a https://api.cf.<region>.hana.ondemand.com
-```
 # Enter your credentials and select target org/space
 ```
 
@@ -353,7 +353,7 @@ cf create-service xsuaa application <your-xsuaa-instance> -c security/xs-securit
 ```
 
 **Create Destination service**  
-*Why: Enables secure connectivity to SSC V2 Employee APIs without hardcoding credentials*
+*Why: Enables secure connectivity to SSC V2 Employee and Account APIs without hardcoding credentials*
 ```bash
 cf create-service destination lite <your-destination-instance>
 ```
@@ -457,7 +457,7 @@ Your Service → Destination Service → SSC V2 Employee API → Employee Data R
 
 **Why this matters**: The service can enrich work orders with real-time employee information (project leads, managers) directly from SSC V2, ensuring data consistency.
 
-### Section D: Optional - Employee Integration from SSC V2                    //Integration from SSC V2
+### Section D: Optional - Employee Integration from SSC V2
 
 This integration enriches work orders with real-time employee data (name, ID, formatted name) from SSC V2 Employee APIs.
 
@@ -468,13 +468,12 @@ This integration enriches work orders with real-time employee data (name, ID, fo
 
 #### How Employee Integration Works
 
-**Use Case**: When creating a work order, you provide `projectLeadId` (employee UUID). The service automatically fetches the employee's display name and formatted name from SSC V2, storing it with the work order for quick display without repeated API calls.
+**Use Case**: When creating a work order, you provide `projectLead.id` (employee UUID). The service automatically fetches the employee's display name and formatted name from SSC V2, returning it with the work order response.
 
 **Implementation**:
 - Location: `src/employee/` directory
 - Generated client: `src/employee/open-api/client/`
 - Service: `employee.service.ts` handles API calls via SAP Cloud SDK
-  
 
 #### Regenerating Employee API Client (Advanced)
 
@@ -494,6 +493,39 @@ npx @sap-cloud-sdk/openapi-generator \
 ```
 
 **Why SAP Cloud SDK?**: It provides pre-built OpenAPI code generation, automatic authentication handling via Destination Service, resilience patterns (retry, circuit breaker), and type-safe TypeScript clients.
+
+### Section E: Optional - Account Integration from SSC V2
+
+This integration enriches work orders with real-time account data (name, ID, display ID) from SSC V2 Account APIs — allowing you to associate a work order with a specific customer account.
+
+**Prerequisites for Account Integration:**
+- Destination configured in BTP (Step 4)
+- Account API access enabled in your SSC V2 tenant
+- OpenAPI specification for Account API
+
+#### How Account Integration Works
+
+**Use Case**: When creating a work order, you provide `account.id` (account UUID). The service fetches the account's display name from SSC V2 and returns it alongside the work order.
+
+**Implementation**:
+- Location: `src/account/` directory
+- Generated client: `src/account/open-api/client/`
+- Service: `account.service.ts` handles API calls via SAP Cloud SDK
+
+#### Regenerating Account API Client (Advanced)
+
+**1. Obtain OpenAPI specification**:
+- Navigate to SAP Business Accelerator Hub → Account API
+- Download the OpenAPI specification
+- Save to `src/account/open-api/specification/`
+
+**2. Generate the client**:
+```bash
+npx @sap-cloud-sdk/openapi-generator \
+  --input src/account/open-api/specification/accountService.json \
+  --outputDir src/account/open-api/client \
+  --transpile
+```
 
 ## Local Development & Testing
 
@@ -547,9 +579,12 @@ Content-Type: application/json
   "startDate": "2024-01-15T00:00:00.000Z",
   "endDate": "2024-12-31T00:00:00.000Z",
   "numberOfSubscriptions": 5,
-  "currencyCode": "USD",
-  "content": 250000,
-  "projectLeadId": "019663df-49ea-7dd3-ad01-2ff8894eda9b",
+  "estimatedRevenue": {
+    "currencyCode": "USD",
+    "content": 250000
+  },
+  "projectLead": { "id": "<your-employee-uuid>" },
+  "account": { "id": "<your-account-uuid>" },
   "Customer": "ACME Corporation",
   "displayId": "WO-2024-001"
 }
@@ -697,7 +732,8 @@ The Work Order Service follows a microservices architecture deployed on SAP BTP 
 │  └────────────────────────────────────────────────────────────┘  │
 │  ┌────────────────────────────────────────────────────────────┐  │
 │  │ Services: Business logic & validation (REQUEST-scoped)     │  │
-│  │ • EmployeeService: Integrates with C4C via Cloud SDK       │  │
+│  │ • EmployeeService: Integrates with SSC V2 via Cloud SDK    │  │
+│  │ • AccountService: Integrates with SSC V2 via Cloud SDK     │  │
 │  └────────────────────────────────────────────────────────────┘  │
 │  ┌────────────────────────────────────────────────────────────┐  │
 │  │ TypeORM Repositories: Data access layer                    │  │
@@ -759,6 +795,77 @@ npm run test:e2e
 # Generate coverage report
 npm run test:cov
 ```
+
+## Events & Analytics Integration (Optional)
+
+> 📖 **Reference**: [Analytics for Custom Services](https://help.sap.com/docs/CX_NG_SVC/56436b4e8fa84dc8b4408c7795a012c4/2992b5af0fec428bac7a0e48e9169be5.html)
+
+This sample publishes two types of CloudEvents to SSC V2 via the inbound data connector:
+
+- **CUD Events** — fired on every WorkOrder mutation (Create, Update, Delete), including changes made through child WorkProducts and ScheduleLines. Any downstream consumer subscribed via the SSC inbound communication system can receive them.
+- **Data Export Request Events** — analytics-specific bulk export flow (PLAN → DATA → SUMMARY), triggered on demand by SSC V2 via `POST /dataExportRequest`.
+
+Both types are optional and require the SSC inbound communication system to be configured. Without `SSC_TENANT_SOURCE_ID` and `SSC_BTP_DESTINATION` set, events are silently skipped and all other service functionality works normally.
+
+### How It Works
+
+**CUD Events (Generic)**
+
+Fired automatically after every Create, Update, or Delete on a WorkOrder — including changes made through child WorkProducts and ScheduleLines. Any downstream system subscribed via the SSC inbound connector can consume them.
+
+| Event Type | Trigger |
+|-----------|---------|
+| `customer.ssc.workorderservice.event.workOrderCreate` | WorkOrder created |
+| `customer.ssc.workorderservice.event.workOrderUpdate` | WorkOrder, WorkProduct, or ScheduleLine updated |
+| `customer.ssc.workorderservice.event.workOrderDelete` | WorkOrder deleted |
+
+See [`docs/CUD_EVENTS.md`](docs/CUD_EVENTS.md) for full payload specifications.
+
+**Analytics Data Export (Optional)**
+
+When SSC V2 triggers a Data Export Request, the service fires a PLAN → DATA → SUMMARY sequence to bulk-export all WorkOrder records to the analytics pipeline.
+
+| Event Type | Trigger |
+|-----------|---------|
+| `customer.ssc.workorderservice.event.workOrderCurrentImageData` | `POST /work-order-service/workOrders/dataExportRequest` |
+
+See [`docs/ANALYTICS_EVENTS.md`](docs/ANALYTICS_EVENTS.md) for full payload specifications.
+
+### Setup Steps
+
+1. **Mark entities as analytics relevant** — Set `analyticsRelevant: true` for required attributes in the Metadata JSON, then turn on the **Analytics Relevant** switch for root and child entities separately in SSC V2 under Custom Metadata → Entities.
+
+2. **Add data export request event** — Add an event of type `DATA_EXPORT_REQUEST` in your service metadata and re-upload it to the custom service.
+
+3. **Enable events in SSC V2** — Navigate to **System Settings → Integration → Inbound Custom Events**. Enable the **Data Export Request** event for analytics data export, and enable `workOrderCreate`, `workOrderUpdate`, `workOrderDelete` for CUD event notifications.
+
+4. **Implement the `POST /dataExportRequest` endpoint** — The external service must handle the following request body and fire Plan → Data → Summary events in sequence:
+   ```json
+   {
+     "dataRequestId": "string",    // UUID generated by SSC V2
+     "serviceFullName": "string",  // Fully qualified service name
+     "entityFullName": "string"    // Fully qualified entity name
+   }
+   ```
+
+5. **Trigger initial data export** — Open the custom service in SSC V2 and choose **Replicate Analytics Data**. After the initial export, subsequent WorkOrder changes are notified automatically via CUD events.
+
+### Configuration
+
+Set the following environment variables in your `manifest.yml` (or `.env` for local development):
+
+```yaml
+env:
+  SSC_TENANT_SOURCE_ID: "<your-analytics-source-id>"
+  SSC_BTP_DESTINATION: "<your-destination-service-name>"
+```
+
+| Variable | Description |
+|---|---|
+| `SSC_TENANT_SOURCE_ID` | The source ID of your SSC tenant registered in the analytics system |
+| `SSC_BTP_DESTINATION` | The BTP Destination name pointing to the SSC tenant's analytics inbound connector |
+
+> If `SSC_TENANT_SOURCE_ID` or `SSC_BTP_DESTINATION` are not configured, analytics events are silently skipped and all other service functionality works normally.
 
 ## Troubleshooting
 
@@ -829,6 +936,6 @@ This is a sample application intended for demonstration and learning purposes. I
 ---
 
 **Version**: 1.0.0  
-**Last Updated**: March 2026 
+**Last Updated**: December 2025 
 
-For the latest updates and more samples, visit the [SAP Samples GitHub Organization](https://github.com/SAP-samples/sales-and-service-cloud-extensions).
+For the latest updates and more samples, visit the [SAP Samples GitHub Organization](https://github.com/SAP-samples).

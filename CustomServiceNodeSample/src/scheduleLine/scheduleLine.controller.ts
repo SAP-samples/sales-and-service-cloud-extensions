@@ -5,6 +5,7 @@ import { ScheduleLineDto } from '../dto/scheduleLine.dto';
 import { UpdateScheduleLineDto } from '../dto/updateScheduleLine.dto';
 import { EtagInterceptor } from '../common/interceptor/etag.interceptor';
 
+// Nested endpoint controller
 @Controller('/work-order-service/workOrders/:workOrderId/workProducts/:workProductId/scheduleLines')
 export class ScheduleLineNestedController {
   constructor(private readonly scheduleLineService: ScheduleLineService) {}
@@ -14,9 +15,12 @@ export class ScheduleLineNestedController {
   async getAllScheduleLines(
     @Param('workOrderId') workOrderId: string,
     @Param('workProductId') workProductId: string,
+    @Query('$top') top?: number,
+    @Query('$skip') skip?: number,
+    @Query('$count') count?: boolean,
     @Query('$orderby') orderBy?: string,
-  ): Promise<{ value: any[] }> {
-    return this.scheduleLineService.findAll(workProductId, orderBy);
+  ): Promise<{ value: any[]; count?: number }> {
+    return this.scheduleLineService.findAll(workProductId, top, skip, count, orderBy);
   }
 
   @Get('/:scheduleLineId')
@@ -27,7 +31,7 @@ export class ScheduleLineNestedController {
     @Param('workProductId') workProductId: string,
     @Param('scheduleLineId') scheduleLineId: string,
   ) {
-    return this.scheduleLineService.findOne(scheduleLineId);
+    return this.scheduleLineService.findOne(scheduleLineId, workProductId);
   }
 
   @Post()
@@ -54,7 +58,7 @@ export class ScheduleLineNestedController {
     @Param('scheduleLineId') scheduleLineId: string,
     @Body() updateDto: UpdateScheduleLineDto,
   ) {
-    return this.scheduleLineService.update(scheduleLineId, updateDto);
+    return this.scheduleLineService.update(scheduleLineId, updateDto, workProductId);
   }
 
   @Delete('/:scheduleLineId')
@@ -64,6 +68,6 @@ export class ScheduleLineNestedController {
     @Param('workProductId') workProductId: string,
     @Param('scheduleLineId') scheduleLineId: string,
   ) {
-    return this.scheduleLineService.delete(scheduleLineId);
+    return this.scheduleLineService.delete(scheduleLineId, workProductId);
   }
 }

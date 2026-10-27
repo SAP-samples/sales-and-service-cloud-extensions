@@ -53,6 +53,7 @@ export class WorkProduct {
   })
   workOrder?: WorkOrder;
 
+  // One-to-Many relationship with Schedule Lines
   @OneToMany(() => ScheduleLine, (scheduleLine) => scheduleLine.workProduct, {
     cascade: true,
     eager: false,
