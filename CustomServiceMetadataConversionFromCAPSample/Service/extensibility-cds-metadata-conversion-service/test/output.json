@@ -1,0 +1,3419 @@
+[
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "email",
+      "label": "email",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "displayName",
+      "label": "display Name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "displayId",
+      "label": "display Id",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "is_prospect",
+      "label": "is prospect",
+      "dataType": "BOOLEAN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "roles",
+      "label": "roles",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "AccountService.AccountRoles",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "roles.accounts = $self"
+    },
+    {
+      "name": "accountabcclassifications",
+      "label": "accountabcclassifications",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "AccountService.AccountAbcClassifications",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "accountabcclassifications.accounts = $self"
+    },
+    {
+      "name": "contacts",
+      "label": "contacts",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "AccountService.AccountContacts",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "contacts.account = $self"
+    },
+    {
+      "name": "addresses",
+      "label": "addresses",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "AccountService.AccountAddresses",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "addresses.account = $self"
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "addressTypes",
+      "label": "address Types",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "zipCode",
+      "label": "zip Code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "label": "state",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "city",
+      "label": "city",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "country",
+      "label": "country",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.Countries",
+      "cardinality": null
+    },
+    {
+      "name": "account",
+      "label": "account",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "country",
+          "targetEntity": "AccountService.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAddresses",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.Accounts",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "externalMarketingPreference",
+      "label": "external Marketing Preference",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "dateOfBirth",
+      "label": "date Of Birth",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "gender",
+      "label": "gender",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "primaryContact",
+      "label": "primary Contact",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "phoneNumber",
+      "label": "phone Number",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "email",
+      "label": "email",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactRole",
+      "label": "contact Role",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactName",
+      "label": "contact Name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactId",
+      "label": "contact Id",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "label": "account",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.Accounts",
+      "cardinality": null
+    },
+    {
+      "name": "contactRevenueAmount",
+      "label": "contact Revenue Amount",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "account",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.AccountContactRevenue",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "amountcurrencycodes",
+      "label": "amountcurrencycodes",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.AmountCurrencyCodes",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "amountcurrencycodes.accountcontactrevenues = $self"
+    },
+    {
+      "name": "accountcontact",
+      "label": "accountcontact",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "AccountService.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.AccountContacts",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "countrycode",
+      "label": "countrycode",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "country",
+      "label": "country",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "accountaddresses",
+      "label": "accountaddresses",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "AccountService.AccountAddresses",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "accountaddresses.country = $self"
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "description",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "label": "accounts",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.Accounts",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "label": "values",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "description",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "label": "accounts",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AccountRoles",
+          "sourceAttribute": "accounts",
+          "targetEntity": "AccountService.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.Accounts",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "amount",
+      "label": "amount",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "currencycode",
+      "label": "currencycode",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accountcontactrevenues",
+      "label": "accountcontactrevenues",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceEntity": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "AccountService.AccountContactRevenue",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "AccountService.AccountContactRevenue",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "email",
+      "label": "email",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "displayName",
+      "label": "display Name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "displayId",
+      "label": "display Id",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "is_prospect",
+      "label": "is prospect",
+      "dataType": "BOOLEAN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "roles",
+      "label": "roles",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "sap.capire.demoAccountBtp.AccountRoles",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "roles.accounts = $self"
+    },
+    {
+      "name": "accountabcclassifications",
+      "label": "accountabcclassifications",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "sap.capire.demoAccountBtp.AccountAbcClassifications",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "accountabcclassifications.accounts = $self"
+    },
+    {
+      "name": "contacts",
+      "label": "contacts",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "sap.capire.demoAccountBtp.AccountContacts",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "contacts.account = $self"
+    },
+    {
+      "name": "addresses",
+      "label": "addresses",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "sap.capire.demoAccountBtp.AccountAddresses",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "addresses.account = $self"
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "label": "values",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "description",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "label": "accounts",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.Accounts",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "description",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "label": "accounts",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accounts",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.Accounts",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "externalMarketingPreference",
+      "label": "external Marketing Preference",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "dateOfBirth",
+      "label": "date Of Birth",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "gender",
+      "label": "gender",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "primaryContact",
+      "label": "primary Contact",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "phoneNumber",
+      "label": "phone Number",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "email",
+      "label": "email",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactRole",
+      "label": "contact Role",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactName",
+      "label": "contact Name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "contactId",
+      "label": "contact Id",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "label": "account",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.Accounts",
+      "cardinality": null
+    },
+    {
+      "name": "contactRevenueAmount",
+      "label": "contact Revenue Amount",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "contactRevenueAmount",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "amountcurrencycodes",
+      "label": "amountcurrencycodes",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.AmountCurrencyCodes",
+      "cardinality": {
+        "max": 1
+      },
+      "onCondition": "amountcurrencycodes.accountcontactrevenues = $self"
+    },
+    {
+      "name": "accountcontact",
+      "label": "accountcontact",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontact",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountContacts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.AccountContacts",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "amount",
+      "label": "amount",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "currencycode",
+      "label": "currencycode",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "accountcontactrevenues",
+      "label": "accountcontactrevenues",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "accountcontactrevenues",
+          "targetEntity": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.AccountcontactRevenues",
+      "cardinality": {
+        "max": 1
+      }
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "addressTypes",
+      "label": "address Types",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "zipCode",
+      "label": "zip Code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "label": "state",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "city",
+      "label": "city",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ]
+    },
+    {
+      "name": "country",
+      "label": "country",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.Countries",
+      "cardinality": null
+    },
+    {
+      "name": "account",
+      "label": "account",
+      "dataType": "ASSOCIATION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [
+        {
+          "sourceAttribute": "country",
+          "targetEntity": "sap.capire.demoAccountBtp.Countries",
+          "targetAttribute": "ID"
+        },
+        {
+          "sourceAttribute": "account",
+          "targetEntity": "sap.capire.demoAccountBtp.Accounts",
+          "targetAttribute": "ID"
+        }
+      ],
+      "target": "sap.capire.demoAccountBtp.Accounts",
+      "cardinality": null
+    },
+    {
+      "name": "createdAt",
+      "label": "created At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "createdBy",
+      "label": "created By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": false,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedAt",
+      "label": "modified At",
+      "dataType": "DATETIME",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "modifiedBy",
+      "label": "modified By",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": false,
+      "filterable": false,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "ID",
+      "label": "ID",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "countrycode",
+      "label": "countrycode",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "country",
+      "label": "country",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "accountaddresses",
+      "label": "accountaddresses",
+      "dataType": "COMPOSITION",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": [],
+      "target": "sap.capire.demoAccountBtp.AccountAddresses",
+      "cardinality": {
+        "max": "*"
+      },
+      "onCondition": "accountaddresses.country = $self"
+    },
+    {
+      "name": "locale",
+      "label": "locale",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "name",
+      "label": "name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "descr",
+      "label": "descr",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "locale",
+      "label": "locale",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "name",
+      "label": "name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "descr",
+      "label": "descr",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "locale",
+      "label": "locale",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "name",
+      "label": "name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "descr",
+      "label": "descr",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "locale",
+      "label": "locale",
+      "dataType": "UNKNOWN",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "name",
+      "label": "name",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "descr",
+      "label": "descr",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    },
+    {
+      "name": "code",
+      "label": "code",
+      "dataType": "STRING",
+      "nullable": true,
+      "creatable": true,
+      "updatable": true,
+      "filterable": true,
+      "searchable": true,
+      "searchWeightage": 1,
+      "analyticsRelevant": true,
+      "ObjectReference": []
+    }
+  ]
