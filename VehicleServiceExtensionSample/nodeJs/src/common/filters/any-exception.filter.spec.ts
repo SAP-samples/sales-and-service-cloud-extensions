@@ -169,7 +169,7 @@ describe('AnyExceptionFilter', () => {
   });
 
   it('Should extract key for Unique Key Constraint error', () => {
-    const sErrorMsg = ` QueryFailedError: unique constraint violated: Table(service_form), Index(IDX_c939ceb0a47080eadc599f4e4f) with error: unique constraint violation for table EXFS_DB_EXPLORER:service_form$delta_1$en, constraint='caseId', key value='abc8a8bd-6702-4303-aab5-993b1bec6b8d', pos=0; indexname=IDX_c939ceb0a47080eadc599f4e4f`;
+    const sErrorMsg = ` QueryFailedError: unique constraint violated: Table(service_form), Index(IDX_c939ceb0a47080eadc599f4e4f) with error: unique constraint violation for table EXFS_DB_EXPLORER:service_form$delta_1$en, constraint='caseId', key value='****', pos=0; indexname=IDX_c939ceb0a47080eadc599f4e4f`;
     const sExpectedMsg = `Record with the given caseId already exists`;
     const sResult = exceptionFilter.extractConstraintKey(sErrorMsg);
     expect(sResult).toBe(sExpectedMsg);
