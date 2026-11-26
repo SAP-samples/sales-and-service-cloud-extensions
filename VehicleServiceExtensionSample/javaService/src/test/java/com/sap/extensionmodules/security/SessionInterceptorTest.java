@@ -39,7 +39,7 @@ class SessionInterceptorTest {
     void preHandle_ValidToken_ShouldSetSessionAttributes() throws Exception {
         // Arrange
         final String dummyToken =
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaW0ua2lya0BzYWxlc2Nsb3VkLmNvbSIsImVpZCI6IiIsImxvZyI6MywiaXNzIjoiY29tLnNhcC5jcm0uaWFtIiwibGFuZ3VhZ2UiOiJlbiIsInR5cCI6IjEiLCJub24iOiJGS3VhYXpUWmdVc2o2ZjZudlFmVTEtYXlXX1UiLCJsb2NhbGUiOiJlbi1VUyIsInNwaWQiOiJlZDcyYWUxMi1lYzc3LTExZTktYTYzOS02YmMyMjZkMjg3M2EiLCJhdWQiOiJuc2QxLWRldi5jeG0tc2FsZXNjbG91ZC5jb20iLCJ1aWQiOiJlZDcyYWUxMi1lYzc3LTExZTktYTYzOS02YmMyMjZkMjg3M2EiLCJjNGMiOmZhbHNlLCJ6aWQiOiI1ZGExMDQ4N2JjYjBhOTc2ODQzYTA4ZDAiLCJydHYiOjg2NDAwLCJleHAiOjE2MTMwMjY0ODUsImFpZCI6Im5zZDEifQ.AYix5SYYQEjxR08oMuvidfU8mNSOariK13oM5AnfjDA";
+                "****";
 
         Token token2 = Mockito.mock(Token.class);
         DefaultHttpDestination destination = Mockito.mock(DefaultHttpDestination.class);
